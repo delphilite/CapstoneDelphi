@@ -1,0 +1,8 @@
+{$IFDEF FPC}
+  {$MODE Delphi}
+{$ENDIF}
+
+{$IF CompilerVersion >= 21.0}
+  {$WEAKLINKRTTI ON}
+  {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+{$IFEND}
