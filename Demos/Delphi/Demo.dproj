@@ -89,7 +89,6 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <DCC_UsePackage>dsnap;rtl;dbrtl;xmlrtl;DbxCommonDriver;soaprtl;$(DCC_UsePackage)</DCC_UsePackage>
-        <DCC_UnitSearchPath>..\..\Source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>2052</VerInfo_Locale>
@@ -181,6 +180,20 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
+        <DCCReference Include="..\..\Source\Capstone.Arm.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.Arm64.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.Evm.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.M680X.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.M68K.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.Mips.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.Ppc.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.Sparc.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.SystemZ.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.Tms320c64x.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.X86.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.XCore.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.Api.pas"/>
+        <DCCReference Include="..\..\Source\Capstone.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

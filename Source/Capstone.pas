@@ -83,7 +83,12 @@ type
     bytes: array[0..15] of Byte;
     mnemonic: string;
     op_str: string;
+    detail: Pcs_detail;
+  public
+    function  ToString(): string;
   end;
+
+  TCsDetail = cs_detail;
 
   ECapstone = class(Exception);
 
@@ -92,20 +97,33 @@ type
     FArch: TCsArch;
     FMode: TCsMode;
     FHandle: csh;
+    FLastErrorCode: Integer;
     FCode: PUInt8;
     FSize: NativeUInt;
     FInsn: Pcs_insn;
     FDetails: Boolean;
     FSyntax: TCsSyntax;
-  protected
-    function  GetDetail(out AInsn: cs_insn; out ADetail: cs_detail): Boolean;
+  private
+    function  FormatErrorMessage(ACode: Integer): string;
+    function  GetHardwareMode(AMode: TCsMode): Integer;
+    function  GetLastErrorMessage: string;
   public
     constructor Create;
     destructor Destroy; override;
 
-    function  Open(ACode: Pointer; ASize: NativeUInt): cs_err;
-    procedure Close;
+    // version function
+    class function EngineVersion: string;
+    // library function
+    class function LibraryVersion: string;
+
+    function  Open(ACode: Pointer; const ASize: NativeUInt): Boolean;
+    procedure Close();
+
     function  GetNext(var AAddr: UInt64; out AInsn: TCsInsn): Boolean;
+    function  GetDetail(out ADetail: TCsDetail): Boolean;
+
+    property  LastErrorCode: Integer read FLastErrorCode;
+    property  LastErrorMessage: string read GetLastErrorMessage;
 
     property  Arch: TCsArch read FArch write FArch;
     property  Mode: TCsMode read FMode write FMode;
@@ -113,27 +131,16 @@ type
     property  Syntax: TCsSyntax read FSyntax write FSyntax;
   end;
 
-  TCapstoneEngine = class
-  private
-    class var VersionInited: Boolean;
-    class var GlobalMajorVersion: Integer;
-    class var GlobalMinorVersion: Integer;
-  public
-    // version function
-    class function MajorVersion: Integer;
-    class function MinorVersion: Integer;
-  end;
-
   TCapstoneUtils = class
   public
     // utils function
-    class function BufferToHex(const AData: PByte; ALen: Integer): string;
+    class function BufferToHex(const AData: Pointer; ALen: Integer): string;
   end;
 
 implementation
 
 const
-  defArchMode: array[TCsArch] of Integer = (
+  defArchitectureMode: array[TCsArch] of Integer = (
     CS_ARCH_ARM,
     CS_ARCH_ARM64,
     CS_ARCH_MIPS,
@@ -149,9 +156,37 @@ const
     CS_ARCH_ALL
   );
 
+type
+  TCapstoneErrorInfo = record
+    Code: Integer;
+    Description: string;
+  end;
+
+const
+  defCapstoneErrorInfos: array[0..14] of TCapstoneErrorInfo = (
+    (Code: CS_ERR_OK;        Description: 'No error: everything was fine'),
+    (Code: CS_ERR_MEM;       Description: 'Out-Of-Memory error'),
+    (Code: CS_ERR_ARCH;      Description: 'Unsupported architecture'),
+    (Code: CS_ERR_HANDLE;    Description: 'Invalid handle'),
+    (Code: CS_ERR_CSH;       Description: 'Invalid csh argument'),
+    (Code: CS_ERR_MODE;      Description: 'Invalid/unsupported mode'),
+    (Code: CS_ERR_OPTION;    Description: 'Invalid/unsupported option'),
+    (Code: CS_ERR_DETAIL;    Description: 'Information is unavailable because detail option is OFF'),
+    (Code: CS_ERR_MEMSETUP;  Description: 'Dynamic memory management uninitialized (see CS_OPT_MEM)'),
+    (Code: CS_ERR_VERSION;   Description: 'Unsupported version (bindings)'),
+    (Code: CS_ERR_DIET;      Description: 'Access irrelevant data in "diet" engine'),
+    (Code: CS_ERR_SKIPDATA;  Description: 'Access irrelevant data for "data" instruction in SKIPDATA mode'),
+    (Code: CS_ERR_X86_ATT;   Description: 'X86 AT&T syntax is unsupported (opt-out at compile time)'),
+    (Code: CS_ERR_X86_INTEL; Description: 'X86 Intel syntax is unsupported (opt-out at compile time)'),
+    (Code: CS_ERR_X86_MASM;  Description: 'X86 Masm syntax is unsupported (opt-out at compile time)')
+  );
+
+resourcestring
+  rsErrUnKnownErrorFmt  = 'Unknown Error code: %d';
+
 { TCapstone }
 
-procedure TCapstone.Close;
+procedure TCapstone.Close();
 begin
   if FInsn <> nil then
   begin
@@ -184,17 +219,112 @@ begin
   inherited;
 end;
 
-function TCapstone.GetDetail(out AInsn: cs_insn; out ADetail: cs_detail): Boolean;
+class function TCapstone.EngineVersion: string;
+var
+  V, major, minor: Integer;
 begin
-  if (FInsn <> nil) then
+  V := cs_version(major, minor);
+  Result := Format('%x', [V]);
+end;
+
+function TCapstone.FormatErrorMessage(ACode: Integer): string;
+var
+  I: Integer;
+begin
+  for I := Low(defCapstoneErrorInfos) to High(defCapstoneErrorInfos) do
+    if defCapstoneErrorInfos[I].Code = ACode then
   begin
-    Move(FInsn^, AInsn, SizeOf(cs_insn));
-    if (FInsn^.detail <> nil) then
-      Move(FInsn^.detail^, ADetail, SizeOf(cs_detail));
-    Result := true;
-  end
-  else
-    Result := False;
+    Result := defCapstoneErrorInfos[I].Description;
+    Exit;
+  end;
+  Result := Format(rsErrUnKnownErrorFmt, [ACode]);
+end;
+
+function TCapstone.GetDetail(out ADetail: TCsDetail): Boolean;
+begin
+  Result := (FInsn <> nil) and (FInsn^.detail <> nil);
+  if Result then
+    Move(FInsn^.detail^, ADetail, SizeOf(cs_detail));
+  Assert(SizeOf(TCsDetail) = SizeOf(cs_detail));
+end;
+
+function TCapstone.GetHardwareMode(AMode: TCsMode): Integer;
+var
+  M: Integer;
+begin
+  M := 0;
+  if csmLittleEndian in AMode then
+    M := M or CS_MODE_LITTLE_ENDIAN;
+  if csmARM in AMode then
+    M := M or CS_MODE_ARM;
+  if csm16 in AMode then
+    M := M or CS_MODE_16;
+  if csm32 in AMode then
+    M := M or CS_MODE_32;
+  if csm64 in AMode then
+    M := M or CS_MODE_64;
+  if csmThumb in AMode then
+    M := M or CS_MODE_THUMB;
+  if csmMClass in AMode then
+    M := M or CS_MODE_MCLASS;
+  if csmV8 in AMode then
+    M := M or CS_MODE_V8;
+  if csmMicro in AMode then
+    M := M or CS_MODE_MICRO;
+  if csmMips3 in AMode then
+    M := M or CS_MODE_MIPS3;
+  if csmMips3R6 in AMode then
+    M := M or CS_MODE_MIPS32R6;
+  if csmMips2 in AMode then
+    M := M or CS_MODE_MIPS2;
+  if csmV9 in AMode then
+    M := M or CS_MODE_V9;
+  if csmQpx in AMode then
+    M := M or CS_MODE_QPX;
+  if csmM68k000 in AMode then
+    M := M or CS_MODE_M68K_000;
+  if csmM68k010 in AMode then
+    M := M or CS_MODE_M68K_010;
+  if csmM68k020 in AMode then
+    M := M or CS_MODE_M68K_020;
+  if csmM68k030 in AMode then
+    M := M or CS_MODE_M68K_030;
+  if csmM68k040 in AMode then
+    M := M or CS_MODE_M68K_040;
+  if csmM68k060 in AMode then
+    M := M or CS_MODE_M68K_060;
+  if csmBigEndian in AMode then
+    M := M or CS_MODE_BIG_ENDIAN;
+  if csmMips32 in AMode then
+    M := M or CS_MODE_MIPS32;
+  if csmMips64 in AMode then
+    M := M or CS_MODE_MIPS64;
+  if csmM680x6301 in AMode then
+    M := M or CS_MODE_M680X_6301;
+  if csmM680x6309 in AMode then
+    M := M or CS_MODE_M680X_6309;
+  if csmM680x6800 in AMode then
+    M := M or CS_MODE_M680X_6800;
+  if csmM680x6801 in AMode then
+    M := M or CS_MODE_M680X_6801;
+  if csmM680x6805 in AMode then
+    M := M or CS_MODE_M680X_6805;
+  if csmM680x6808 in AMode then
+    M := M or CS_MODE_M680X_6808;
+  if csmM680x6809 in AMode then
+    M := M or CS_MODE_M680X_6809;
+  if csmM680x6811 in AMode then
+    M := M or CS_MODE_M680X_6811;
+  if csmM680xCpu12 in AMode then
+    M := M or CS_MODE_M680X_CPU12;
+  if csmM680xHcs08 in AMode then
+    M := M or CS_MODE_M680X_HCS08;
+  Result := M;
+end;
+
+function TCapstone.GetLastErrorMessage: string;
+begin
+  Result := FormatErrorMessage(FLastErrorCode);
 end;
 
 function TCapstone.GetNext(var AAddr: UInt64; out AInsn: TCsInsn): Boolean;
@@ -222,91 +352,31 @@ begin
     Move(FInsn^.bytes, AInsn.bytes, 16);
     AInsn.mnemonic := string(FInsn^.mnemonic);
     AInsn.op_str := string(FInsn^.op_str);
+    AInsn.detail := FInsn^.detail;
   end
   else begin
-//    err := cs_errno(FHandle);
+    FLastErrorCode := cs_errno(FHandle);
   end;
 end;
 
-function TCapstone.Open(ACode: Pointer; ASize: NativeUInt): cs_err;
+class function TCapstone.LibraryVersion: string;
+begin
+  Result := Format('%d.%d.%d', [CS_VERSION_MAJOR, CS_VERSION_MINOR, CS_VERSION_EXTRA]);
+end;
+
+function TCapstone.Open(ACode: Pointer; const ASize: NativeUInt): Boolean;
 var
   A, M: Integer;
   H: csh;
 begin
   if FArch = csaUnknown then
     raise ECapstone.Create('Unknown Architecture');
-  M := 0;
-  if csmLittleEndian in FMode then
-    M := M or CS_MODE_LITTLE_ENDIAN;
-  if csmARM in FMode then
-    M := M or CS_MODE_ARM;
-  if csm16 in FMode then
-    M := M or CS_MODE_16;
-  if csm32 in FMode then
-    M := M or CS_MODE_32;
-  if csm64 in FMode then
-    M := M or CS_MODE_64;
-  if csmThumb in FMode then
-    M := M or CS_MODE_THUMB;
-  if csmMClass in FMode then
-    M := M or CS_MODE_MCLASS;
-  if csmV8 in FMode then
-    M := M or CS_MODE_V8;
-  if csmMicro in FMode then
-    M := M or CS_MODE_MICRO;
-  if csmMips3 in FMode then
-    M := M or CS_MODE_MIPS3;
-  if csmMips3R6 in FMode then
-    M := M or CS_MODE_MIPS32R6;
-  if csmMips2 in FMode then
-    M := M or CS_MODE_MIPS2;
-  if csmV9 in FMode then
-    M := M or CS_MODE_V9;
-  if csmQpx in FMode then
-    M := M or CS_MODE_QPX;
-  if csmM68k000 in FMode then
-    M := M or CS_MODE_M68K_000;
-  if csmM68k010 in FMode then
-    M := M or CS_MODE_M68K_010;
-  if csmM68k020 in FMode then
-    M := M or CS_MODE_M68K_020;
-  if csmM68k030 in FMode then
-    M := M or CS_MODE_M68K_030;
-  if csmM68k040 in FMode then
-    M := M or CS_MODE_M68K_040;
-  if csmM68k060 in FMode then
-    M := M or CS_MODE_M68K_060;
-  if csmBigEndian in FMode then
-    M := M or CS_MODE_BIG_ENDIAN;
-  if csmMips32 in FMode then
-    M := M or CS_MODE_MIPS32;
-  if csmMips64 in FMode then
-    M := M or CS_MODE_MIPS64;
-  if csmM680x6301 in FMode then
-    M := M or CS_MODE_M680X_6301;
-  if csmM680x6309 in FMode then
-    M := M or CS_MODE_M680X_6309;
-  if csmM680x6800 in FMode then
-    M := M or CS_MODE_M680X_6800;
-  if csmM680x6801 in FMode then
-    M := M or CS_MODE_M680X_6801;
-  if csmM680x6805 in FMode then
-    M := M or CS_MODE_M680X_6805;
-  if csmM680x6808 in FMode then
-    M := M or CS_MODE_M680X_6808;
-  if csmM680x6809 in FMode then
-    M := M or CS_MODE_M680X_6809;
-  if csmM680x6811 in FMode then
-    M := M or CS_MODE_M680X_6811;
-  if csmM680xCpu12 in FMode then
-    M := M or CS_MODE_M680X_CPU12;
-  if csmM680xHcs08 in FMode then
-    M := M or CS_MODE_M680X_HCS08;
-  A := defArchMode[FArch];
+  A := defArchitectureMode[FArch];
+  M := GetHardwareMode(FMode);
   H := 0;
-
-  Result := cs_open(A, M, H);
-  if Result = CS_ERR_OK then
+  FLastErrorCode := cs_open(A, M, H);
+  Result := FLastErrorCode = CS_ERR_OK;
+  if Result then
   begin
     FHandle := H;
     cs_option(FHandle, CS_OPT_SKIPDATA_, CS_OPT_ON);
@@ -314,40 +384,19 @@ begin
       cs_option(FHandle, CS_OPT_DETAIL, CS_OPT_ON);
     if FSyntax = cssAtt then
       cs_option(FHandle, CS_OPT_SYNTAX, CS_OPT_SYNTAX_ATT);
+    FCode := ACode;
+    FSize := ASize;
   end
   else begin
     FHandle := 0;
+    FCode := nil;
+    FSize := 0;
   end;
-
-  FCode := ACode;
-  FSize := ASize;
-end;
-
-{ TCapstoneEngine }
-
-class function TCapstoneEngine.MajorVersion: Integer;
-begin
-  if not VersionInited then
-  begin
-    cs_version(GlobalMajorVersion, GlobalMinorVersion);
-    VersionInited := True;
-  end;
-  Result := GlobalMajorVersion;
-end;
-
-class function TCapstoneEngine.MinorVersion: Integer;
-begin
-  if not VersionInited then
-  begin
-    cs_version(GlobalMajorVersion, GlobalMinorVersion);
-    VersionInited := True;
-  end;
-  Result := GlobalMinorVersion;
 end;
 
 { TCapstoneUtils }
 
-class function TCapstoneUtils.BufferToHex(const AData: PByte; ALen: Integer): string;
+class function TCapstoneUtils.BufferToHex(const AData: Pointer; ALen: Integer): string;
 const
   defCharConvertTable: array[0..15] of Char = (
     '0', '1', '2', '3', '4', '5', '6', '7',
@@ -369,6 +418,18 @@ begin
     Dec(ALen);
     Inc(pData);
   end;
+end;
+
+{ TCsInsn }
+
+function TCsInsn.ToString(): string;
+var
+  S: string;
+begin
+  if Self.size > 0 then
+    S := TCapstoneUtils.BufferToHex(PByte(@Self.bytes), Self.size)
+  else S := '';
+  Result := Format('%.8x %-16s %s %s', [Self.address, S, Self.mnemonic, Self.op_str]);
 end;
 
 end.

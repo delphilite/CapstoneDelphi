@@ -1,13 +1,6 @@
 program Demo;
 
-{$IF CompilerVersion >= 21.0}
-  {$WEAKLINKRTTI ON}
-  {$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
-{$IFEND}
-
-{$APPTYPE CONSOLE}
-
-{$R *.res}
+{$mode objfpc}{$H+}
 
 uses
   SysUtils,

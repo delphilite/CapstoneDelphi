@@ -31,7 +31,7 @@ const
   capstone = 'libcapstone.so';
   _PU = '';
 {$ENDIF}
-{$IFDEF MACOS}
+{$IF Defined(MACOS64) or Defined(DARWIN)}
   capstone = 'libcapstone.dylib';
   _PU = '';
 {$ENDIF}
@@ -829,6 +829,17 @@ function cs_op_index(handle: csh; const insn: Pcs_insn; op_type: Cardinal; posit
 function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; regs_read_count: PUInt8; regs_write: cs_regs; regs_write_count: PUInt8): cs_err; cdecl;
   external capstone name _PU + 'cs_regs_access';
 
+(**
+ Macro to create combined version which can be compared to
+ result of cs_version() API.
+ *)
+function cs_make_version(major, minor: Integer): Cardinal; cdecl;
+
 implementation
+
+function cs_make_version(major, minor: Integer): Cardinal;
+begin
+  Result := major shl 8 or minor;
+end;
 
 end.
