@@ -98,6 +98,8 @@
         <SanitizedProjectName>Demo</SanitizedProjectName>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
+        <DCC_UnitSearchPath>..\..\Source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_SysLibRoot>..\..\Bin\$(Platform);$(DCC_SysLibRoot)</DCC_SysLibRoot>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <VerInfo_Keys>package=com.embarcadero.$(MSBuildProjectName);label=$(MSBuildProjectName);versionCode=1;versionName=1.0.0;persistent=False;restoreAnyVersion=False;installLocation=auto;largeHeap=False;theme=TitleBar;hardwareAccelerated=true;apiKey=</VerInfo_Keys>
@@ -180,20 +182,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\..\Source\Capstone.Arm.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.Arm64.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.Evm.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.M680X.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.M68K.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.Mips.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.Ppc.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.Sparc.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.SystemZ.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.Tms320c64x.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.X86.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.XCore.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.Api.pas"/>
-        <DCCReference Include="..\..\Source\Capstone.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
