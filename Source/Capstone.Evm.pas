@@ -14,8 +14,6 @@ unit Capstone.Evm;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 type

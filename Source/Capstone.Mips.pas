@@ -14,8 +14,6 @@ unit Capstone.Mips;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 type

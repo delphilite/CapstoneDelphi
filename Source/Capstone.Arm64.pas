@@ -14,8 +14,6 @@ unit Capstone.Arm64;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 /// ARM64 shift type

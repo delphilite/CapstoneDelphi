@@ -14,8 +14,6 @@ unit Capstone.M680X;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 const

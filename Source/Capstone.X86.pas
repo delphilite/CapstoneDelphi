@@ -14,8 +14,6 @@ unit Capstone.X86;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 const

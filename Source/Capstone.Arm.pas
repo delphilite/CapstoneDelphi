@@ -14,8 +14,6 @@ unit Capstone.Arm;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 type

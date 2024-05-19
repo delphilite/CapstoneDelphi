@@ -14,8 +14,6 @@ unit Capstone.Tms320c64x;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 type

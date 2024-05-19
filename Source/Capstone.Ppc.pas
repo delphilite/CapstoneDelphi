@@ -14,8 +14,6 @@ unit Capstone.Ppc;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 type

@@ -14,8 +14,6 @@ unit Capstone.Api;
 
 {$I Capstone.inc}
 
-{$MINENUMSIZE 4}
-
 interface
 
 uses
@@ -34,7 +32,10 @@ const
 {$IF Defined(MACOS64) or Defined(DARWIN)}
   capstone = 'libcapstone.dylib';
   _PU = '';
-{$ENDIF}
+  {$IFDEF FPC}
+    {$LINKLIB libcapstone}
+  {$ENDIF}
+{$IFEND}
 
 const
   // Capstone API version
