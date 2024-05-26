@@ -44,9 +44,9 @@ begin
     DisAsmFunctionCode(@SysUtils.ExpandFileNameCase);
     WriteLn('');
     WriteLn('Done.');
-    ReadLn;
   except
     on E: Exception do
       WriteLn(Format('Error Decompiler: %s', [E.Message]));
   end;
+  ReadLn;
 end.

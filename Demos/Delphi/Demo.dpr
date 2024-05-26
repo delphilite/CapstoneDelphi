@@ -45,15 +45,16 @@ begin
 end;
 
 begin
+  ReportMemoryLeaksOnShutdown := True;
   try
     WriteLn(Format('Capstone Engine: v%s(%s), DisAsm ExpandFileNameCase ...', [TCapstone.LibraryVersion, TCapstone.EngineVersion]));
     WriteLn('');
     DisAsmFunctionCode(@SysUtils.ExpandFileNameCase);
     WriteLn('');
     WriteLn('Done.');
-    ReadLn;
   except
     on E: Exception do
       WriteLn(Format('Error Decompiler: %s', [E.Message]));
   end;
+  ReadLn;
 end.

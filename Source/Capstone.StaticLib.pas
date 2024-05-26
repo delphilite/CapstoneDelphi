@@ -2,15 +2,15 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone Api header                       }
+{  Unit Name: Capstone Api header && BCB static lib     }
 {     Author: Lsuper 2024.05.01                         }
-{    Purpose: capstone.h                                }
+{    Purpose: capstone.h + capstone.lib                 }
 {                                                       }
 {  Copyright (c) 1998-2024 Super Studio                 }
 {                                                       }
 { ***************************************************** }
 
-unit Capstone.Api;
+unit Capstone.StaticLib;
 
 {$I Capstone.inc}
 
@@ -21,24 +21,15 @@ uses
   Capstone.M68K, Capstone.Ppc, Capstone.Sparc, Capstone.SystemZ, Capstone.Tms320c64x, Capstone.XCore;
 
 const
-{$IFDEF MSWINDOWS}
-  capstone = 'capstone.dll';
+{$IFNDEF MSWINDOWS}
+  {$MESSAGE ERROR 'not supported'}
 {$ENDIF}
-{$IFDEF LINUX}
-  capstone = 'libcapstone.so';
-{$ENDIF}
-{$IFDEF MACOS}
-  {$IF DEFINED(IOS) or DEFINED(MACOS64)}
-    capstone = '/usr/lib/libcapstone.dylib';
-  {$ELSE}
-    capstone = 'libcapstone.dylib';
-  {$IFEND}
-{$ENDIF}
-{$IF DEFINED(FPC) and DEFINED(DARWIN)}
-  capstone = 'libcapstone.dylib';
-  {$LINKLIB libcapstone}
-{$IFEND}
+
+{$IFDEF CPUX64}
   _PU = '';
+{$ELSE}
+  _PU = '_';
+{$ENDIF}
 
 const
   // Capstone API version
@@ -488,7 +479,7 @@ type
  set both @major & @minor arguments to NULL.
  *)
 function cs_version(var major: Integer; var minor: Integer): Cardinal; cdecl;
-  external capstone name _PU + 'cs_version';
+  external name _PU + 'cs_version';
 
 (**
  This API can be used to either ask for archs supported by this library,
@@ -504,7 +495,7 @@ function cs_version(var major: Integer; var minor: Integer): Cardinal; cdecl;
  @return True if this library supports the given arch, or in 'diet' mode.
  *)
 function cs_support(query: Integer): Boolean; cdecl;
-  external capstone name _PU + 'cs_support';
+  external name _PU + 'cs_support';
 
 (**
  Initialize CS handle: this must be done before any usage of CS.
@@ -517,7 +508,7 @@ function cs_support(query: Integer): Boolean; cdecl;
  for detailed error).
  *)
 function cs_open(arch: cs_arch; mode: cs_mode; var handle: csh): cs_err; cdecl;
-  external capstone name _PU + 'cs_open';
+  external name _PU + 'cs_open';
 
 (**
  Close CS handle: MUST do to release the handle when it is not used anymore.
@@ -534,7 +525,7 @@ function cs_open(arch: cs_arch; mode: cs_mode; var handle: csh): cs_err; cdecl;
  for detailed error).
  *)
 function cs_close(var handle: csh): cs_err; cdecl;
-  external capstone name _PU + 'cs_close';
+  external name _PU + 'cs_close';
 
 (**
  Set option for disassembling engine at runtime
@@ -551,7 +542,7 @@ function cs_close(var handle: csh): cs_err; cdecl;
  even before cs_open()
  *)
 function cs_option(handle: csh; &type: cs_opt_type; value: NativeUInt): cs_err; cdecl;
-  external capstone name _PU + 'cs_option';
+  external name _PU + 'cs_option';
 
 (**
  Report the last error number when some API function fail.
@@ -562,7 +553,7 @@ function cs_option(handle: csh; &type: cs_opt_type; value: NativeUInt): cs_err; 
  @return: error code of cs_err enum type (CS_ERR_*, see above)
  *)
 function cs_errno(handle: csh): cs_err; cdecl;
-  external capstone name _PU + 'cs_errno';
+  external name _PU + 'cs_errno';
 
 (**
  Return a string describing given error code.
@@ -573,7 +564,7 @@ function cs_errno(handle: csh): cs_err; cdecl;
 	passed in the argument @code
  *)
 function cs_strerror(code: cs_err): PAnsiChar; cdecl;
-  external capstone name _PU + 'cs_strerror';
+  external name _PU + 'cs_strerror';
 
 (**
  Disassemble binary code, given the code buffer, size, address and number
@@ -609,14 +600,14 @@ function cs_strerror(code: cs_err): PAnsiChar; cdecl;
  On failure, call cs_errno() for error code.
  *)
 function cs_disasm(handle: csh; const code: PUInt8; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
-  external capstone name _PU + 'cs_disasm';
+  external name _PU + 'cs_disasm';
 
 (**
   Deprecated function - to be retired in the next version!
   Use cs_disasm() instead of cs_disasm_ex()
  *)
 function cs_disasm_ex(handle: csh; const code: PUInt8; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
-  external capstone name _PU + 'cs_disasm_ex';
+  external name _PU + 'cs_disasm_ex';
 
 (**
  Free memory allocated by cs_malloc() or cs_disasm() (argument @insn)
@@ -626,7 +617,7 @@ function cs_disasm_ex(handle: csh; const code: PUInt8; code_size: NativeUInt; ad
      to free memory allocated by cs_malloc().
  *)
 procedure cs_free(insn: Pcs_insn; count: NativeUInt); cdecl;
-  external capstone name _PU + 'cs_free';
+  external name _PU + 'cs_free';
 
 (**
  Allocate memory for 1 instruction to be used by cs_disasm_iter().
@@ -637,7 +628,7 @@ procedure cs_free(insn: Pcs_insn; count: NativeUInt); cdecl;
  this instruction with cs_free(insn, 1)
  *)
 function cs_malloc(handle: csh): Pcs_insn; cdecl;
-  external capstone name _PU + 'cs_malloc';
+  external name _PU + 'cs_malloc';
 
 (**
  Fast API to disassemble binary code, given the code buffer, size, address
@@ -675,7 +666,7 @@ function cs_malloc(handle: csh): Pcs_insn; cdecl;
  On failure, call cs_errno() for error code.
  *)
 function cs_disasm_iter(handle: csh; var code: PUInt8; var size: NativeUInt; var address: UInt64; insn: Pcs_insn): Boolean; cdecl;
-  external capstone name _PU + 'cs_disasm_iter';
+  external name _PU + 'cs_disasm_iter';
 
 (**
  Return friendly name of register in a string.
@@ -691,7 +682,7 @@ function cs_disasm_iter(handle: csh; var code: PUInt8; var size: NativeUInt; var
  @return: string name of the register, or NULL if @reg_id is invalid.
  *)
 function cs_reg_name(handle: csh; reg_id: Cardinal): PAnsiChar; cdecl;
-  external capstone name _PU + 'cs_reg_name';
+  external name _PU + 'cs_reg_name';
 
 (**
  Return friendly name of an instruction in a string.
@@ -706,7 +697,7 @@ function cs_reg_name(handle: csh; reg_id: Cardinal): PAnsiChar; cdecl;
  @return: string name of the instruction, or NULL if @insn_id is invalid.
  *)
 function cs_insn_name(handle: csh; insn_id: Cardinal): PAnsiChar; cdecl;
-  external capstone name _PU + 'cs_insn_name';
+  external name _PU + 'cs_insn_name';
 
 (**
  Return friendly name of a group id (that an instruction can belong to)
@@ -721,7 +712,7 @@ function cs_insn_name(handle: csh; insn_id: Cardinal): PAnsiChar; cdecl;
  @return: string name of the group, or NULL if @group_id is invalid.
  *)
 function cs_group_name(handle: csh; group_id: Cardinal): PAnsiChar; cdecl;
-  external capstone name _PU + 'cs_group_name';
+  external name _PU + 'cs_group_name';
 
 (**
  Check if a disassembled instruction belong to a particular group.
@@ -740,7 +731,7 @@ function cs_group_name(handle: csh; group_id: Cardinal): PAnsiChar; cdecl;
  @return: true if this instruction indeed belongs to the given group, or false otherwise.
  *)
 function cs_insn_group(handle: csh; const insn: Pcs_insn; group_id: Cardinal): Boolean; cdecl;
-  external capstone name _PU + 'cs_insn_group';
+  external name _PU + 'cs_insn_group';
 
 (**
  Check if a disassembled instruction IMPLICITLY used a particular register.
@@ -758,7 +749,7 @@ function cs_insn_group(handle: csh; const insn: Pcs_insn; group_id: Cardinal): B
  @return: true if this instruction indeed implicitly used the given register, or false otherwise.
  *)
 function cs_reg_read(handle: csh; const insn: Pcs_insn; reg_id: Cardinal): Boolean; cdecl;
-  external capstone name _PU + 'cs_reg_read';
+  external name _PU + 'cs_reg_read';
 
 (**
  Check if a disassembled instruction IMPLICITLY modified a particular register.
@@ -776,7 +767,7 @@ function cs_reg_read(handle: csh; const insn: Pcs_insn; reg_id: Cardinal): Boole
  @return: true if this instruction indeed implicitly modified the given register, or false otherwise.
  *)
 function cs_reg_write(handle: csh; const insn: Pcs_insn; reg_id: Cardinal): Boolean; cdecl;
-  external capstone name _PU + 'cs_reg_write';
+  external name _PU + 'cs_reg_write';
 
 (**
  Count the number of operands of a given type.
@@ -792,7 +783,7 @@ function cs_reg_write(handle: csh; const insn: Pcs_insn; reg_id: Cardinal): Bool
  or -1 on failure.
  *)
 function cs_op_count(handle: csh; const insn: Pcs_insn; op_type: Cardinal): Integer; cdecl;
-  external capstone name _PU + 'cs_op_count';
+  external name _PU + 'cs_op_count';
 
 (**
  Retrieve the position of operand of given type in <arch>.operands[] array.
@@ -811,7 +802,7 @@ function cs_op_count(handle: csh; const insn: Pcs_insn; op_type: Cardinal): Inte
  in instruction @insn, or -1 on failure.
  *)
 function cs_op_index(handle: csh; const insn: Pcs_insn; op_type: Cardinal; position: Cardinal): Integer; cdecl;
-  external capstone name _PU + 'cs_op_index';
+  external name _PU + 'cs_op_index';
 
 (**
  Retrieve all the registers accessed by an instruction, either explicitly or
@@ -831,7 +822,7 @@ function cs_op_index(handle: csh; const insn: Pcs_insn; op_type: Cardinal; posit
  for detailed error).
  *)
 function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; regs_read_count: PUInt8; regs_write: cs_regs; regs_write_count: PUInt8): cs_err; cdecl;
-  external capstone name _PU + 'cs_regs_access';
+  external name _PU + 'cs_regs_access';
 
 (**
  Macro to create combined version which can be compared to
@@ -840,6 +831,99 @@ function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; r
 function cs_make_version(major, minor: Integer): Cardinal; cdecl;
 
 implementation
+
+{$IFDEF CPUX86}
+  {$L Win32\cs.obj}
+  {$L Win32\X86Module.obj}
+  {$L Win32\X86ATTInstPrinter.obj}
+  {$L Win32\X86Disassembler.obj}
+  {$L Win32\X86DisassemblerDecoder.obj}
+  {$L Win32\X86IntelInstPrinter.obj}
+  {$L Win32\X86Mapping.obj}
+  {$L Win32\MCInst.obj}
+  {$L Win32\MCInstrDesc.obj}
+  {$L Win32\MCRegisterInfo.obj}
+  {$L Win32\SStream.obj}
+  {$L Win32\utils.obj}
+  {$WARN BAD_GLOBAL_SYMBOL OFF}
+{$ENDIF CPUX86}
+
+{$IFDEF CPUX64}
+  {$L Win64\cs.o}
+  {$L Win64\X86Module.o}
+  {$L Win64\X86ATTInstPrinter.o}
+  {$L Win64\X86Disassembler.o}
+  {$L Win64\X86DisassemblerDecoder.o}
+  {$L Win64\X86IntelInstPrinter.o}
+  {$L Win64\X86Mapping.o}
+  {$L Win64\MCInst.o}
+  {$L Win64\MCInstrDesc.o}
+  {$L Win64\MCRegisterInfo.o}
+  {$L Win64\SStream.o}
+  {$L Win64\utils.o}
+  {$WARN BAD_GLOBAL_SYMBOL OFF}
+{$ENDIF CPUX64}
+
+const
+  msvcrt = 'msvcrt.dll';
+
+{$IFDEF CPUX86}
+
+procedure _malloc; cdecl; external msvcrt name 'malloc';
+procedure _calloc; cdecl; external msvcrt name 'calloc';
+procedure _realloc; cdecl; external msvcrt name 'realloc';
+procedure _free; cdecl; external msvcrt name 'free';
+procedure _vsnprintf; cdecl; external msvcrt name 'vsnprintf';
+
+procedure _memcpy; cdecl; external msvcrt name 'memcpy';
+procedure _memmove; cdecl; external msvcrt name 'memmove';
+procedure _memset; cdecl; external msvcrt name 'memset';
+
+procedure _strlen; cdecl; external msvcrt name 'strlen';
+procedure _strncpy; cdecl; external msvcrt name 'strncpy';
+
+procedure _qsort; cdecl; external msvcrt name 'qsort';
+
+procedure __llmul; asm jmp System.@_llmul end;
+procedure __llshl; asm jmp System.@_llshl end;
+
+var
+  __fltused: Integer = 0;
+
+  _cs_mem_malloc: Pointer = @_malloc;
+  _cs_mem_calloc: Pointer = @_calloc;
+  _cs_mem_free: Pointer = @_free;
+  _cs_vsnprintf: Pointer = @_vsnprintf;
+
+{$ENDIF CPUX86}
+
+{$IFDEF CPUX64}
+
+procedure malloc; cdecl; external msvcrt name 'malloc';
+procedure calloc; cdecl; external msvcrt name 'calloc';
+procedure realloc; cdecl; external msvcrt name 'realloc';
+procedure free; cdecl; external msvcrt name 'free';
+procedure vsnprintf; cdecl; external msvcrt name 'vsnprintf';
+
+procedure memcpy; cdecl; external msvcrt name 'memcpy';
+procedure memmove; cdecl; external msvcrt name 'memmove';
+procedure memset; cdecl; external msvcrt name 'memset';
+
+procedure strcmp; cdecl; external msvcrt name 'strcmp';
+procedure strlen; cdecl; external msvcrt name 'strlen';
+procedure strncpy; cdecl; external msvcrt name 'strncpy';
+
+procedure qsort; cdecl; external msvcrt name 'qsort';
+
+var
+  _fltused: Integer = 0;
+
+  cs_mem_malloc: Pointer = @malloc;
+  cs_mem_calloc: Pointer = @calloc;
+  cs_mem_free: Pointer = @free;
+  cs_vsnprintf: Pointer = @vsnprintf;
+
+{$ENDIF CPUX64}
 
 function cs_make_version(major, minor: Integer): Cardinal;
 begin

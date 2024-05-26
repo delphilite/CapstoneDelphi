@@ -14,10 +14,17 @@ unit Capstone;
 
 {$I Capstone.inc}
 
+{.$DEFINE CS_STATICLINK}
+
 interface
 
 uses
-  SysUtils, Capstone.Api;
+{$IFDEF CS_STATICLINK}
+  Capstone.StaticLib,
+{$ELSE}
+  Capstone.Api,
+{$ENDIF}
+  SysUtils;
 
 type
   TCsArch = (
