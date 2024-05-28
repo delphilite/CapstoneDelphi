@@ -102,7 +102,7 @@ const
   /// = Relative addressing operand.
   M680X_OP_RELATIVE = 6;
   /// = constant operand (Displayed as number only).
-  				///< Used e.g. for a bit index or page number.
+  ///< Used e.g. for a bit index or page number.
   M680X_OP_CONSTANT = 7;
 
 /// Group of M680X instructions
@@ -541,24 +541,24 @@ type
   /// Instruction's operand referring to indexed addressing
   m680x_op_idx = record
     /// base register (or M680X_REG_INVALID if
-    				///< irrelevant)
+    ///< irrelevant)
     base_reg: m680x_reg;
     /// offset register (or M680X_REG_INVALID if
-    				///< irrelevant)
+    ///< irrelevant)
     offset_reg: m680x_reg;
     /// 5-,8- or 16-bit offset. See also offset_bits.
     offset: Int16;
     /// = offset addr. if base_reg == M680X_REG_PC.
-    				///< calculated as offset + PC
+    ///< calculated as offset + PC
     offset_addr: UInt16;
     /// offset width in bits for indexed addressing
     offset_bits: UInt8;
     /// inc. or dec. value:
-    				///<    0: no inc-/decrement
-    				///<    1 .. 8: increment by 1 .. 8
-    				///<    -1 .. -8: decrement by 1 .. 8
-    				///< if flag M680X_IDX_POST_INC_DEC set it is post
-    				///< inc-/decrement otherwise pre inc-/decrement
+    ///<    0: no inc-/decrement
+    ///<    1 .. 8: increment by 1 .. 8
+    ///<    -1 .. -8: decrement by 1 .. 8
+    ///< if flag M680X_IDX_POST_INC_DEC set it is post
+    ///< inc-/decrement otherwise pre inc-/decrement
     inc_dec: Int8;
     /// 8-bit flags (see above)
     flags: UInt8;
@@ -567,8 +567,8 @@ type
   /// Instruction's memory operand referring to relative addressing (Bcc/LBcc)
   m680x_op_rel = record
     /// The absolute address.
-    				///< calculated as PC + offset. PC is the first
-    				///< address after the instruction.
+    ///< calculated as PC + offset. PC is the first
+    ///< address after the instruction.
     address: UInt16;
     /// the offset/displacement value
     offset: Int16;
@@ -608,8 +608,8 @@ type
     /// size of this operand (in bytes)
     size: UInt8;
     /// How is this operand accessed? (READ, WRITE or READ|WRITE)
-    	/// This field is combined of cs_ac_type.
-    	/// NOTE: this field is irrelevant if engine is compiled in DIET
+    /// This field is combined of cs_ac_type.
+    /// NOTE: this field is irrelevant if engine is compiled in DIET
     access: UInt8;
   end;
 

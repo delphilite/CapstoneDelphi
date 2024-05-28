@@ -816,8 +816,8 @@ type
   /// This is associated with SYSZ_OP_MEM operand type above
   sysz_op_mem = record
     /// base register, can be safely interpreted as
-    				///< a value of type `sysz_reg`, but it is only
-    				///< one byte wide
+    ///< a value of type `sysz_reg`, but it is only
+    ///< one byte wide
     base: UInt8;
     /// index register, same conditions apply here
     index: UInt8;
@@ -849,7 +849,7 @@ type
     /// Code condition
     cc: sysz_cc;
     /// Number of operands of this instruction,
-    	/// or 0 when instruction has no operand.
+    /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
     operands: array [0..5] of cs_sysz_op;

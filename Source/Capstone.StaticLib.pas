@@ -2,9 +2,9 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone Api header && BCB static lib     }
+{  Unit Name: Capstone Api header && Lite staticlib     }
 {     Author: Lsuper 2024.05.01                         }
-{    Purpose: capstone.h + capstone.lib                 }
+{    Purpose: capstone.h + capstone.lib(bcb x86/64)     }
 {                                                       }
 {  Copyright (c) 1998-2024 Super Studio                 }
 {                                                       }
@@ -26,9 +26,15 @@ const
 {$ENDIF}
 
 {$IFDEF CPUX64}
-  _PU = '';
+  {$UNDEF NEED_UNDERSCORE}
 {$ELSE}
+  {$DEFINE NEED_UNDERSCORE}
+{$ENDIF}
+
+{$IFDEF NEED_UNDERSCORE}
   _PU = '_';
+{$ELSE}
+  _PU = '';
 {$ENDIF}
 
 const
@@ -468,9 +474,9 @@ type
  @minor: minor number of API version
 
  @return hexical number as (major << 8 | minor), which encodes both
-	 major & minor versions.
-	 NOTE: This returned value can be compared with version number made
-	 with macro CS_MAKE_VERSION
+  major & minor versions.
+  NOTE: This returned value can be compared with version number made
+  with macro CS_MAKE_VERSION
 
  For example, second API version would return 1 in @major, and 1 in @minor
  The return value would be 0x0101
@@ -561,7 +567,7 @@ function cs_errno(handle: csh): cs_err; cdecl;
  @code: error code (see CS_ERR_* above)
 
  @return: returns a pointer to a string that describes the error code
-	passed in the argument @code
+  passed in the argument @code
  *)
 function cs_strerror(code: cs_err): PAnsiChar; cdecl;
   external name _PU + 'cs_strerror';
@@ -590,8 +596,8 @@ function cs_strerror(code: cs_err): PAnsiChar; cdecl;
  @code_size: size of the above code buffer.
  @address: address of the first instruction in given raw code buffer.
  @insn: array of instructions filled in by this API.
-	   NOTE: @insn will be allocated by this function, and should be freed
-	   with cs_free() API.
+  NOTE: @insn will be allocated by this function, and should be freed
+  with cs_free() API.
  @count: number of instructions to be disassembled, or 0 to get all of them
 
  @return: the number of successfully disassembled instructions,
@@ -796,7 +802,7 @@ function cs_op_count(handle: csh; const insn: Pcs_insn; op_type: Cardinal): Inte
  @insn: disassembled instruction structure received from cs_disasm() or cs_disasm_iter()
  @op_type: Operand type to be found.
  @position: position of the operand to be found. This must be in the range
-			[1, cs_op_count(handle, insn, op_type)]
+  [1, cs_op_count(handle, insn, op_type)]
 
  @return: index of operand of given type @op_type in <arch>.operands[] array
  in instruction @insn, or -1 on failure.
@@ -867,22 +873,94 @@ implementation
 const
   msvcrt = 'msvcrt.dll';
 
-{$IFDEF CPUX86}
+{$IFDEF NEED_UNDERSCORE}
+function _malloc(size: NativeUInt): Pointer; cdecl;
+{$ELSE}
+function malloc(size: NativeUInt): Pointer; cdecl;
+{$ENDIF}
+begin
+  GetMem(Result, Size);
+end;
 
-procedure _malloc; cdecl; external msvcrt name 'malloc';
-procedure _calloc; cdecl; external msvcrt name 'calloc';
-procedure _realloc; cdecl; external msvcrt name 'realloc';
-procedure _free; cdecl; external msvcrt name 'free';
+{$IFDEF NEED_UNDERSCORE}
+function _calloc(nmemb: NativeUInt; elsize: NativeUInt): Pointer; cdecl;
+{$ELSE}
+function calloc(nmemb: NativeUInt; elsize: NativeUInt): Pointer; cdecl;
+{$ENDIF}
+var
+  nBytes: NativeUInt;
+begin
+  nBytes := nmemb * elsize;
+  if nBytes > 0 then
+  begin
+    GetMem(Result, nBytes);
+    FillChar(Result^, nBytes, 0);
+  end
+  else Result := nil;
+end;
+
+{$IFDEF NEED_UNDERSCORE}
+function _realloc(ptr: Pointer; size: NativeUInt): Pointer; cdecl;
+{$ELSE}
+function realloc(ptr: Pointer; size: NativeUInt): Pointer; cdecl;
+{$ENDIF}
+begin
+  ReallocMem(ptr, size);
+  Result := ptr;
+end;
+
+{$IFDEF NEED_UNDERSCORE}
+procedure _free(ptr: Pointer); cdecl;
+{$ELSE}
+procedure free(ptr: Pointer); cdecl;
+{$ENDIF}
+begin
+  FreeMem(ptr);
+end;
+
+{$IFDEF NEED_UNDERSCORE}
 procedure _vsnprintf; cdecl; external msvcrt name 'vsnprintf';
+{$ELSE}
+procedure vsnprintf; cdecl; external msvcrt name 'vsnprintf';
+{$ENDIF}
 
+{$IFDEF NEED_UNDERSCORE}
 procedure _memcpy; cdecl; external msvcrt name 'memcpy';
+{$ELSE}
+procedure memcpy; cdecl; external msvcrt name 'memcpy';
+{$ENDIF}
+
+{$IFDEF NEED_UNDERSCORE}
 procedure _memmove; cdecl; external msvcrt name 'memmove';
+{$ELSE}
+procedure memmove; cdecl; external msvcrt name 'memmove';
+{$ENDIF}
+
+{$IFDEF NEED_UNDERSCORE}
 procedure _memset; cdecl; external msvcrt name 'memset';
+{$ELSE}
+procedure memset; cdecl; external msvcrt name 'memset';
+{$ENDIF}
 
+{$IFDEF NEED_UNDERSCORE}
 procedure _strlen; cdecl; external msvcrt name 'strlen';
-procedure _strncpy; cdecl; external msvcrt name 'strncpy';
+{$ELSE}
+procedure strlen; cdecl; external msvcrt name 'strlen';
+{$ENDIF}
 
+{$IFDEF NEED_UNDERSCORE}
+procedure _strncpy; cdecl; external msvcrt name 'strncpy';
+{$ELSE}
+procedure strncpy; cdecl; external msvcrt name 'strncpy';
+{$ENDIF}
+
+{$IFDEF NEED_UNDERSCORE}
 procedure _qsort; cdecl; external msvcrt name 'qsort';
+{$ELSE}
+procedure qsort; cdecl; external msvcrt name 'qsort';
+{$ENDIF}
+
+{$IFDEF NEED_UNDERSCORE}
 
 procedure __llmul; asm jmp System.@_llmul end;
 procedure __llshl; asm jmp System.@_llshl end;
@@ -895,25 +973,9 @@ var
   _cs_mem_free: Pointer = @_free;
   _cs_vsnprintf: Pointer = @_vsnprintf;
 
-{$ENDIF CPUX86}
-
-{$IFDEF CPUX64}
-
-procedure malloc; cdecl; external msvcrt name 'malloc';
-procedure calloc; cdecl; external msvcrt name 'calloc';
-procedure realloc; cdecl; external msvcrt name 'realloc';
-procedure free; cdecl; external msvcrt name 'free';
-procedure vsnprintf; cdecl; external msvcrt name 'vsnprintf';
-
-procedure memcpy; cdecl; external msvcrt name 'memcpy';
-procedure memmove; cdecl; external msvcrt name 'memmove';
-procedure memset; cdecl; external msvcrt name 'memset';
+{$ELSE}
 
 procedure strcmp; cdecl; external msvcrt name 'strcmp';
-procedure strlen; cdecl; external msvcrt name 'strlen';
-procedure strncpy; cdecl; external msvcrt name 'strncpy';
-
-procedure qsort; cdecl; external msvcrt name 'qsort';
 
 var
   _fltused: Integer = 0;
@@ -923,7 +985,7 @@ var
   cs_mem_free: Pointer = @free;
   cs_vsnprintf: Pointer = @vsnprintf;
 
-{$ENDIF CPUX64}
+{$ENDIF}
 
 function cs_make_version(major, minor: Integer): Cardinal;
 begin

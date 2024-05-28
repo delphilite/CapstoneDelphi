@@ -991,7 +991,7 @@ type
     /// displacement/offset value
     disp: Integer;
     /// left-shift on index register, or 0 if irrelevant
-    	/// NOTE: this value can also be fetched via operand.shift.value
+    /// NOTE: this value can also be fetched via operand.shift.value
     lshift: Integer;
   end;
 
@@ -1025,12 +1025,12 @@ type
     &type: arm_op_type;
     f4: _anonymous_type_2;
     /// in some instructions, an operand can be subtracted or added to
-    	/// the base register,
-    	/// if TRUE, this operand is subtracted. otherwise, it is added.
+    /// the base register,
+    /// if TRUE, this operand is subtracted. otherwise, it is added.
     subtracted: Boolean;
     /// How is this operand accessed? (READ, WRITE or READ|WRITE)
-    	/// This field is combined of cs_ac_type.
-    	/// NOTE: this field is irrelevant if engine is compiled in DIET mode.
+    /// This field is combined of cs_ac_type.
+    /// NOTE: this field is irrelevant if engine is compiled in DIET mode.
     access: UInt8;
     /// Neon lane index for NEON instructions (or -1 if irrelevant)
     neon_lane: Int8;
@@ -1057,7 +1057,7 @@ type
     /// Option for some memory barrier instructions
     mem_barrier: arm_mem_barrier;
     /// Number of operands of this instruction,
-    	/// or 0 when instruction has no operand.
+    /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
     operands: array [0..35] of cs_arm_op;

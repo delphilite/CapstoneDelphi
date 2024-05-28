@@ -1179,16 +1179,14 @@ type
     disp: Int32;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_arm64_op_shift = record
     /// shifter type of this operand
     &type: arm64_shifter;
     /// shifter value of this operand
     value: Cardinal;
   end;
 
-  P_anonymous_type_2 = ^_anonymous_type_2;
-  _anonymous_type_2 = record
+  cs_arm64_op_detail = record
     case Integer of
       0: (/// register value for REG operand
     reg: arm64_reg);
@@ -1216,15 +1214,17 @@ type
     vas: arm64_vas;
     /// Vector Element Size Specifier
     vess: arm64_vess;
-    shift: _anonymous_type_1;
+    /// shifter type detail
+    shift: cs_arm64_op_shift;
     /// extender type of this operand
     ext: arm64_extender;
     /// operand type
     &type: arm64_op_type;
-    f7: _anonymous_type_2;
+    /// union detail
+    detail: cs_arm64_op_detail;
     /// How is this operand accessed? (READ, WRITE or READ|WRITE)
-    	/// This field is combined of cs_ac_type.
-    	/// NOTE: this field is irrelevant if engine is compiled in DIET mode.
+    /// This field is combined of cs_ac_type.
+    /// NOTE: this field is irrelevant if engine is compiled in DIET mode.
     access: UInt8;
   end;
 
@@ -1237,7 +1237,7 @@ type
     /// does this insn request writeback? 'True' means 'yes'
     writeback: Boolean;
     /// Number of operands of this instruction,
-    	/// or 0 when instruction has no operand.
+    /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
     operands: array [0..7] of cs_arm64_op;

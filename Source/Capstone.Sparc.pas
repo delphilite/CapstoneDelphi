@@ -533,8 +533,8 @@ type
   /// This is associated with SPARC_OP_MEM operand type above
   sparc_op_mem = record
     /// base register, can be safely interpreted as
-    				///< a value of type `sparc_reg`, but it is only
-    				///< one byte wide
+    ///< a value of type `sparc_reg`, but it is only
+    ///< one byte wide
     base: UInt8;
     /// index register, same conditions apply here
     index: UInt8;
@@ -567,7 +567,7 @@ type
     /// branch hint: encoding as bitwise OR of sparc_hint.
     hint: sparc_hint;
     /// Number of operands of this instruction,
-    	/// or 0 when instruction has no operand.
+    /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
     operands: array [0..3] of cs_sparc_op;

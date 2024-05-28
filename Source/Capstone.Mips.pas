@@ -944,7 +944,7 @@ type
   /// Instruction structure
   cs_mips = record
     /// Number of operands of this instruction,
-    	/// or 0 when instruction has no operand.
+    /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
     operands: array [0..9] of cs_mips_op;

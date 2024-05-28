@@ -218,8 +218,8 @@ type
   /// This is associated with XCORE_OP_MEM operand type above
   xcore_op_mem = record
     /// base register, can be safely interpreted as
-    				///< a value of type `xcore_reg`, but it is only
-    				///< one byte wide
+    ///< a value of type `xcore_reg`, but it is only
+    ///< one byte wide
     base: UInt8;
     /// index register, same conditions apply here
     index: UInt8;
@@ -250,7 +250,7 @@ type
   /// Instruction structure
   cs_xcore = record
     /// Number of operands of this instruction,
-    	/// or 0 when instruction has no operand.
+    /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
     operands: array [0..7] of cs_xcore_op;

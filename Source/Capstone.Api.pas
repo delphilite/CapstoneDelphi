@@ -38,7 +38,12 @@ const
   capstone = 'libcapstone.dylib';
   {$LINKLIB libcapstone}
 {$IFEND}
+
+{$IFDEF NEED_UNDERSCORE}
+  _PU = '_';
+{$ELSE}
   _PU = '';
+{$ENDIF}
 
 const
   // Capstone API version
@@ -119,70 +124,70 @@ const
   /// little-endian mode (default mode)
   CS_MODE_LITTLE_ENDIAN = 0;
   /// 32-bit ARM
-  CS_MODE_ARM = 0;
+  CS_MODE_ARM = CS_MODE_LITTLE_ENDIAN;
   /// 16-bit mode (X86)
-  CS_MODE_16 = 2;
+  CS_MODE_16 = 1 shl 1;
   /// 32-bit mode (X86)
-  CS_MODE_32 = 4;
+  CS_MODE_32 = 1 shl 2;
   /// 64-bit mode (X86, PPC)
-  CS_MODE_64 = 8;
+  CS_MODE_64 = 1 shl 3;
   /// ARM's Thumb mode, including Thumb-2
-  CS_MODE_THUMB = 16;
+  CS_MODE_THUMB = 1 shl 4;
   /// ARM's Cortex-M series
-  CS_MODE_MCLASS = 32;
+  CS_MODE_MCLASS = 1 shl 5;
   /// ARMv8 A32 encodings for ARM
-  CS_MODE_V8 = 64;
+  CS_MODE_V8 = 1 shl 6;
   /// MicroMips mode (MIPS)
-  CS_MODE_MICRO = 16;
+  CS_MODE_MICRO = 1 shl 4;
   /// Mips III ISA
-  CS_MODE_MIPS3 = 32;
+  CS_MODE_MIPS3 = 1 shl 5;
   /// Mips32r6 ISA
-  CS_MODE_MIPS32R6 = 64;
+  CS_MODE_MIPS32R6 = 1 shl 6;
   /// Mips II ISA
-  CS_MODE_MIPS2 = 128;
+  CS_MODE_MIPS2 = 1 shl 7;
   /// SparcV9 mode (Sparc)
-  CS_MODE_V9 = 16;
+  CS_MODE_V9 = 1 shl 4;
   /// Quad Processing eXtensions mode (PPC)
-  CS_MODE_QPX = 16;
+  CS_MODE_QPX = 1 shl 4;
   /// M68K 68000 mode
-  CS_MODE_M68K_000 = 2;
+  CS_MODE_M68K_000 = 1 shl 1;
   /// M68K 68010 mode
-  CS_MODE_M68K_010 = 4;
+  CS_MODE_M68K_010 = 1 shl 2;
   /// M68K 68020 mode
-  CS_MODE_M68K_020 = 8;
+  CS_MODE_M68K_020 = 1 shl 3;
   /// M68K 68030 mode
-  CS_MODE_M68K_030 = 16;
+  CS_MODE_M68K_030 = 1 shl 4;
   /// M68K 68040 mode
-  CS_MODE_M68K_040 = 32;
+  CS_MODE_M68K_040 = 1 shl 5;
   /// M68K 68060 mode
-  CS_MODE_M68K_060 = 64;
+  CS_MODE_M68K_060 = 1 shl 6;
   /// big-endian mode
-  CS_MODE_BIG_ENDIAN = -2147483648;
+  CS_MODE_BIG_ENDIAN = 1 shl 31;
   /// Mips32 ISA (Mips)
-  CS_MODE_MIPS32 = 4;
+  CS_MODE_MIPS32 = CS_MODE_32;
   /// Mips64 ISA (Mips)
-  CS_MODE_MIPS64 = 8;
+  CS_MODE_MIPS64 = CS_MODE_64;
   /// M680X Hitachi 6301,6303 mode
-  CS_MODE_M680X_6301 = 2;
+  CS_MODE_M680X_6301 = 1 shl 1;
   /// M680X Hitachi 6309 mode
-  CS_MODE_M680X_6309 = 4;
+  CS_MODE_M680X_6309 = 1 shl 2;
   /// M680X Motorola 6800,6802 mode
-  CS_MODE_M680X_6800 = 8;
+  CS_MODE_M680X_6800 = 1 shl 3;
   /// M680X Motorola 6801,6803 mode
-  CS_MODE_M680X_6801 = 16;
+  CS_MODE_M680X_6801 = 1 shl 4;
   /// M680X Motorola/Freescale 6805 mode
-  CS_MODE_M680X_6805 = 32;
+  CS_MODE_M680X_6805 = 1 shl 5;
   /// M680X Motorola/Freescale/NXP 68HC08 mode
-  CS_MODE_M680X_6808 = 64;
+  CS_MODE_M680X_6808 = 1 shl 6;
   /// M680X Motorola 6809 mode
-  CS_MODE_M680X_6809 = 128;
+  CS_MODE_M680X_6809 = 1 shl 7;
   /// M680X Motorola/Freescale/NXP 68HC11 mode
-  CS_MODE_M680X_6811 = 256;
+  CS_MODE_M680X_6811 = 1 shl 8;
   /// M680X Motorola/Freescale/NXP CPU12
   /// used on M68HC12/HCS12
-  CS_MODE_M680X_CPU12 = 512;
+  CS_MODE_M680X_CPU12 = 1 shl 9;
   /// M680X Freescale/NXP HCS08 mode
-  CS_MODE_M680X_HCS08 = 1024;
+  CS_MODE_M680X_HCS08 = 1 shl 10;
 
 type
   /// User-defined dynamic memory related functions: malloc/calloc/realloc/free/vsnprintf()
@@ -477,9 +482,9 @@ type
  @minor: minor number of API version
 
  @return hexical number as (major << 8 | minor), which encodes both
-	 major & minor versions.
-	 NOTE: This returned value can be compared with version number made
-	 with macro CS_MAKE_VERSION
+  major & minor versions.
+  NOTE: This returned value can be compared with version number made
+  with macro CS_MAKE_VERSION
 
  For example, second API version would return 1 in @major, and 1 in @minor
  The return value would be 0x0101
@@ -570,7 +575,7 @@ function cs_errno(handle: csh): cs_err; cdecl;
  @code: error code (see CS_ERR_* above)
 
  @return: returns a pointer to a string that describes the error code
-	passed in the argument @code
+  passed in the argument @code
  *)
 function cs_strerror(code: cs_err): PAnsiChar; cdecl;
   external capstone name _PU + 'cs_strerror';
@@ -599,8 +604,8 @@ function cs_strerror(code: cs_err): PAnsiChar; cdecl;
  @code_size: size of the above code buffer.
  @address: address of the first instruction in given raw code buffer.
  @insn: array of instructions filled in by this API.
-	   NOTE: @insn will be allocated by this function, and should be freed
-	   with cs_free() API.
+  NOTE: @insn will be allocated by this function, and should be freed
+  with cs_free() API.
  @count: number of instructions to be disassembled, or 0 to get all of them
 
  @return: the number of successfully disassembled instructions,
@@ -805,7 +810,7 @@ function cs_op_count(handle: csh; const insn: Pcs_insn; op_type: Cardinal): Inte
  @insn: disassembled instruction structure received from cs_disasm() or cs_disasm_iter()
  @op_type: Operand type to be found.
  @position: position of the operand to be found. This must be in the range
-			[1, cs_op_count(handle, insn, op_type)]
+  [1, cs_op_count(handle, insn, op_type)]
 
  @return: index of operand of given type @op_type in <arch>.operands[] array
  in instruction @insn, or -1 on failure.
