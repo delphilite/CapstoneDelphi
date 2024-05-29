@@ -1,9 +1,21 @@
-﻿program test_arm64;
+﻿{ ***************************************************** }
+{                                                       }
+{  Pascal language binding for the Capstone engine      }
+{                                                       }
+{  Unit Name: test_arm64                                }
+{     Author: Lsuper 2024.05.01                         }
+{    Purpose: tests\test_arm64.c                        }
+{                                                       }
+{  Copyright (c) 1998-2024 Super Studio                 }
+{                                                       }
+{ ***************************************************** }
+
+program test_arm64;
 
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, test_utils, Capstone.Api, Capstone.Arm64;
+  SysUtils, Windows, Capstone.Api, Capstone.Arm64, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 var

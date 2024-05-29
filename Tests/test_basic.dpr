@@ -1,9 +1,21 @@
+{ ***************************************************** }
+{                                                       }
+{  Pascal language binding for the Capstone engine      }
+{                                                       }
+{  Unit Name: test_basic                                }
+{     Author: Lsuper 2024.05.01                         }
+{    Purpose: tests\test_basic.c                        }
+{                                                       }
+{  Copyright (c) 1998-2024 Super Studio                 }
+{                                                       }
+{ ***************************************************** }
+
 program test_basic;
 
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, test_utils, Capstone.Api;
+  SysUtils, Windows, Capstone.Api, test_utils;
 
 procedure Test;
 const
@@ -190,11 +202,11 @@ begin
     err := cs_open(Platforms[i].arch, Platforms[i].mode, handle);
     if err <> CS_ERR_OK then
     begin
-      Writeln('Failed on cs_open() with error returned: ', Err);
+      Writeln('Failed on cs_open() with error returned: ', err);
       Continue;
     end;
 
-    if Platforms[I].opt_type <> 0 then
+    if Platforms[i].opt_type <> 0 then
       cs_option(handle, Platforms[i].opt_type, Platforms[i].opt_value);
 
     address := $1000;
@@ -229,7 +241,7 @@ begin
     end;
 
     WriteLn('');
-    cs_close(Handle);
+    cs_close(handle);
   end;
 end;
 

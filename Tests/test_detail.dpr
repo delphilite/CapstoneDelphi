@@ -1,9 +1,21 @@
+{ ***************************************************** }
+{                                                       }
+{  Pascal language binding for the Capstone engine      }
+{                                                       }
+{  Unit Name: test_detail                               }
+{     Author: Lsuper 2024.05.01                         }
+{    Purpose: tests\test_detail.c                       }
+{                                                       }
+{  Copyright (c) 1998-2024 Super Studio                 }
+{                                                       }
+{ ***************************************************** }
+
 program test_detail;
 
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, test_utils, Capstone.Api;
+  SysUtils, Windows, Capstone.Api, test_utils;
 
 procedure Test;
 const

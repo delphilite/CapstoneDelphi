@@ -1,3 +1,15 @@
+{ ***************************************************** }
+{                                                       }
+{  Pascal language binding for the Capstone engine      }
+{                                                       }
+{  Unit Name: common test utils                         }
+{     Author: Lsuper 2024.05.01                         }
+{    Purpose:                                           }
+{                                                       }
+{  Copyright (c) 1998-2024 Super Studio                 }
+{                                                       }
+{ ***************************************************** }
+
 unit test_utils;
 
 interface
@@ -14,7 +26,11 @@ type
     comment: PAnsiChar;
     opt_type: Integer;
     opt_value: Integer;
+
     syntax: Integer;
+
+    opt_skipdata: Integer;
+    skipdata: NativeUInt;
   end;
 
   function  format_string_hex(const c: Integer;
