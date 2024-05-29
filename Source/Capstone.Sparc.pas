@@ -542,8 +542,7 @@ type
     disp: Int32;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_sparc_op_detail = record
     case Integer of
       0: (/// register value for REG operand
     reg: sparc_reg);
@@ -557,7 +556,7 @@ type
   cs_sparc_op = record
     /// operand type
     &type: sparc_op_type;
-    f2: _anonymous_type_1;
+    detail: cs_sparc_op_detail;
   end;
 
   /// Instruction structure

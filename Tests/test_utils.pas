@@ -3,24 +3,38 @@ unit test_utils;
 interface
 
 uses
-  SysUtils, Windows, Capstone.Api;
+  SysUtils;
 
 type
   TPlatform = record
-    arch: cs_arch;
-    mode: cs_mode;
-    code: PUInt8;
-    size: size_t;
+    arch: Cardinal;
+    mode: Integer;
+    code: PByte;
+    size: NativeUInt;
     comment: PAnsiChar;
-    opt_type: cs_opt_type;
-    opt_value: cs_opt_value;
+    opt_type: Integer;
+    opt_value: Integer;
+    syntax: Integer;
   end;
 
-  function format_string_hex(const c: Int64; const fmt: string = ''): string;
+  function  format_string_hex(const c: Integer;
+    const fmt: string = ''): string; overload;
+  function  format_string_hex(const c: Int64;
+    const fmt: string = ''): string; overload;
 
-  procedure print_string_hex(const comment: string; str: PUInt8; len: size_t);
+  procedure print_string_hex(const comment: string; str: PByte; len: Integer);
+
+  procedure WriteLnFormat(const fmt: string; const args: array of const);
 
 implementation
+
+function format_string_hex(const c: Integer; const fmt: string): string;
+begin
+  if fmt = '' then
+    Result := IntToHex(c, 2)
+  else Result := Format(fmt, [c]);
+  Result := LowerCase(Result);
+end;
 
 function format_string_hex(const c: Int64; const fmt: string): string;
 begin
@@ -30,7 +44,7 @@ begin
   Result := LowerCase(Result);
 end;
 
-procedure print_string_hex(const comment: string; str: PUInt8; len: size_t);
+procedure print_string_hex(const comment: string; str: PByte; len: Integer);
 var
   i: Integer;
   l, s: string;
@@ -44,6 +58,14 @@ begin
     l := l + s;
   end;
   Writeln(l);
+end;
+
+procedure WriteLnFormat(const fmt: string; const args: array of const);
+var
+  S: string;
+begin
+  S := Format(fmt, args);
+  Writeln(S);
 end;
 
 end.

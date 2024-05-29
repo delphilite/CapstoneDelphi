@@ -995,14 +995,12 @@ type
     lshift: Integer;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_arm_op_shift = record
     &type: arm_shifter;
     value: Cardinal;
   end;
 
-  P_anonymous_type_2 = ^_anonymous_type_2;
-  _anonymous_type_2 = record
+  cs_arm_op_detail = record
     case Integer of
       0: (/// register value for REG/SYSREG operand
     reg: Integer);
@@ -1020,10 +1018,11 @@ type
   cs_arm_op = record
     /// Vector Index for some vector operands (or -1 if irrelevant)
     vector_index: Integer;
-    shift: _anonymous_type_1;
+    shift: cs_arm_op_shift;
     /// operand type
     &type: arm_op_type;
-    f4: _anonymous_type_2;
+    /// union detail
+    detail: cs_arm_op_detail;
     /// in some instructions, an operand can be subtracted or added to
     /// the base register,
     /// if TRUE, this operand is subtracted. otherwise, it is added.

@@ -105,7 +105,7 @@ type
     FMode: TCsMode;
     FHandle: csh;
     FLastErrorCode: Integer;
-    FCode: PUInt8;
+    FCode: PByte;
     FSize: NativeUInt;
     FInsn: Pcs_insn;
     FDetails: Boolean;

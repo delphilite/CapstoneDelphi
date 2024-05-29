@@ -229,8 +229,7 @@ type
     direct: Integer;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_xcore_op_detail = record
     case Integer of
       0: (/// register value for REG operand
     reg: xcore_reg);
@@ -244,7 +243,7 @@ type
   cs_xcore_op = record
     /// operand type
     &type: xcore_op_type;
-    f2: _anonymous_type_1;
+    detail: cs_xcore_op_detail;
   end;
 
   /// Instruction structure

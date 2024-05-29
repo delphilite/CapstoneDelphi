@@ -3,7 +3,13 @@
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, test_utils, Capstone.Api, Capstone.X86;
+  SysUtils, Windows, test_utils,
+{$IFDEF CS_STATICLINK}
+  Capstone.StaticLib,
+{$ELSE}
+  Capstone.Api,
+{$ENDIF}
+  Capstone.X86;
 
 function get_eflag_name(const flag: UInt64): string;
 type
@@ -321,9 +327,22 @@ end;
 
 procedure Test;
 const
-  X86_CODE64: array[0..25] of Byte = ($55, $48, $8b, $05, $b8, $13, $00, $00, $e9, $ea, $be, $ad, $de, $ff, $25, $23, $01, $00, $00, $e8, $df, $be, $ad, $de, $74, $ff);
-  X86_CODE16: array[0..61] of Byte = ($8d, $4c, $32, $08, $01, $d8, $81, $c6, $34, $12, $00, $00, $05, $23, $01, $00, $00, $36, $8b, $84, $91, $23, $01, $00, $00, $41, $8d, $84, $39, $89, $67, $00, $00, $8d, $87, $89, $67, $00, $00, $b4, $c6, $66, $e9, $b8, $00, $00, $00, $67, $ff, $a0, $23, $01, $00, $00, $66, $e8, $cb, $00, $00, $00, $74, $fc);
-  X86_CODE32: array[0..58] of Byte = ($8d, $4c, $32, $08, $01, $d8, $81, $c6, $34, $12, $00, $00, $05, $23, $01, $00, $00, $36, $8b, $84, $91, $23, $01, $00, $00, $41, $8d, $84, $39, $89, $67, $00, $00, $8d, $87, $89, $67, $00, $00, $b4, $c6, $e9, $ea, $be, $ad, $de, $ff, $a0, $23, $01, $00, $00, $e8, $df, $be, $ad, $de, $74, $ff);
+  X86_CODE64: array[0..25] of Byte = (
+    $55, $48, $8B, $05, $B8, $13, $00, $00, $E9, $EA, $BE, $AD, $DE, $FF, $25, $23,
+    $01, $00, $00, $E8, $DF, $BE, $AD, $DE, $74, $FF
+  );
+  X86_CODE16: array[0..61] of Byte = (
+    $8D, $4C, $32, $08, $01, $D8, $81, $C6, $34, $12, $00, $00, $05, $23, $01, $00,
+    $00, $36, $8B, $84, $91, $23, $01, $00, $00, $41, $8D, $84, $39, $89, $67, $00,
+    $00, $8D, $87, $89, $67, $00, $00, $B4, $C6, $66, $E9, $B8, $00, $00, $00, $67,
+    $FF, $A0, $23, $01, $00, $00, $66, $E8, $CB, $00, $00, $00, $74, $FC
+  );
+  X86_CODE32: array[0..58] of Byte = (
+    $8D, $4C, $32, $08, $01, $D8, $81, $C6, $34, $12, $00, $00, $05, $23, $01, $00,
+    $00, $36, $8B, $84, $91, $23, $01, $00, $00, $41, $8D, $84, $39, $89, $67, $00,
+    $00, $8D, $87, $89, $67, $00, $00, $B4, $C6, $E9, $EA, $BE, $AD, $DE, $FF, $A0,
+    $23, $01, $00, $00, $E8, $DF, $BE, $AD, $DE, $74, $FF
+  );
 const
   Platforms: array [0..3] of TPlatform = (
     (arch: CS_ARCH_X86; mode: CS_MODE_16; code: @X86_CODE16[0]; size: SizeOf(X86_CODE16); comment: 'X86 16bit (Intel syntax)'; opt_type: CS_OPT_INVALID; opt_value: 0),
@@ -367,7 +386,8 @@ begin
       for j := 0 to count - 1 do
       begin
         l := '0x' + format_string_hex(item.address, '%.4x');
-        WriteLn(Format('%s:'#9'%s'#9'%s', [l, item.mnemonic, item.op_str]));
+        l := Format('%s:'#9'%s'#9'%s', [l, item.mnemonic, item.op_str]);
+        WriteLn(l);
         print_insn_detail(handle, Platforms[i].mode, item);
         if j < count - 1 then
           Inc(item);

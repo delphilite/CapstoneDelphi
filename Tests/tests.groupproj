@@ -6,6 +6,12 @@
 			<Projects Include="test_basic.dproj">
 				<Dependencies/>
 			</Projects>
+			<Projects Include="test_detail.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_arm.dproj">
+				<Dependencies/>
+			</Projects>
 			<Projects Include="test_arm64.dproj">
 				<Dependencies/>
 			</Projects>
@@ -29,6 +35,24 @@
 		<Target Name="test_basic:Make">
 			<MSBuild Projects="test_basic.dproj" Targets="Make"/>
 		</Target>
+		<Target Name="test_detail">
+			<MSBuild Projects="test_detail.dproj"/>
+		</Target>
+		<Target Name="test_detail:Clean">
+			<MSBuild Projects="test_detail.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_detail:Make">
+			<MSBuild Projects="test_detail.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_arm">
+			<MSBuild Projects="test_arm.dproj"/>
+		</Target>
+		<Target Name="test_arm:Clean">
+			<MSBuild Projects="test_arm.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_arm:Make">
+			<MSBuild Projects="test_arm.dproj" Targets="Make"/>
+		</Target>
 		<Target Name="test_arm64">
 			<MSBuild Projects="test_arm64.dproj"/>
 		</Target>
@@ -48,13 +72,13 @@
 			<MSBuild Projects="test_x86.dproj" Targets="Make"/>
 		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="test_basic;test_arm64;test_x86"/>
+			<CallTarget Targets="test_basic;test_detail;test_arm;test_arm64;test_x86"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="test_basic:Clean;test_arm64:Clean;test_x86:Clean"/>
+			<CallTarget Targets="test_basic:Clean;test_detail:Clean;test_arm:Clean;test_arm64:Clean;test_x86:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="test_basic:Make;test_arm64:Make;test_x86:Make"/>
+			<CallTarget Targets="test_basic:Make;test_detail:Make;test_arm:Make;test_arm64:Make;test_x86:Make"/>
 		</Target>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 	</Project>

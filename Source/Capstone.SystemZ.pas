@@ -827,8 +827,7 @@ type
     disp: Int64;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_sysz_op_detail = record
     case Integer of
       0: (/// register value for REG operand
     reg: sysz_reg);
@@ -842,7 +841,7 @@ type
   cs_sysz_op = record
     /// operand type
     &type: sysz_op_type;
-    f2: _anonymous_type_1;
+    f2: cs_sysz_op_detail;
   end;
 
   cs_sysz = record

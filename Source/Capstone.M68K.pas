@@ -651,8 +651,7 @@ type
     reg_1: m68k_reg;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_m68k_op_detail = record
     case Integer of
       0: (/// immediate value for IMM operand
     imm: UInt64);
@@ -668,7 +667,7 @@ type
 
   /// Instruction operand
   cs_m68k_op = record
-    f1: _anonymous_type_1;
+    detail: cs_m68k_op_detail;
     /// data when operand is targeting memory
     mem: m68k_op_mem;
     /// data when operand is a branch displacement
@@ -680,8 +679,7 @@ type
     address_mode: m68k_address_mode;
   end;
 
-  P_anonymous_type_2 = ^_anonymous_type_2;
-  _anonymous_type_2 = record
+  m68k_op_size_detail = record
     case Integer of
       0: (cpu_size: m68k_cpu_size);
       1: (fpu_size: m68k_fpu_size);
@@ -690,7 +688,7 @@ type
   /// Operation size of the current instruction (NOT the actually size of instruction)
   m68k_op_size = record
     &type: m68k_size_type;
-    f2: _anonymous_type_2;
+    detail: m68k_op_size_detail;
   end;
 
   /// The M68K instruction and it's operands

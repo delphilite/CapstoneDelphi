@@ -362,8 +362,7 @@ type
     modify: Cardinal;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_tms320c64x_op_detail = record
     case Integer of
       0: (/// register value for REG operand or first register for REGPAIR operand
     reg: Cardinal);
@@ -376,17 +375,15 @@ type
   cs_tms320c64x_op = record
     /// operand type
     &type: tms320c64x_op_type;
-    f2: _anonymous_type_1;
+    detail: cs_tms320c64x_op_detail;
   end;
 
-  P_anonymous_type_2 = ^_anonymous_type_2;
-  _anonymous_type_2 = record
+  cs_tms320c64x_condition = record
     reg: Cardinal;
     zero: Cardinal;
   end;
 
-  P_anonymous_type_3 = ^_anonymous_type_3;
-  _anonymous_type_3 = record
+  cs_tms320c64x_funit = record
     &unit: Cardinal;
     side: Cardinal;
     crosspath: Cardinal;
@@ -396,8 +393,8 @@ type
     op_count: UInt8;
     /// operands for this instruction.
     operands: array [0..7] of cs_tms320c64x_op;
-    condition: _anonymous_type_2;
-    funit: _anonymous_type_3;
+    condition: cs_tms320c64x_condition;
+    funit: cs_tms320c64x_funit;
     parallel: Cardinal;
   end;
 

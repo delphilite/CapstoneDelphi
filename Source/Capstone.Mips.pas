@@ -923,8 +923,7 @@ type
     disp: Int64;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_mips_op_detail = record
     case Integer of
       0: (/// register value for REG operand
     reg: mips_reg);
@@ -938,7 +937,7 @@ type
   cs_mips_op = record
     /// operand type
     &type: mips_op_type;
-    f2: _anonymous_type_1;
+    detail: cs_mips_op_detail;
   end;
 
   /// Instruction structure

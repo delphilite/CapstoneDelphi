@@ -1450,8 +1450,7 @@ type
     cond: ppc_bc;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_ppc_op_detail = record
     case Integer of
       0: (/// register value for REG operand
     reg: ppc_reg);
@@ -1467,7 +1466,7 @@ type
   cs_ppc_op = record
     /// operand type
     &type: ppc_op_type;
-    f2: _anonymous_type_1;
+    detail: cs_ppc_op_detail;
   end;
 
   /// Instruction structure

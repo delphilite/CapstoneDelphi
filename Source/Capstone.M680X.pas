@@ -582,8 +582,7 @@ type
     indirect: Boolean;
   end;
 
-  P_anonymous_type_1 = ^_anonymous_type_1;
-  _anonymous_type_1 = record
+  cs_m680x_op_detail = record
     case Integer of
       0: (/// immediate value for IMM operand
     imm: Int32);
@@ -604,7 +603,7 @@ type
   /// Instruction operand
   cs_m680x_op = record
     &type: m680x_op_type;
-    f2: _anonymous_type_1;
+    detail: cs_m680x_op_detail;
     /// size of this operand (in bytes)
     size: UInt8;
     /// How is this operand accessed? (READ, WRITE or READ|WRITE)

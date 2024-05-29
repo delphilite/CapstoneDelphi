@@ -74,9 +74,6 @@ type
   /// Architecture type
   cs_arch = Cardinal;
 
-  // Forward declarations
-  PUInt8 = ^UInt8;
-
 const
   /// ARM architecture (including Thumb, Thumb-2)
   CS_ARCH_ARM = 0;
@@ -323,7 +320,7 @@ type
   
    @return: return number of bytes to skip, or 0 to immediately stop disassembling.
    *)
-  cs_skipdata_cb_t = function(const code: PUInt8; code_size: NativeUInt; offset: NativeUInt; user_data: Pointer): NativeUInt; cdecl;
+  cs_skipdata_cb_t = function(const code: PByte; code_size: NativeUInt; offset: NativeUInt; user_data: Pointer): NativeUInt; cdecl;
 
   /// User-customized setup for SKIPDATA option
   cs_opt_skipdata = record
@@ -613,14 +610,14 @@ function cs_strerror(code: cs_err): PAnsiChar; cdecl;
 
  On failure, call cs_errno() for error code.
  *)
-function cs_disasm(handle: csh; const code: PUInt8; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
+function cs_disasm(handle: csh; const code: PByte; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
   external capstone name _PU + 'cs_disasm';
 
 (**
   Deprecated function - to be retired in the next version!
   Use cs_disasm() instead of cs_disasm_ex()
  *)
-function cs_disasm_ex(handle: csh; const code: PUInt8; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
+function cs_disasm_ex(handle: csh; const code: PByte; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
   external capstone name _PU + 'cs_disasm_ex';
 
 (**
@@ -679,7 +676,7 @@ function cs_malloc(handle: csh): Pcs_insn; cdecl;
 
  On failure, call cs_errno() for error code.
  *)
-function cs_disasm_iter(handle: csh; var code: PUInt8; var size: NativeUInt; var address: UInt64; insn: Pcs_insn): Boolean; cdecl;
+function cs_disasm_iter(handle: csh; var code: PByte; var size: NativeUInt; var address: UInt64; insn: Pcs_insn): Boolean; cdecl;
   external capstone name _PU + 'cs_disasm_iter';
 
 (**
@@ -835,7 +832,7 @@ function cs_op_index(handle: csh; const insn: Pcs_insn; op_type: Cardinal; posit
  @return CS_ERR_OK on success, or other value on failure (refer to cs_err enum
  for detailed error).
  *)
-function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; regs_read_count: PUInt8; regs_write: cs_regs; regs_write_count: PUInt8): cs_err; cdecl;
+function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; regs_read_count: PByte; regs_write: cs_regs; regs_write_count: PByte): cs_err; cdecl;
   external capstone name _PU + 'cs_regs_access';
 
 (**
