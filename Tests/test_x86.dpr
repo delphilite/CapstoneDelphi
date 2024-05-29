@@ -1,15 +1,21 @@
-﻿program test_x86;
+﻿{ ***************************************************** }
+{                                                       }
+{  Pascal language binding for the Capstone engine      }
+{                                                       }
+{  Unit Name: test_x86                                  }
+{     Author: Lsuper 2024.05.01                         }
+{    Purpose: tests\test_x86.c                          }
+{                                                       }
+{  Copyright (c) 1998-2024 Super Studio                 }
+{                                                       }
+{ ***************************************************** }
+
+program test_x86;
 
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, test_utils,
-{$IFDEF CS_STATICLINK}
-  Capstone.StaticLib,
-{$ELSE}
-  Capstone.Api,
-{$ENDIF}
-  Capstone.X86;
+  SysUtils, Windows, Capstone.Api, Capstone.X86, test_utils;
 
 function get_eflag_name(const flag: UInt64): string;
 type

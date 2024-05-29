@@ -14,6 +14,22 @@ unit Capstone.Api;
 
 {$I Capstone.inc}
 
+{.$DEFINE CS_STATICLINK}
+
+{$IFDEF CS_STATICLINK}
+  {$IFDEF FPC}
+    {$MESSAGE ERROR 'staticlink not supported'}
+  {$ENDIF}
+  {$IFNDEF MSWINDOWS}
+    {$MESSAGE ERROR 'staticlink not supported'}
+  {$ENDIF}
+  {$IFNDEF CPUX64}
+    {$DEFINE CS_USE_UNDERSCORE}
+  {$ENDIF}
+{$ELSE}
+  {$DEFINE CS_USE_EXTNAME}
+{$ENDIF}
+
 interface
 
 uses
@@ -39,7 +55,7 @@ const
   {$LINKLIB libcapstone}
 {$IFEND}
 
-{$IFDEF NEED_UNDERSCORE}
+{$IFDEF CS_USE_UNDERSCORE}
   _PU = '_';
 {$ELSE}
   _PU = '';
@@ -490,7 +506,7 @@ type
  set both @major & @minor arguments to NULL.
  *)
 function cs_version(var major: Integer; var minor: Integer): Cardinal; cdecl;
-  external capstone name _PU + 'cs_version';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_version';
 
 (**
  This API can be used to either ask for archs supported by this library,
@@ -506,7 +522,7 @@ function cs_version(var major: Integer; var minor: Integer): Cardinal; cdecl;
  @return True if this library supports the given arch, or in 'diet' mode.
  *)
 function cs_support(query: Integer): Boolean; cdecl;
-  external capstone name _PU + 'cs_support';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_support';
 
 (**
  Initialize CS handle: this must be done before any usage of CS.
@@ -519,7 +535,7 @@ function cs_support(query: Integer): Boolean; cdecl;
  for detailed error).
  *)
 function cs_open(arch: cs_arch; mode: cs_mode; var handle: csh): cs_err; cdecl;
-  external capstone name _PU + 'cs_open';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_open';
 
 (**
  Close CS handle: MUST do to release the handle when it is not used anymore.
@@ -536,7 +552,7 @@ function cs_open(arch: cs_arch; mode: cs_mode; var handle: csh): cs_err; cdecl;
  for detailed error).
  *)
 function cs_close(var handle: csh): cs_err; cdecl;
-  external capstone name _PU + 'cs_close';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_close';
 
 (**
  Set option for disassembling engine at runtime
@@ -553,7 +569,7 @@ function cs_close(var handle: csh): cs_err; cdecl;
  even before cs_open()
  *)
 function cs_option(handle: csh; &type: cs_opt_type; value: NativeUInt): cs_err; cdecl;
-  external capstone name _PU + 'cs_option';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_option';
 
 (**
  Report the last error number when some API function fail.
@@ -564,7 +580,7 @@ function cs_option(handle: csh; &type: cs_opt_type; value: NativeUInt): cs_err; 
  @return: error code of cs_err enum type (CS_ERR_*, see above)
  *)
 function cs_errno(handle: csh): cs_err; cdecl;
-  external capstone name _PU + 'cs_errno';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_errno';
 
 (**
  Return a string describing given error code.
@@ -575,7 +591,7 @@ function cs_errno(handle: csh): cs_err; cdecl;
   passed in the argument @code
  *)
 function cs_strerror(code: cs_err): PAnsiChar; cdecl;
-  external capstone name _PU + 'cs_strerror';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_strerror';
 
 (**
  Disassemble binary code, given the code buffer, size, address and number
@@ -611,14 +627,14 @@ function cs_strerror(code: cs_err): PAnsiChar; cdecl;
  On failure, call cs_errno() for error code.
  *)
 function cs_disasm(handle: csh; const code: PByte; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
-  external capstone name _PU + 'cs_disasm';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_disasm';
 
 (**
   Deprecated function - to be retired in the next version!
   Use cs_disasm() instead of cs_disasm_ex()
  *)
 function cs_disasm_ex(handle: csh; const code: PByte; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
-  external capstone name _PU + 'cs_disasm_ex';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_disasm_ex';
 
 (**
  Free memory allocated by cs_malloc() or cs_disasm() (argument @insn)
@@ -628,7 +644,7 @@ function cs_disasm_ex(handle: csh; const code: PByte; code_size: NativeUInt; add
      to free memory allocated by cs_malloc().
  *)
 procedure cs_free(insn: Pcs_insn; count: NativeUInt); cdecl;
-  external capstone name _PU + 'cs_free';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_free';
 
 (**
  Allocate memory for 1 instruction to be used by cs_disasm_iter().
@@ -639,7 +655,7 @@ procedure cs_free(insn: Pcs_insn; count: NativeUInt); cdecl;
  this instruction with cs_free(insn, 1)
  *)
 function cs_malloc(handle: csh): Pcs_insn; cdecl;
-  external capstone name _PU + 'cs_malloc';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_malloc';
 
 (**
  Fast API to disassemble binary code, given the code buffer, size, address
@@ -677,7 +693,7 @@ function cs_malloc(handle: csh): Pcs_insn; cdecl;
  On failure, call cs_errno() for error code.
  *)
 function cs_disasm_iter(handle: csh; var code: PByte; var size: NativeUInt; var address: UInt64; insn: Pcs_insn): Boolean; cdecl;
-  external capstone name _PU + 'cs_disasm_iter';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_disasm_iter';
 
 (**
  Return friendly name of register in a string.
@@ -693,7 +709,7 @@ function cs_disasm_iter(handle: csh; var code: PByte; var size: NativeUInt; var 
  @return: string name of the register, or NULL if @reg_id is invalid.
  *)
 function cs_reg_name(handle: csh; reg_id: Cardinal): PAnsiChar; cdecl;
-  external capstone name _PU + 'cs_reg_name';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_reg_name';
 
 (**
  Return friendly name of an instruction in a string.
@@ -708,7 +724,7 @@ function cs_reg_name(handle: csh; reg_id: Cardinal): PAnsiChar; cdecl;
  @return: string name of the instruction, or NULL if @insn_id is invalid.
  *)
 function cs_insn_name(handle: csh; insn_id: Cardinal): PAnsiChar; cdecl;
-  external capstone name _PU + 'cs_insn_name';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_insn_name';
 
 (**
  Return friendly name of a group id (that an instruction can belong to)
@@ -723,7 +739,7 @@ function cs_insn_name(handle: csh; insn_id: Cardinal): PAnsiChar; cdecl;
  @return: string name of the group, or NULL if @group_id is invalid.
  *)
 function cs_group_name(handle: csh; group_id: Cardinal): PAnsiChar; cdecl;
-  external capstone name _PU + 'cs_group_name';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_group_name';
 
 (**
  Check if a disassembled instruction belong to a particular group.
@@ -742,7 +758,7 @@ function cs_group_name(handle: csh; group_id: Cardinal): PAnsiChar; cdecl;
  @return: true if this instruction indeed belongs to the given group, or false otherwise.
  *)
 function cs_insn_group(handle: csh; const insn: Pcs_insn; group_id: Cardinal): Boolean; cdecl;
-  external capstone name _PU + 'cs_insn_group';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_insn_group';
 
 (**
  Check if a disassembled instruction IMPLICITLY used a particular register.
@@ -760,7 +776,7 @@ function cs_insn_group(handle: csh; const insn: Pcs_insn; group_id: Cardinal): B
  @return: true if this instruction indeed implicitly used the given register, or false otherwise.
  *)
 function cs_reg_read(handle: csh; const insn: Pcs_insn; reg_id: Cardinal): Boolean; cdecl;
-  external capstone name _PU + 'cs_reg_read';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_reg_read';
 
 (**
  Check if a disassembled instruction IMPLICITLY modified a particular register.
@@ -778,7 +794,7 @@ function cs_reg_read(handle: csh; const insn: Pcs_insn; reg_id: Cardinal): Boole
  @return: true if this instruction indeed implicitly modified the given register, or false otherwise.
  *)
 function cs_reg_write(handle: csh; const insn: Pcs_insn; reg_id: Cardinal): Boolean; cdecl;
-  external capstone name _PU + 'cs_reg_write';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_reg_write';
 
 (**
  Count the number of operands of a given type.
@@ -794,7 +810,7 @@ function cs_reg_write(handle: csh; const insn: Pcs_insn; reg_id: Cardinal): Bool
  or -1 on failure.
  *)
 function cs_op_count(handle: csh; const insn: Pcs_insn; op_type: Cardinal): Integer; cdecl;
-  external capstone name _PU + 'cs_op_count';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_op_count';
 
 (**
  Retrieve the position of operand of given type in <arch>.operands[] array.
@@ -813,7 +829,7 @@ function cs_op_count(handle: csh; const insn: Pcs_insn; op_type: Cardinal): Inte
  in instruction @insn, or -1 on failure.
  *)
 function cs_op_index(handle: csh; const insn: Pcs_insn; op_type: Cardinal; position: Cardinal): Integer; cdecl;
-  external capstone name _PU + 'cs_op_index';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_op_index';
 
 (**
  Retrieve all the registers accessed by an instruction, either explicitly or
@@ -833,7 +849,7 @@ function cs_op_index(handle: csh; const insn: Pcs_insn; op_type: Cardinal; posit
  for detailed error).
  *)
 function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; regs_read_count: PByte; regs_write: cs_regs; regs_write_count: PByte): cs_err; cdecl;
-  external capstone name _PU + 'cs_regs_access';
+  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_regs_access';
 
 (**
  Macro to create combined version which can be compared to
@@ -842,6 +858,155 @@ function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; r
 function cs_make_version(major, minor: Integer): Cardinal; cdecl;
 
 implementation
+
+{$IFDEF CS_STATICLINK}
+
+{$IFDEF CPUX86}
+  {$L Win32\cs.obj}
+  {$L Win32\X86Module.obj}
+  {$L Win32\X86ATTInstPrinter.obj}
+  {$L Win32\X86Disassembler.obj}
+  {$L Win32\X86DisassemblerDecoder.obj}
+  {$L Win32\X86IntelInstPrinter.obj}
+  {$L Win32\X86Mapping.obj}
+  {$L Win32\MCInst.obj}
+  {$L Win32\MCInstrDesc.obj}
+  {$L Win32\MCRegisterInfo.obj}
+  {$L Win32\SStream.obj}
+  {$L Win32\utils.obj}
+  {$WARN BAD_GLOBAL_SYMBOL OFF}
+{$ENDIF CPUX86}
+
+{$IFDEF CPUX64}
+  {$L Win64\cs.o}
+  {$L Win64\X86Module.o}
+  {$L Win64\X86ATTInstPrinter.o}
+  {$L Win64\X86Disassembler.o}
+  {$L Win64\X86DisassemblerDecoder.o}
+  {$L Win64\X86IntelInstPrinter.o}
+  {$L Win64\X86Mapping.o}
+  {$L Win64\MCInst.o}
+  {$L Win64\MCInstrDesc.o}
+  {$L Win64\MCRegisterInfo.o}
+  {$L Win64\SStream.o}
+  {$L Win64\utils.o}
+  {$WARN BAD_GLOBAL_SYMBOL OFF}
+{$ENDIF CPUX64}
+
+const
+  msvcrt = 'msvcrt.dll';
+
+{$IFDEF CS_USE_UNDERSCORE}
+function _malloc(size: NativeUInt): Pointer; cdecl;
+{$ELSE}
+function malloc(size: NativeUInt): Pointer; cdecl;
+{$ENDIF}
+begin
+  GetMem(Result, Size);
+end;
+
+{$IFDEF CS_USE_UNDERSCORE}
+function _calloc(nmemb: NativeUInt; elsize: NativeUInt): Pointer; cdecl;
+{$ELSE}
+function calloc(nmemb: NativeUInt; elsize: NativeUInt): Pointer; cdecl;
+{$ENDIF}
+var
+  nBytes: NativeUInt;
+begin
+  nBytes := nmemb * elsize;
+  if nBytes > 0 then
+  begin
+    GetMem(Result, nBytes);
+    FillChar(Result^, nBytes, 0);
+  end
+  else Result := nil;
+end;
+
+{$IFDEF CS_USE_UNDERSCORE}
+function _realloc(ptr: Pointer; size: NativeUInt): Pointer; cdecl;
+{$ELSE}
+function realloc(ptr: Pointer; size: NativeUInt): Pointer; cdecl;
+{$ENDIF}
+begin
+  ReallocMem(ptr, size);
+  Result := ptr;
+end;
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _free(ptr: Pointer); cdecl;
+{$ELSE}
+procedure free(ptr: Pointer); cdecl;
+{$ENDIF}
+begin
+  FreeMem(ptr);
+end;
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _vsnprintf; cdecl; external msvcrt name 'vsnprintf';
+{$ELSE}
+procedure vsnprintf; cdecl; external msvcrt name 'vsnprintf';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _memcpy; cdecl; external msvcrt name 'memcpy';
+{$ELSE}
+procedure memcpy; cdecl; external msvcrt name 'memcpy';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _memmove; cdecl; external msvcrt name 'memmove';
+{$ELSE}
+procedure memmove; cdecl; external msvcrt name 'memmove';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _memset; cdecl; external msvcrt name 'memset';
+{$ELSE}
+procedure memset; cdecl; external msvcrt name 'memset';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _strlen; cdecl; external msvcrt name 'strlen';
+{$ELSE}
+procedure strlen; cdecl; external msvcrt name 'strlen';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _strncpy; cdecl; external msvcrt name 'strncpy';
+{$ELSE}
+procedure strncpy; cdecl; external msvcrt name 'strncpy';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _qsort; cdecl; external msvcrt name 'qsort';
+{$ELSE}
+procedure qsort; cdecl; external msvcrt name 'qsort';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure __llmul; asm jmp System.@_llmul end;
+procedure __llshl; asm jmp System.@_llshl end;
+{$ELSE}
+procedure strcmp; cdecl; external msvcrt name 'strcmp';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+var
+  __fltused: Integer = 0;
+  _cs_mem_malloc: Pointer = @_malloc;
+  _cs_mem_calloc: Pointer = @_calloc;
+  _cs_mem_free: Pointer = @_free;
+  _cs_vsnprintf: Pointer = @_vsnprintf;
+{$ELSE}
+var
+  _fltused: Integer = 0;
+  cs_mem_malloc: Pointer = @malloc;
+  cs_mem_calloc: Pointer = @calloc;
+  cs_mem_free: Pointer = @free;
+  cs_vsnprintf: Pointer = @vsnprintf;
+{$ENDIF}
+
+{$ENDIF CS_STATICLINK}
 
 function cs_make_version(major, minor: Integer): Cardinal;
 begin
