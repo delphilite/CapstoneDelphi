@@ -694,7 +694,7 @@ type
   /// The M68K instruction and it's operands
   cs_m68k = record
     /// operands for this instruction.
-    operands: array [0..3] of cs_m68k_op;
+    operands: array[0..3] of cs_m68k_op;
     /// size of data operand works on in bytes (.b, .w, .l, etc)
     op_size: m68k_op_size;
     /// number of operands for the instruction

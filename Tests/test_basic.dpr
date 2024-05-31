@@ -134,55 +134,55 @@ const
 const
   Platforms: array[0..26] of TPlatform = (
 {$IFDEF CAPSTONE_HAS_X86}
-    (arch: CS_ARCH_X86; mode: CS_MODE_16; code: @X86_CODE16[0]; size: SizeOf(X86_CODE16); comment: 'X86 16bit (Intel syntax)'),
-    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32[0]; size: SizeOf(X86_CODE32); comment: 'X86 32bit (ATT syntax)'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_ATT),
-    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32[0]; size: SizeOf(X86_CODE32); comment: 'X86 32 (Intel syntax)'),
-    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32[0]; size: SizeOf(X86_CODE32); comment: 'X86 32 (MASM syntax)'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_MASM),
-    (arch: CS_ARCH_X86; mode: CS_MODE_64; code: @X86_CODE64[0]; size: SizeOf(X86_CODE64); comment: 'X86 64 (Intel syntax)'),
+    (arch: CS_ARCH_X86; mode: CS_MODE_16; code: @X86_CODE16; size: SizeOf(X86_CODE16); comment: 'X86 16bit (Intel syntax)'),
+    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32; size: SizeOf(X86_CODE32); comment: 'X86 32bit (ATT syntax)'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_ATT),
+    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32; size: SizeOf(X86_CODE32); comment: 'X86 32 (Intel syntax)'),
+    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32; size: SizeOf(X86_CODE32); comment: 'X86 32 (MASM syntax)'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_MASM),
+    (arch: CS_ARCH_X86; mode: CS_MODE_64; code: @X86_CODE64; size: SizeOf(X86_CODE64); comment: 'X86 64 (Intel syntax)'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_ARM}
-    (arch: CS_ARCH_ARM; mode: CS_MODE_ARM; code: @ARM_CODE[0]; size: SizeOf(ARM_CODE); comment: 'ARM'),
-    (arch: CS_ARCH_ARM; mode: CS_MODE_THUMB; code: @THUMB_CODE2[0]; size: SizeOf(THUMB_CODE2); comment: 'THUMB-2'),
-    (arch: CS_ARCH_ARM; mode: CS_MODE_ARM; code: @ARM_CODE2[0]; size: SizeOf(ARM_CODE2); comment: 'ARM: Cortex-A15 + NEON'),
-    (arch: CS_ARCH_ARM; mode: CS_MODE_THUMB; code: @THUMB_CODE[0]; size: SizeOf(THUMB_CODE); comment: 'THUMB'),
-    (arch: CS_ARCH_ARM; mode: CS_MODE_THUMB or CS_MODE_MCLASS; code: @THUMB_MCLASS[0]; size: SizeOf(THUMB_MCLASS); comment: 'Thumb-MClass'),
-    (arch: CS_ARCH_ARM; mode: CS_MODE_ARM or CS_MODE_V8; code: @ARMV8[0]; size: SizeOf(ARMV8); comment: 'Arm-V8'),
+    (arch: CS_ARCH_ARM; mode: CS_MODE_ARM; code: @ARM_CODE; size: SizeOf(ARM_CODE); comment: 'ARM'),
+    (arch: CS_ARCH_ARM; mode: CS_MODE_THUMB; code: @THUMB_CODE2; size: SizeOf(THUMB_CODE2); comment: 'THUMB-2'),
+    (arch: CS_ARCH_ARM; mode: CS_MODE_ARM; code: @ARM_CODE2; size: SizeOf(ARM_CODE2); comment: 'ARM: Cortex-A15 + NEON'),
+    (arch: CS_ARCH_ARM; mode: CS_MODE_THUMB; code: @THUMB_CODE; size: SizeOf(THUMB_CODE); comment: 'THUMB'),
+    (arch: CS_ARCH_ARM; mode: CS_MODE_THUMB or CS_MODE_MCLASS; code: @THUMB_MCLASS; size: SizeOf(THUMB_MCLASS); comment: 'Thumb-MClass'),
+    (arch: CS_ARCH_ARM; mode: CS_MODE_ARM or CS_MODE_V8; code: @ARMV8; size: SizeOf(ARMV8); comment: 'Arm-V8'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_MIPS}
-    (arch: CS_ARCH_MIPS; mode: CS_MODE_MIPS32 or CS_MODE_BIG_ENDIAN; code: @MIPS_CODE[0]; size: SizeOf(MIPS_CODE); comment: 'MIPS-32 (Big-endian)'),
-    (arch: CS_ARCH_MIPS; mode: CS_MODE_MIPS64 or CS_MODE_LITTLE_ENDIAN; code: @MIPS_CODE2[0]; size: SizeOf(MIPS_CODE2); comment: 'MIPS-64-EL (Little-endian)'),
-    (arch: CS_ARCH_MIPS; mode: CS_MODE_MIPS32R6 or CS_MODE_MICRO or CS_MODE_BIG_ENDIAN; code: @MIPS_32R6M[0]; size: SizeOf(MIPS_32R6M); comment: 'MIPS-32R6 | Micro (Big-endian)'),
-    (arch: CS_ARCH_MIPS; mode: CS_MODE_MIPS32R6 or CS_MODE_BIG_ENDIAN; code: @MIPS_32R6[0]; size: SizeOf(MIPS_32R6); comment: 'MIPS-32R6 (Big-endian)'),
+    (arch: CS_ARCH_MIPS; mode: CS_MODE_MIPS32 or CS_MODE_BIG_ENDIAN; code: @MIPS_CODE; size: SizeOf(MIPS_CODE); comment: 'MIPS-32 (Big-endian)'),
+    (arch: CS_ARCH_MIPS; mode: CS_MODE_MIPS64 or CS_MODE_LITTLE_ENDIAN; code: @MIPS_CODE2; size: SizeOf(MIPS_CODE2); comment: 'MIPS-64-EL (Little-endian)'),
+    (arch: CS_ARCH_MIPS; mode: CS_MODE_MIPS32R6 or CS_MODE_MICRO or CS_MODE_BIG_ENDIAN; code: @MIPS_32R6M; size: SizeOf(MIPS_32R6M); comment: 'MIPS-32R6 | Micro (Big-endian)'),
+    (arch: CS_ARCH_MIPS; mode: CS_MODE_MIPS32R6 or CS_MODE_BIG_ENDIAN; code: @MIPS_32R6; size: SizeOf(MIPS_32R6); comment: 'MIPS-32R6 (Big-endian)'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_ARM64}
-    (arch: CS_ARCH_ARM64; mode: CS_MODE_ARM; code: @ARM64_CODE[0]; size: SizeOf(ARM64_CODE); comment: 'ARM-64'),
+    (arch: CS_ARCH_ARM64; mode: CS_MODE_ARM; code: @ARM64_CODE; size: SizeOf(ARM64_CODE); comment: 'ARM-64'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_POWERPC}
-    (arch: CS_ARCH_PPC; mode: CS_MODE_BIG_ENDIAN; code: @PPC_CODE[0]; size: SizeOf(PPC_CODE); comment: 'PPC-64'),
-    (arch: CS_ARCH_PPC; mode: CS_MODE_BIG_ENDIAN; code: @PPC_CODE[0]; size: SizeOf(PPC_CODE); comment: 'PPC-64, print register with number only'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_NOREGNAME),
-    (arch: CS_ARCH_PPC; mode: CS_MODE_BIG_ENDIAN or CS_MODE_QPX; code: @PPC_CODE2[0]; size: SizeOf(PPC_CODE2); comment: 'PPC-64 + QPX'),
+    (arch: CS_ARCH_PPC; mode: CS_MODE_BIG_ENDIAN; code: @PPC_CODE; size: SizeOf(PPC_CODE); comment: 'PPC-64'),
+    (arch: CS_ARCH_PPC; mode: CS_MODE_BIG_ENDIAN; code: @PPC_CODE; size: SizeOf(PPC_CODE); comment: 'PPC-64, print register with number only'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_NOREGNAME),
+    (arch: CS_ARCH_PPC; mode: CS_MODE_BIG_ENDIAN or CS_MODE_QPX; code: @PPC_CODE2; size: SizeOf(PPC_CODE2); comment: 'PPC-64 + QPX'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_SPARC}
-    (arch: CS_ARCH_SPARC; mode: CS_MODE_BIG_ENDIAN; code: @SPARC_CODE[0]; size: SizeOf(SPARC_CODE); comment: 'Sparc'),
-    (arch: CS_ARCH_SPARC; mode: CS_MODE_BIG_ENDIAN or CS_MODE_V9; code: @SPARCV9_CODE[0]; size: SizeOf(SPARCV9_CODE); comment: 'SparcV9'),
+    (arch: CS_ARCH_SPARC; mode: CS_MODE_BIG_ENDIAN; code: @SPARC_CODE; size: SizeOf(SPARC_CODE); comment: 'Sparc'),
+    (arch: CS_ARCH_SPARC; mode: CS_MODE_BIG_ENDIAN or CS_MODE_V9; code: @SPARCV9_CODE; size: SizeOf(SPARCV9_CODE); comment: 'SparcV9'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_SYSZ}
-    (arch: CS_ARCH_SYSZ; mode: 0; code: @SYSZ_CODE[0]; size: SizeOf(SYSZ_CODE); comment: 'SystemZ'),
+    (arch: CS_ARCH_SYSZ; mode: 0; code: @SYSZ_CODE; size: SizeOf(SYSZ_CODE); comment: 'SystemZ'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_XCORE}
-    (arch: CS_ARCH_XCORE; mode: 0; code: @XCORE_CODE[0]; size: SizeOf(XCORE_CODE); comment: 'XCore'),
+    (arch: CS_ARCH_XCORE; mode: 0; code: @XCORE_CODE; size: SizeOf(XCORE_CODE); comment: 'XCore'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_M68K}
-    (arch: CS_ARCH_M68K; mode: CS_MODE_BIG_ENDIAN or CS_MODE_M68K_040; code: @M68K_CODE[0]; size: SizeOf(M68K_CODE); comment: 'M68K'),
+    (arch: CS_ARCH_M68K; mode: CS_MODE_BIG_ENDIAN or CS_MODE_M68K_040; code: @M68K_CODE; size: SizeOf(M68K_CODE); comment: 'M68K'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_TMS320C64X}
-    (arch: CS_ARCH_TMS320C64X; mode: 0; code: @TMS320C64X_CODE[0]; size: SizeOf(TMS320C64X_CODE); comment: 'TMS320C64x'),
+    (arch: CS_ARCH_TMS320C64X; mode: 0; code: @TMS320C64X_CODE; size: SizeOf(TMS320C64X_CODE); comment: 'TMS320C64x'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_M680X}
-    (arch: CS_ARCH_M680X; mode: CS_MODE_M680X_6809; code: @M680X_CODE[0]; size: SizeOf(M680X_CODE); comment: 'M680X_M6809'),
+    (arch: CS_ARCH_M680X; mode: CS_MODE_M680X_6809; code: @M680X_CODE; size: SizeOf(M680X_CODE); comment: 'M680X_M6809'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_EVM}
-    (arch: CS_ARCH_EVM; mode: 0; code: @EVM_CODE[0]; size: SizeOf(EVM_CODE); comment: 'EVM')
+    (arch: CS_ARCH_EVM; mode: 0; code: @EVM_CODE; size: SizeOf(EVM_CODE); comment: 'EVM')
 {$ENDIF}
   );
 var

@@ -6,10 +6,10 @@
 			<Projects Include="test_basic.dproj">
 				<Dependencies/>
 			</Projects>
-			<Projects Include="test_detail.dproj">
+			<Projects Include="test_customized_mnem.dproj">
 				<Dependencies/>
 			</Projects>
-			<Projects Include="test_customized_mnem.dproj">
+			<Projects Include="test_detail.dproj">
 				<Dependencies/>
 			</Projects>
 			<Projects Include="test_iter.dproj">
@@ -24,7 +24,34 @@
 			<Projects Include="test_arm64.dproj">
 				<Dependencies/>
 			</Projects>
+			<Projects Include="test_evm.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_m680x.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_m68k.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_mips.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_ppc.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_sparc.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_systemz.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_tms320c64x.dproj">
+				<Dependencies/>
+			</Projects>
 			<Projects Include="test_x86.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="test_xcore.dproj">
 				<Dependencies/>
 			</Projects>
 		</ItemGroup>
@@ -44,15 +71,6 @@
 		<Target Name="test_basic:Make">
 			<MSBuild Projects="test_basic.dproj" Targets="Make"/>
 		</Target>
-		<Target Name="test_detail">
-			<MSBuild Projects="test_detail.dproj"/>
-		</Target>
-		<Target Name="test_detail:Clean">
-			<MSBuild Projects="test_detail.dproj" Targets="Clean"/>
-		</Target>
-		<Target Name="test_detail:Make">
-			<MSBuild Projects="test_detail.dproj" Targets="Make"/>
-		</Target>
 		<Target Name="test_customized_mnem">
 			<MSBuild Projects="test_customized_mnem.dproj"/>
 		</Target>
@@ -61,6 +79,15 @@
 		</Target>
 		<Target Name="test_customized_mnem:Make">
 			<MSBuild Projects="test_customized_mnem.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_detail">
+			<MSBuild Projects="test_detail.dproj"/>
+		</Target>
+		<Target Name="test_detail:Clean">
+			<MSBuild Projects="test_detail.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_detail:Make">
+			<MSBuild Projects="test_detail.dproj" Targets="Make"/>
 		</Target>
 		<Target Name="test_iter">
 			<MSBuild Projects="test_iter.dproj"/>
@@ -98,6 +125,78 @@
 		<Target Name="test_arm64:Make">
 			<MSBuild Projects="test_arm64.dproj" Targets="Make"/>
 		</Target>
+		<Target Name="test_evm">
+			<MSBuild Projects="test_evm.dproj"/>
+		</Target>
+		<Target Name="test_evm:Clean">
+			<MSBuild Projects="test_evm.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_evm:Make">
+			<MSBuild Projects="test_evm.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_m680x">
+			<MSBuild Projects="test_m680x.dproj"/>
+		</Target>
+		<Target Name="test_m680x:Clean">
+			<MSBuild Projects="test_m680x.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_m680x:Make">
+			<MSBuild Projects="test_m680x.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_m68k">
+			<MSBuild Projects="test_m68k.dproj"/>
+		</Target>
+		<Target Name="test_m68k:Clean">
+			<MSBuild Projects="test_m68k.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_m68k:Make">
+			<MSBuild Projects="test_m68k.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_mips">
+			<MSBuild Projects="test_mips.dproj"/>
+		</Target>
+		<Target Name="test_mips:Clean">
+			<MSBuild Projects="test_mips.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_mips:Make">
+			<MSBuild Projects="test_mips.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_ppc">
+			<MSBuild Projects="test_ppc.dproj"/>
+		</Target>
+		<Target Name="test_ppc:Clean">
+			<MSBuild Projects="test_ppc.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_ppc:Make">
+			<MSBuild Projects="test_ppc.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_sparc">
+			<MSBuild Projects="test_sparc.dproj"/>
+		</Target>
+		<Target Name="test_sparc:Clean">
+			<MSBuild Projects="test_sparc.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_sparc:Make">
+			<MSBuild Projects="test_sparc.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_systemz">
+			<MSBuild Projects="test_systemz.dproj"/>
+		</Target>
+		<Target Name="test_systemz:Clean">
+			<MSBuild Projects="test_systemz.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_systemz:Make">
+			<MSBuild Projects="test_systemz.dproj" Targets="Make"/>
+		</Target>
+		<Target Name="test_tms320c64x">
+			<MSBuild Projects="test_tms320c64x.dproj"/>
+		</Target>
+		<Target Name="test_tms320c64x:Clean">
+			<MSBuild Projects="test_tms320c64x.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_tms320c64x:Make">
+			<MSBuild Projects="test_tms320c64x.dproj" Targets="Make"/>
+		</Target>
 		<Target Name="test_x86">
 			<MSBuild Projects="test_x86.dproj"/>
 		</Target>
@@ -107,14 +206,23 @@
 		<Target Name="test_x86:Make">
 			<MSBuild Projects="test_x86.dproj" Targets="Make"/>
 		</Target>
+		<Target Name="test_xcore">
+			<MSBuild Projects="test_xcore.dproj"/>
+		</Target>
+		<Target Name="test_xcore:Clean">
+			<MSBuild Projects="test_xcore.dproj" Targets="Clean"/>
+		</Target>
+		<Target Name="test_xcore:Make">
+			<MSBuild Projects="test_xcore.dproj" Targets="Make"/>
+		</Target>
 		<Target Name="Build">
-			<CallTarget Targets="test_basic;test_detail;test_customized_mnem;test_iter;test_skipdata;test_arm;test_arm64;test_x86"/>
+			<CallTarget Targets="test_basic;test_customized_mnem;test_detail;test_iter;test_skipdata;test_arm;test_arm64;test_evm;test_m680x;test_m68k;test_mips;test_ppc;test_sparc;test_systemz;test_tms320c64x;test_x86;test_xcore"/>
 		</Target>
 		<Target Name="Clean">
-			<CallTarget Targets="test_basic:Clean;test_detail:Clean;test_customized_mnem:Clean;test_iter:Clean;test_skipdata:Clean;test_arm:Clean;test_arm64:Clean;test_x86:Clean"/>
+			<CallTarget Targets="test_basic:Clean;test_customized_mnem:Clean;test_detail:Clean;test_iter:Clean;test_skipdata:Clean;test_arm:Clean;test_arm64:Clean;test_evm:Clean;test_m680x:Clean;test_m68k:Clean;test_mips:Clean;test_ppc:Clean;test_sparc:Clean;test_systemz:Clean;test_tms320c64x:Clean;test_x86:Clean;test_xcore:Clean"/>
 		</Target>
 		<Target Name="Make">
-			<CallTarget Targets="test_basic:Make;test_detail:Make;test_customized_mnem:Make;test_iter:Make;test_skipdata:Make;test_arm:Make;test_arm64:Make;test_x86:Make"/>
+			<CallTarget Targets="test_basic:Make;test_customized_mnem:Make;test_detail:Make;test_iter:Make;test_skipdata:Make;test_arm:Make;test_arm64:Make;test_evm:Make;test_m680x:Make;test_m68k:Make;test_mips:Make;test_ppc:Make;test_sparc:Make;test_systemz:Make;test_tms320c64x:Make;test_x86:Make;test_xcore:Make"/>
 		</Target>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')" Project="$(BDS)\Bin\CodeGear.Group.Targets"/>
 	</Project>

@@ -373,15 +373,15 @@ type
   /// then update arch/ARCH/ARCHDisassembler.c accordingly
   cs_detail = record
     /// list of implicit registers read by this insn
-    regs_read: array [0..11] of UInt16;
+    regs_read: array[0..11] of UInt16;
     /// number of implicit registers read by this insn
     regs_read_count: UInt8;
     /// list of implicit registers modified by this insn
-    regs_write: array [0..19] of UInt16;
+    regs_write: array[0..19] of UInt16;
     /// number of implicit registers modified by this insn
     regs_write_count: UInt8;
     /// list of group this instruction belong to
-    groups: array [0..7] of UInt8;
+    groups: array[0..7] of UInt8;
     /// number of groups this insn belongs to
     groups_count: UInt8;
     /// Architecture-specific instruction info
@@ -430,13 +430,13 @@ type
     size: UInt16;
     /// Machine bytes of this instruction, with number of bytes indicated by @size above
     /// This information is available even when CS_OPT_DETAIL = CS_OPT_OFF
-    bytes: array [0..15] of UInt8;
+    bytes: array[0..15] of UInt8;
     /// Ascii text of instruction mnemonic
     /// This information is available even when CS_OPT_DETAIL = CS_OPT_OFF
-    mnemonic: array [0..31] of AnsiChar;
+    mnemonic: array[0..31] of AnsiChar;
     /// Ascii text of instruction operands
     /// This information is available even when CS_OPT_DETAIL = CS_OPT_OFF
-    op_str: array [0..159] of AnsiChar;
+    op_str: array[0..159] of AnsiChar;
     /// Pointer to cs_detail.
     /// NOTE: detail pointer is only valid when both requirements below are met:
     /// (1) CS_OP_DETAIL = CS_OPT_ON
@@ -486,7 +486,7 @@ const
 
 type
   /// Type of array to keep the list of registers
-  cs_regs = array [0..63] of UInt16;
+  cs_regs = array[0..63] of UInt16;
 
 (**
  Return combined API version & major and minor version numbers.

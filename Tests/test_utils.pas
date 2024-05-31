@@ -40,8 +40,6 @@ type
 
   procedure print_string_hex(const comment: string; str: PByte; len: Integer);
 
-  procedure WriteLnFormat(const fmt: string; const args: array of const);
-
 implementation
 
 function format_string_hex(const c: Integer; const fmt: string): string;
@@ -74,14 +72,6 @@ begin
     l := l + s;
   end;
   Writeln(l);
-end;
-
-procedure WriteLnFormat(const fmt: string; const args: array of const);
-var
-  S: string;
-begin
-  S := Format(fmt, args);
-  Writeln(S);
 end;
 
 end.

@@ -30,7 +30,7 @@ begin
   if count > 0 then
   begin
     print_string_hex('', @X86_CODE32[0], SizeOf(X86_CODE32));
-    WriteLnFormat('%s %s', [insn.mnemonic, insn.op_str]);
+    Writeln(#9#9, insn.mnemonic, #9, insn.op_str);
     // Free memory allocated by cs_disasm()
     cs_free(insn, count);
   end
@@ -57,7 +57,7 @@ begin
   err := cs_open(CS_ARCH_X86, CS_MODE_32, handle);
   if err <> CS_ERR_OK then
   begin
-    Writeln('Failed on cs_open() with error returned: ', Ord(err));
+    Writeln('Failed on cs_open() with error returned: ', err);
     Abort;
   end;
 

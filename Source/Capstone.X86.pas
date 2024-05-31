@@ -2160,11 +2160,11 @@ type
     /// See X86_PREFIX_CS/SS/DS/ES/FS/GS above.
     /// prefix[2] indicates operand-size override (X86_PREFIX_OPSIZE)
     /// prefix[3] indicates address-size override (X86_PREFIX_ADDRSIZE)
-    prefix: array [0..3] of UInt8;
+    prefix: array[0..3] of UInt8;
     /// Instruction opcode, which can be from 1 to 4 bytes in size.
     /// This contains VEX opcode as well.
     /// An trailing opcode byte gets value 0 when irrelevant.
-    opcode: array [0..3] of UInt8;
+    opcode: array[0..3] of UInt8;
     /// REX prefix: only a non-zero value is relevant for x86_64
     rex: UInt8;
     /// Address size, which can be overridden with above prefix[5].
@@ -2197,7 +2197,7 @@ type
     /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
-    operands: array [0..7] of cs_x86_op;
+    operands: array[0..7] of cs_x86_op;
     /// encoding information
     encoding: cs_x86_encoding;
   end;

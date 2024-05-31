@@ -569,7 +569,7 @@ type
     /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
-    operands: array [0..3] of cs_sparc_op;
+    operands: array[0..3] of cs_sparc_op;
   end;
 
 implementation

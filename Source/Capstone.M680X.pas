@@ -619,7 +619,7 @@ type
     /// number of operands for the instruction or 0
     op_count: UInt8;
     /// operands for this insn.
-    operands: array [0..8] of cs_m680x_op;
+    operands: array[0..8] of cs_m680x_op;
   end;
 
 implementation

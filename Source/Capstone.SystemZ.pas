@@ -841,7 +841,7 @@ type
   cs_sysz_op = record
     /// operand type
     &type: sysz_op_type;
-    f2: cs_sysz_op_detail;
+    detail: cs_sysz_op_detail;
   end;
 
   cs_sysz = record
@@ -851,7 +851,7 @@ type
     /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
-    operands: array [0..5] of cs_sysz_op;
+    operands: array[0..5] of cs_sysz_op;
   end;
 
 implementation

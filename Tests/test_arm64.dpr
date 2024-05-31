@@ -38,66 +38,66 @@ begin
   begin
     case arm64.operands[i].&type of
       ARM64_OP_REG:
-        WriteLnFormat(#9#9'operands[%d].type: REG = %s', [i, cs_reg_name(handle, arm64.operands[i].detail.reg)]);
+        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, arm64.operands[i].detail.reg));
       ARM64_OP_IMM:
-        WriteLnFormat(#9#9'operands[%d].type: IMM = 0x%s', [i, format_string_hex(arm64.operands[i].detail.imm, '%x')]);
+        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(arm64.operands[i].detail.imm, '%x'));
       ARM64_OP_FP:
 {$IFDEF _KERNEL_MODE}
         // Issue #681: Windows kernel does not support formatting float point
-        WriteLnFormat(#9#9'operands[%d].type: FP = <float_point_unsupported>', [i]);
+        WriteLn(#9#9'operands[', i, '].type: FP = <float_point_unsupported>');
 {$ELSE}
-        WriteLnFormat(#9#9'operands[%d].type: FP = %f', [i, arm64.operands[i].detail.fp]);
+        WriteLn(#9#9'operands[', i, '].type: FP = ', arm64.operands[i].detail.fp);
 {$ENDIF}
       ARM64_OP_MEM_:
       begin
-        WriteLnFormat(#9#9'operands[%d].type: MEM', [i]);
+        WriteLn(#9#9'operands[', i, '].type: MEM');
         if (arm64.operands[i].detail.mem.base <> ARM64_REG_INVALID) then
-          WriteLnFormat(#9#9#9'operands[%d].mem.base: REG = %s', [i, cs_reg_name(handle, arm64.operands[i].detail.mem.base)]);
+          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, arm64.operands[i].detail.mem.base));
         if (arm64.operands[i].detail.mem.index <> ARM64_REG_INVALID) then
-          WriteLnFormat(#9#9#9'operands[%d].mem.index: REG = %s', [i, cs_reg_name(handle, arm64.operands[i].detail.mem.index)]);
+          WriteLn(#9#9#9'operands[', i, '].mem.index: REG = ', cs_reg_name(handle, arm64.operands[i].detail.mem.index));
         if (arm64.operands[i].detail.mem.disp <> 0) then
-          WriteLnFormat(#9#9#9'operands[%d].mem.disp: 0x%s', [i, format_string_hex(arm64.operands[i].detail.mem.disp, '%x')]);
+          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(arm64.operands[i].detail.mem.disp, '%x'));
       end;
       ARM64_OP_CIMM:
-        WriteLnFormat(#9#9'operands[%d].type: C-IMM = %u', [i, arm64.operands[i].detail.imm]);
+        WriteLn(#9#9'operands[', i, '].type: C-IMM = ', arm64.operands[i].detail.imm);
       ARM64_OP_REG_MRS:
-        WriteLnFormat(#9#9'operands[%d].type: REG_MRS = 0x%s', [i, format_string_hex(arm64.operands[i].detail.reg, '%x')]);
+        WriteLn(#9#9'operands[', i, '].type: REG_MRS = 0x', format_string_hex(arm64.operands[i].detail.reg, '%x'));
       ARM64_OP_REG_MSR:
-        WriteLnFormat(#9#9'operands[%d].type: REG_MSR = 0x%s', [i, format_string_hex(arm64.operands[i].detail.reg, '%x')]);
+        WriteLn(#9#9'operands[', i, '].type: REG_MSR = 0x', format_string_hex(arm64.operands[i].detail.reg, '%x'));
       ARM64_OP_PSTATE:
-        WriteLnFormat(#9#9'operands[%d].type: PSTATE = 0x%s', [i, format_string_hex(arm64.operands[i].detail.pstate, '%x')]);
+        WriteLn(#9#9'operands[', i, '].type: PSTATE = 0x', format_string_hex(arm64.operands[i].detail.pstate, '%x'));
       ARM64_OP_SYS:
-        WriteLnFormat(#9#9'operands[%d].type: SYS = 0x%s', [i, format_string_hex(arm64.operands[i].detail.sys, '%x')]);
+        WriteLn(#9#9'operands[', i, '].type: SYS = 0x', format_string_hex(arm64.operands[i].detail.sys, '%x'));
       ARM64_OP_PREFETCH:
-        WriteLnFormat(#9#9'operands[%d].type: PREFETCH = 0x%s', [i, format_string_hex(arm64.operands[i].detail.prefetch, '%x')]);
+        WriteLn(#9#9'operands[', i, '].type: PREFETCH = 0x', format_string_hex(arm64.operands[i].detail.prefetch, '%x'));
       ARM64_OP_BARRIER:
-        WriteLnFormat(#9#9'operands[%d].type: BARRIER = 0x%s', [i, format_string_hex(arm64.operands[i].detail.barrier, '%x')]);
+        WriteLn(#9#9'operands[', i, '].type: BARRIER = 0x', format_string_hex(arm64.operands[i].detail.barrier, '%x'));
     end;
 
     access := arm64.operands[i].access;
     case access of
       CS_AC_READ:
-        WriteLnFormat(#9#9'operands[%d].access: READ', [i]);
+        WriteLn(#9#9'operands[', i, '].access: READ');
       CS_AC_WRITE:
-        WriteLnFormat(#9#9'operands[%d].access: WRITE', [i]);
+        WriteLn(#9#9'operands[', i, '].access: WRITE');
       CS_AC_READ or CS_AC_WRITE:
-        WriteLnFormat(#9#9'operands[%d].access: READ | WRITE', [i]);
+        WriteLn(#9#9'operands[', i, '].access: READ | WRITE');
     end;
 
     if (arm64.operands[i].shift.&type <> ARM64_SFT_INVALID) and (arm64.operands[i].shift.value <> 0) then
-      WriteLnFormat(#9#9#9'Shift: type = %u, value = %u', [arm64.operands[i].shift.&type, arm64.operands[i].shift.value]);
+      WriteLn(#9#9#9'Shift: type = ', arm64.operands[i].shift.&type, ', value = ', arm64.operands[i].shift.value);
 
     if (arm64.operands[i].ext <> ARM64_EXT_INVALID) then
-      WriteLnFormat(#9#9#9'Ext: %u', [arm64.operands[i].ext]);
+      WriteLn(#9#9#9'Ext: ', arm64.operands[i].ext);
 
     if (arm64.operands[i].vas <> ARM64_VAS_INVALID) then
-      WriteLnFormat(#9#9#9'Vector Arrangement Specifier: 0x%s', [format_string_hex(arm64.operands[i].vas, '%x')]);
+      WriteLn(#9#9#9'Vector Arrangement Specifier: 0x', format_string_hex(arm64.operands[i].vas, '%x'));
 
     if (arm64.operands[i].vess <> ARM64_VESS_INVALID) then
-      WriteLnFormat(#9#9#9'Vector Element Size Specifier: %d', [arm64.operands[i].vess]);
+      WriteLn(#9#9#9'Vector Element Size Specifier: ', arm64.operands[i].vess);
 
     if (arm64.operands[i].vector_index <> -1) then
-      WriteLnFormat(#9#9#9'Vector Index: %d', [arm64.operands[i].vector_index]);
+      WriteLn(#9#9#9'Vector Index: ', arm64.operands[i].vector_index);
   end;
 
   if (arm64.update_flags) then
@@ -107,7 +107,7 @@ begin
     WriteLn(#9'Write-back: True');
 
   if (arm64.cc <> 0) then
-    WriteLnFormat(#9'Code-condition: %u', [arm64.cc]);
+    WriteLn(#9'Code-condition: ', arm64.cc);
 
   // Print out all registers accessed by this instruction (either implicit or explicit)
   if cs_regs_access(handle, ins, regs_read, @regs_read_count, regs_write, @regs_write_count) = CS_ERR_OK then
@@ -132,7 +132,7 @@ begin
   WriteLn('');
 end;
 
-procedure test;
+procedure Test;
 const
   ARM64_CODE: array[0..67] of Byte = (
     $09, $00, $38, $D5, $BF, $40, $00, $D5, $0C, $05, $13, $D5, $20, $50, $02, $0E,
@@ -142,8 +142,8 @@ const
     $10, $5B, $E8, $3C
   );
 const
-  Platforms: array [0..0] of TPlatform = (
-    (arch: CS_ARCH_ARM64; mode: CS_MODE_ARM; code: @ARM64_CODE[0]; size: SizeOf(ARM64_CODE); comment: 'ARM-64')
+  Platforms: array[0..0] of TPlatform = (
+    (arch: CS_ARCH_ARM64; mode: CS_MODE_ARM; code: @ARM64_CODE; size: SizeOf(ARM64_CODE); comment: 'ARM-64')
   );
 var
   handle: csh;
@@ -151,7 +151,6 @@ var
   insn, item: Pcs_insn;
   i, j: Integer;
   count: Integer;
-  l: string;
   err: cs_err;
 begin
   for i := Low(Platforms) to High(Platforms) do
@@ -160,7 +159,7 @@ begin
     err := cs_open(Platforms[i].arch, Platforms[i].mode, handle);
     if err <> CS_ERR_OK then
     begin
-      WriteLn('Failed on cs_open() with error returned: ', Ord(err));
+      WriteLn('Failed on cs_open() with error returned: ', err);
       Abort;
     end;
 
@@ -177,14 +176,12 @@ begin
       item := insn;
       for j := 0 to count - 1 do
       begin
-        l := '0x' + format_string_hex(item.address);
-        WriteLnFormat('%s:'#9'%s'#9'%s', [l, item.mnemonic, item.op_str]);
+        WriteLn('0x', format_string_hex(item.address), ':'#9, item.mnemonic, #9, item.op_str);
         print_insn_detail(handle, item);
         if j < count - 1 then
           Inc(item);
       end;
-      l := '0x' + format_string_hex(item.address + item.size, '%.2x') + ':';
-      WriteLn(l);
+      WriteLn('0x', format_string_hex(item.address + item.size, '%.2x'), ':');
     finally
       // free memory allocated by cs_disasm()
       cs_free(insn, count);

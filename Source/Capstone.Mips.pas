@@ -946,7 +946,7 @@ type
     /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
-    operands: array [0..9] of cs_mips_op;
+    operands: array[0..9] of cs_mips_op;
   end;
 
 implementation

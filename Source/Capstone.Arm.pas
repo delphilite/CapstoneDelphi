@@ -1059,7 +1059,7 @@ type
     /// or 0 when instruction has no operand.
     op_count: UInt8;
     /// operands for this instruction.
-    operands: array [0..35] of cs_arm_op;
+    operands: array[0..35] of cs_arm_op;
   end;
 
 implementation

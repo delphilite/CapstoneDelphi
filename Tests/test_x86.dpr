@@ -350,11 +350,11 @@ const
     $23, $01, $00, $00, $E8, $DF, $BE, $AD, $DE, $74, $FF
   );
 const
-  Platforms: array [0..3] of TPlatform = (
-    (arch: CS_ARCH_X86; mode: CS_MODE_16; code: @X86_CODE16[0]; size: SizeOf(X86_CODE16); comment: 'X86 16bit (Intel syntax)'; opt_type: CS_OPT_INVALID; opt_value: 0),
-    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32[0]; size: SizeOf(X86_CODE32); comment: 'X86 32 (AT&T syntax)'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_ATT),
-    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32[0]; size: SizeOf(X86_CODE32); comment: 'X86 32 (Intel syntax)'; opt_type: CS_OPT_INVALID; opt_value: 0),
-    (arch: CS_ARCH_X86; mode: CS_MODE_64; code: @X86_CODE64[0]; size: SizeOf(X86_CODE64); comment: 'X86 64 (Intel syntax)'; opt_type: CS_OPT_INVALID; opt_value: 0)
+  Platforms: array[0..3] of TPlatform = (
+    (arch: CS_ARCH_X86; mode: CS_MODE_16; code: @X86_CODE16; size: SizeOf(X86_CODE16); comment: 'X86 16bit (Intel syntax)'; opt_type: CS_OPT_INVALID; opt_value: 0),
+    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32; size: SizeOf(X86_CODE32); comment: 'X86 32 (AT&T syntax)'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_ATT),
+    (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32; size: SizeOf(X86_CODE32); comment: 'X86 32 (Intel syntax)'; opt_type: CS_OPT_INVALID; opt_value: 0),
+    (arch: CS_ARCH_X86; mode: CS_MODE_64; code: @X86_CODE64; size: SizeOf(X86_CODE64); comment: 'X86 64 (Intel syntax)'; opt_type: CS_OPT_INVALID; opt_value: 0)
   );
 var
   handle: csh;
@@ -371,7 +371,7 @@ begin
     err := cs_open(Platforms[i].arch, Platforms[i].mode, handle);
     if err <> CS_ERR_OK then
     begin
-      WriteLn('Failed on cs_open() with error returned: ', Ord(err));
+      WriteLn('Failed on cs_open() with error returned: ', err);
       Abort;
     end;
 

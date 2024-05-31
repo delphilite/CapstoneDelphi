@@ -392,7 +392,7 @@ type
   cs_tms320c64x = record
     op_count: UInt8;
     /// operands for this instruction.
-    operands: array [0..7] of cs_tms320c64x_op;
+    operands: array[0..7] of cs_tms320c64x_op;
     condition: cs_tms320c64x_condition;
     funit: cs_tms320c64x_funit;
     parallel: Cardinal;
