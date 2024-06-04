@@ -351,7 +351,7 @@ type
     /// displacement/offset value
     disp: Cardinal;
     /// unit of base and offset register
-    &unit: Cardinal;
+    unit_: Cardinal;
     /// offset scaled
     scaled: Cardinal;
     /// displacement type
@@ -374,7 +374,7 @@ type
 
   cs_tms320c64x_op = record
     /// operand type
-    &type: tms320c64x_op_type;
+    type_: tms320c64x_op_type;
     detail: cs_tms320c64x_op_detail;
   end;
 
@@ -384,7 +384,7 @@ type
   end;
 
   cs_tms320c64x_funit = record
-    &unit: Cardinal;
+    unit_: Cardinal;
     side: Cardinal;
     crosspath: Cardinal;
   end;

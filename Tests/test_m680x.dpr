@@ -74,7 +74,7 @@ begin
     op := @m680x^.operands[i];
     comment := '';
 
-    case op^.&type of
+    case op^.type_ of
       M680X_OP_REGISTER:
       begin
         if ((i = 0) and ((m680x^.flags and M680X_FIRST_OP_IN_MNEM) <> 0)) or

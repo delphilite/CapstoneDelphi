@@ -936,7 +936,7 @@ type
   /// Instruction operand
   cs_mips_op = record
     /// operand type
-    &type: mips_op_type;
+    type_: mips_op_type;
     detail: cs_mips_op_detail;
   end;
 

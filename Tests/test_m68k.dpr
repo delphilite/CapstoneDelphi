@@ -87,7 +87,7 @@ begin
   begin
     op := @m68k.operands[i];
 
-    case Integer(op.&type) of
+    case Integer(op.type_) of
       M68K_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       M68K_OP_IMM:

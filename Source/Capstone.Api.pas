@@ -568,7 +568,7 @@ function cs_close(var handle: csh): cs_err; cdecl;
  so that cs_option(handle, CS_OPT_MEM, value) can (i.e must) be called
  even before cs_open()
  *)
-function cs_option(handle: csh; &type: cs_opt_type; value: NativeUInt): cs_err; cdecl;
+function cs_option(handle: csh; type_: cs_opt_type; value: NativeUInt): cs_err; cdecl;
   external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_option';
 
 (**

@@ -34,7 +34,7 @@ begin
   for i := 0 to sysz.op_count - 1 do
   begin
     op := @sysz.operands[i];
-    case op.&type of
+    case op.type_ of
       SYSZ_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       SYSZ_OP_ACREG:

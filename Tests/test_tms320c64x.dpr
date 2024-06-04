@@ -41,7 +41,7 @@ begin
   for i := 0 to tms320c64x.op_count - 1 do
   begin
     op := @(tms320c64x.operands[i]);
-    case op.&type of
+    case op.type_ of
       TMS320C64X_OP_REG:
         WriteLn(#9#9, 'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       TMS320C64X_OP_IMM:
@@ -69,7 +69,7 @@ begin
             WriteLn(#9#9#9, 'operands[', i, '].mem.disp: ', cs_reg_name(handle, op.detail.mem.disp));
           end;
         end;
-        WriteLn(#9#9#9, 'operands[', i, '].mem.unit: ', op.detail.mem.&unit);
+        WriteLn(#9#9#9, 'operands[', i, '].mem.unit: ', op.detail.mem.unit_);
         Write(#9#9#9'operands[', i, '].mem.direction: ');
         case op.detail.mem.direction of
           TMS320C64X_MEM_DIR_INVALID: WriteLn('Invalid');
@@ -92,14 +92,14 @@ begin
   end;
 
   Write(#9'Functional unit: ');
-  case tms320c64x.funit.&unit of
+  case tms320c64x.funit.unit_ of
     TMS320C64X_FUNIT_D: WriteLn('D', tms320c64x.funit.side);
     TMS320C64X_FUNIT_L: WriteLn('L', tms320c64x.funit.side);
     TMS320C64X_FUNIT_M: WriteLn('M', tms320c64x.funit.side);
     TMS320C64X_FUNIT_S: WriteLn('S', tms320c64x.funit.side);
     TMS320C64X_FUNIT_NO: WriteLn('No Functional Unit');
   else
-    WriteLn('Unknown (Unit ', tms320c64x.funit.&unit, ', Side ', tms320c64x.funit.side, ')');
+    WriteLn('Unknown (Unit ', tms320c64x.funit.unit_, ', Side ', tms320c64x.funit.side, ')');
   end;
   if tms320c64x.funit.crosspath = 1 then
     WriteLn(#9'Crosspath: 1');

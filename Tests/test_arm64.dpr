@@ -36,7 +36,7 @@ begin
 
   for i := 0 to arm64.op_count - 1 do
   begin
-    case arm64.operands[i].&type of
+    case arm64.operands[i].type_ of
       ARM64_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, arm64.operands[i].detail.reg));
       ARM64_OP_IMM:
@@ -84,8 +84,8 @@ begin
         WriteLn(#9#9'operands[', i, '].access: READ | WRITE');
     end;
 
-    if (arm64.operands[i].shift.&type <> ARM64_SFT_INVALID) and (arm64.operands[i].shift.value <> 0) then
-      WriteLn(#9#9#9'Shift: type = ', arm64.operands[i].shift.&type, ', value = ', arm64.operands[i].shift.value);
+    if (arm64.operands[i].shift.type_ <> ARM64_SFT_INVALID) and (arm64.operands[i].shift.value <> 0) then
+      WriteLn(#9#9#9'Shift: type = ', arm64.operands[i].shift.type_, ', value = ', arm64.operands[i].shift.value);
 
     if (arm64.operands[i].ext <> ARM64_EXT_INVALID) then
       WriteLn(#9#9#9'Ext: ', arm64.operands[i].ext);

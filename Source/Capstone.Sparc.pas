@@ -555,7 +555,7 @@ type
   /// Instruction operand
   cs_sparc_op = record
     /// operand type
-    &type: sparc_op_type;
+    type_: sparc_op_type;
     detail: cs_sparc_op_detail;
   end;
 

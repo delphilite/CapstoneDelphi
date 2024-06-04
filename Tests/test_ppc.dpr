@@ -49,7 +49,7 @@ begin
 
   for i := 0 to ppc^.op_count - 1 do
   begin
-    case ppc^.operands[i].&type of
+    case ppc^.operands[i].type_ of
       PPC_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, ppc^.operands[i].detail.reg));
       PPC_OP_IMM:

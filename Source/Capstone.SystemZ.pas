@@ -840,7 +840,7 @@ type
   /// Instruction operand
   cs_sysz_op = record
     /// operand type
-    &type: sysz_op_type;
+    type_: sysz_op_type;
     detail: cs_sysz_op_detail;
   end;
 

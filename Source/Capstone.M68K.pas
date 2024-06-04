@@ -674,7 +674,7 @@ type
     br_disp: m68k_op_br_disp;
     /// register bits for movem etc. (always in d0-d7, a0-a7, fp0 - fp7 order)
     register_bits: UInt32;
-    &type: m68k_op_type;
+    type_: m68k_op_type;
     /// M68K addressing mode for this op
     address_mode: m68k_address_mode;
   end;
@@ -687,7 +687,7 @@ type
 
   /// Operation size of the current instruction (NOT the actually size of instruction)
   m68k_op_size = record
-    &type: m68k_size_type;
+    type_: m68k_size_type;
     detail: m68k_op_size_detail;
   end;
 

@@ -996,7 +996,7 @@ type
   end;
 
   cs_arm_op_shift = record
-    &type: arm_shifter;
+    type_: arm_shifter;
     value: Cardinal;
   end;
 
@@ -1020,7 +1020,7 @@ type
     vector_index: Integer;
     shift: cs_arm_op_shift;
     /// operand type
-    &type: arm_op_type;
+    type_: arm_op_type;
     /// union detail
     detail: cs_arm_op_detail;
     /// in some instructions, an operand can be subtracted or added to

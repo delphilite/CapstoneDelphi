@@ -31,7 +31,7 @@ begin
 
   for i := 0 to mips^.op_count - 1 do
   begin
-    case mips^.operands[i].&type of
+    case mips^.operands[i].type_ of
       MIPS_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, mips^.operands[i].detail.reg));
       MIPS_OP_IMM:

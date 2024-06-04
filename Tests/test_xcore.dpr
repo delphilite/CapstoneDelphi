@@ -34,7 +34,7 @@ begin
   for i := 0 to xcore^.op_count - 1 do
   begin
     op := @xcore^.operands[i];
-    case op^.&type of
+    case op^.type_ of
       XCORE_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op^.detail.reg));
       XCORE_OP_IMM:

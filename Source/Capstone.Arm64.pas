@@ -1181,7 +1181,7 @@ type
 
   cs_arm64_op_shift = record
     /// shifter type of this operand
-    &type: arm64_shifter;
+    type_: arm64_shifter;
     /// shifter value of this operand
     value: Cardinal;
   end;
@@ -1219,7 +1219,7 @@ type
     /// extender type of this operand
     ext: arm64_extender;
     /// operand type
-    &type: arm64_op_type;
+    type_: arm64_op_type;
     /// union detail
     detail: cs_arm64_op_detail;
     /// How is this operand accessed? (READ, WRITE or READ|WRITE)

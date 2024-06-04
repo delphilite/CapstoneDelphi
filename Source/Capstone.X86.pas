@@ -2115,7 +2115,7 @@ type
   /// Instruction operand
   cs_x86_op = record
     /// operand type
-    &type: x86_op_type;
+    type_: x86_op_type;
     /// union detail
     detail: cs_x86_op_union_detail;
     /// size of this operand (in bytes).

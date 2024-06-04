@@ -242,7 +242,7 @@ type
   /// Instruction operand
   cs_xcore_op = record
     /// operand type
-    &type: xcore_op_type;
+    type_: xcore_op_type;
     detail: cs_xcore_op_detail;
   end;
 

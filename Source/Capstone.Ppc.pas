@@ -1465,7 +1465,7 @@ type
   /// Instruction operand
   cs_ppc_op = record
     /// operand type
-    &type: ppc_op_type;
+    type_: ppc_op_type;
     detail: cs_ppc_op_detail;
   end;
 

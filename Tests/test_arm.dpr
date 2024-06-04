@@ -38,7 +38,7 @@ begin
   for i := 0 to arm.op_count - 1 do
   begin
     op := @arm.operands[i];
-    case Integer(op.&type) of
+    case Integer(op.type_) of
       ARM_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       ARM_OP_IMM:
@@ -88,14 +88,14 @@ begin
         WriteLn(#9#9'operands[', i, '].access: READ | WRITE');
     end;
 
-    if (op.shift.&type <> ARM_SFT_INVALID) and (op.shift.value <> 0) then
+    if (op.shift.type_ <> ARM_SFT_INVALID) and (op.shift.value <> 0) then
     begin
-      if op.shift.&type < ARM_SFT_ASR_REG then
+      if op.shift.type_ < ARM_SFT_ASR_REG then
         // shift with constant value
-        WriteLn(#9#9#9'Shift: ', op.shift.&type, ' = ', op.shift.value)
+        WriteLn(#9#9#9'Shift: ', op.shift.type_, ' = ', op.shift.value)
       else
         // shift with register
-        WriteLn(#9#9#9'Shift: ', op.shift.&type, ' = ', cs_reg_name(handle, op.shift.value));
+        WriteLn(#9#9#9'Shift: ', op.shift.type_, ' = ', cs_reg_name(handle, op.shift.value));
     end;
 
     if op.vector_index <> -1 then

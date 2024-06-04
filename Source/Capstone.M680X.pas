@@ -602,7 +602,7 @@ type
 
   /// Instruction operand
   cs_m680x_op = record
-    &type: m680x_op_type;
+    type_: m680x_op_type;
     detail: cs_m680x_op_detail;
     /// size of this operand (in bytes)
     size: UInt8;

@@ -34,7 +34,7 @@ begin
   for i := 0 to sparc.op_count - 1 do
   begin
     op := @sparc.operands[i];
-    case op.&type of
+    case op.type_ of
       SPARC_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       SPARC_OP_IMM:
