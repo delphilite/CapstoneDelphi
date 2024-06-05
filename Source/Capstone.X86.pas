@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone X86 header                       }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: x86.h                                     }
 {                                                       }
@@ -17,87 +17,86 @@ unit Capstone.X86;
 interface
 
 const
-  { TODO : Unable to convert function-like macro: }
-  (* X86_REL_ADDR ( insn ) ( ( ( insn ) . detail -> x86 . operands [ 0 ] . type == X86_OP_IMM ) ? ( uint64_t ) ( ( insn ) . detail -> x86 . operands [ 0 ] . imm ) : ( ( ( insn ) . address + ( insn ) . size ) + ( uint64_t ) ( insn ) . detail -> x86 . disp ) ) *)
-  X86_EFLAGS_MODIFY_AF = UInt64(1 shl 0);
-  X86_EFLAGS_MODIFY_CF = UInt64(1 shl 1);
-  X86_EFLAGS_MODIFY_SF = UInt64(1 shl 2);
-  X86_EFLAGS_MODIFY_ZF = UInt64(1 shl 3);
-  X86_EFLAGS_MODIFY_PF = UInt64(1 shl 4);
-  X86_EFLAGS_MODIFY_OF = UInt64(1 shl 5);
-  X86_EFLAGS_MODIFY_TF = UInt64(1 shl 6);
-  X86_EFLAGS_MODIFY_IF = UInt64(1 shl 7);
-  X86_EFLAGS_MODIFY_DF = UInt64(1 shl 8);
-  X86_EFLAGS_MODIFY_NT = UInt64(1 shl 9);
-  X86_EFLAGS_MODIFY_RF = UInt64(1 shl 10);
-  X86_EFLAGS_PRIOR_OF = UInt64(1 shl 11);
-  X86_EFLAGS_PRIOR_SF = UInt64(1 shl 12);
-  X86_EFLAGS_PRIOR_ZF = UInt64(1 shl 13);
-  X86_EFLAGS_PRIOR_AF = UInt64(1 shl 14);
-  X86_EFLAGS_PRIOR_PF = UInt64(1 shl 15);
-  X86_EFLAGS_PRIOR_CF = UInt64(1 shl 16);
-  X86_EFLAGS_PRIOR_TF = UInt64(1 shl 17);
-  X86_EFLAGS_PRIOR_IF = UInt64(1 shl 18);
-  X86_EFLAGS_PRIOR_DF = UInt64(1 shl 19);
-  X86_EFLAGS_PRIOR_NT = UInt64(1 shl 20);
-  X86_EFLAGS_RESET_OF = UInt64(1 shl 21);
-  X86_EFLAGS_RESET_CF = UInt64(1 shl 22);
-  X86_EFLAGS_RESET_DF = UInt64(1 shl 23);
-  X86_EFLAGS_RESET_IF = UInt64(1 shl 24);
-  X86_EFLAGS_RESET_SF = UInt64(1 shl 25);
-  X86_EFLAGS_RESET_AF = UInt64(1 shl 26);
-  X86_EFLAGS_RESET_TF = UInt64(1 shl 27);
-  X86_EFLAGS_RESET_NT = UInt64(1 shl 28);
-  X86_EFLAGS_RESET_PF = UInt64(1 shl 29);
-  X86_EFLAGS_SET_CF = UInt64(1 shl 30);
-  X86_EFLAGS_SET_DF = UInt64(1 shl 31);
-  X86_EFLAGS_SET_IF = UInt64(1 shl 32);
-  X86_EFLAGS_TEST_OF = UInt64(1 shl 33);
-  X86_EFLAGS_TEST_SF = UInt64(1 shl 34);
-  X86_EFLAGS_TEST_ZF = UInt64(1 shl 35);
-  X86_EFLAGS_TEST_PF = UInt64(1 shl 36);
-  X86_EFLAGS_TEST_CF = UInt64(1 shl 37);
-  X86_EFLAGS_TEST_NT = UInt64(1 shl 38);
-  X86_EFLAGS_TEST_DF = UInt64(1 shl 39);
-  X86_EFLAGS_UNDEFINED_OF = UInt64(1 shl 40);
-  X86_EFLAGS_UNDEFINED_SF = UInt64(1 shl 41);
-  X86_EFLAGS_UNDEFINED_ZF = UInt64(1 shl 42);
-  X86_EFLAGS_UNDEFINED_PF = UInt64(1 shl 43);
-  X86_EFLAGS_UNDEFINED_AF = UInt64(1 shl 44);
-  X86_EFLAGS_UNDEFINED_CF = UInt64(1 shl 45);
-  X86_EFLAGS_RESET_RF = UInt64(1 shl 46);
-  X86_EFLAGS_TEST_RF = UInt64(1 shl 47);
-  X86_EFLAGS_TEST_IF = UInt64(1 shl 48);
-  X86_EFLAGS_TEST_TF = UInt64(1 shl 49);
-  X86_EFLAGS_TEST_AF = UInt64(1 shl 50);
-  X86_EFLAGS_RESET_ZF = UInt64(1 shl 51);
-  X86_EFLAGS_SET_OF = UInt64(1 shl 52);
-  X86_EFLAGS_SET_SF = UInt64(1 shl 53);
-  X86_EFLAGS_SET_ZF = UInt64(1 shl 54);
-  X86_EFLAGS_SET_AF = UInt64(1 shl 55);
-  X86_EFLAGS_SET_PF = UInt64(1 shl 56);
-  X86_EFLAGS_RESET_0F = UInt64(1 shl 57);
-  X86_EFLAGS_RESET_AC = UInt64(1 shl 58);
-  X86_FPU_FLAGS_MODIFY_C0 = UInt64(1 shl 0);
-  X86_FPU_FLAGS_MODIFY_C1 = UInt64(1 shl 1);
-  X86_FPU_FLAGS_MODIFY_C2 = UInt64(1 shl 2);
-  X86_FPU_FLAGS_MODIFY_C3 = UInt64(1 shl 3);
-  X86_FPU_FLAGS_RESET_C0 = UInt64(1 shl 4);
-  X86_FPU_FLAGS_RESET_C1 = UInt64(1 shl 5);
-  X86_FPU_FLAGS_RESET_C2 = UInt64(1 shl 6);
-  X86_FPU_FLAGS_RESET_C3 = UInt64(1 shl 7);
-  X86_FPU_FLAGS_SET_C0 = UInt64(1 shl 8);
-  X86_FPU_FLAGS_SET_C1 = UInt64(1 shl 9);
-  X86_FPU_FLAGS_SET_C2 = UInt64(1 shl 10);
-  X86_FPU_FLAGS_SET_C3 = UInt64(1 shl 11);
-  X86_FPU_FLAGS_UNDEFINED_C0 = UInt64(1 shl 12);
-  X86_FPU_FLAGS_UNDEFINED_C1 = UInt64(1 shl 13);
-  X86_FPU_FLAGS_UNDEFINED_C2 = UInt64(1 shl 14);
-  X86_FPU_FLAGS_UNDEFINED_C3 = UInt64(1 shl 15);
-  X86_FPU_FLAGS_TEST_C0 = UInt64(1 shl 16);
-  X86_FPU_FLAGS_TEST_C1 = UInt64(1 shl 17);
-  X86_FPU_FLAGS_TEST_C2 = UInt64(1 shl 18);
-  X86_FPU_FLAGS_TEST_C3 = UInt64(1 shl 19);
+  /// Sub-flags of EFLAGS
+  X86_EFLAGS_MODIFY_AF = (UInt64(1) shl 0);
+  X86_EFLAGS_MODIFY_CF = (UInt64(1) shl 1);
+  X86_EFLAGS_MODIFY_SF = (UInt64(1) shl 2);
+  X86_EFLAGS_MODIFY_ZF = (UInt64(1) shl 3);
+  X86_EFLAGS_MODIFY_PF = (UInt64(1) shl 4);
+  X86_EFLAGS_MODIFY_OF = (UInt64(1) shl 5);
+  X86_EFLAGS_MODIFY_TF = (UInt64(1) shl 6);
+  X86_EFLAGS_MODIFY_IF = (UInt64(1) shl 7);
+  X86_EFLAGS_MODIFY_DF = (UInt64(1) shl 8);
+  X86_EFLAGS_MODIFY_NT = (UInt64(1) shl 9);
+  X86_EFLAGS_MODIFY_RF = (UInt64(1) shl 10);
+  X86_EFLAGS_PRIOR_OF = (UInt64(1) shl 11);
+  X86_EFLAGS_PRIOR_SF = (UInt64(1) shl 12);
+  X86_EFLAGS_PRIOR_ZF = (UInt64(1) shl 13);
+  X86_EFLAGS_PRIOR_AF = (UInt64(1) shl 14);
+  X86_EFLAGS_PRIOR_PF = (UInt64(1) shl 15);
+  X86_EFLAGS_PRIOR_CF = (UInt64(1) shl 16);
+  X86_EFLAGS_PRIOR_TF = (UInt64(1) shl 17);
+  X86_EFLAGS_PRIOR_IF = (UInt64(1) shl 18);
+  X86_EFLAGS_PRIOR_DF = (UInt64(1) shl 19);
+  X86_EFLAGS_PRIOR_NT = (UInt64(1) shl 20);
+  X86_EFLAGS_RESET_OF = (UInt64(1) shl 21);
+  X86_EFLAGS_RESET_CF = (UInt64(1) shl 22);
+  X86_EFLAGS_RESET_DF = (UInt64(1) shl 23);
+  X86_EFLAGS_RESET_IF = (UInt64(1) shl 24);
+  X86_EFLAGS_RESET_SF = (UInt64(1) shl 25);
+  X86_EFLAGS_RESET_AF = (UInt64(1) shl 26);
+  X86_EFLAGS_RESET_TF = (UInt64(1) shl 27);
+  X86_EFLAGS_RESET_NT = (UInt64(1) shl 28);
+  X86_EFLAGS_RESET_PF = (UInt64(1) shl 29);
+  X86_EFLAGS_SET_CF = (UInt64(1) shl 30);
+  X86_EFLAGS_SET_DF = (UInt64(1) shl 31);
+  X86_EFLAGS_SET_IF = (UInt64(1) shl 32);
+  X86_EFLAGS_TEST_OF = (UInt64(1) shl 33);
+  X86_EFLAGS_TEST_SF = (UInt64(1) shl 34);
+  X86_EFLAGS_TEST_ZF = (UInt64(1) shl 35);
+  X86_EFLAGS_TEST_PF = (UInt64(1) shl 36);
+  X86_EFLAGS_TEST_CF = (UInt64(1) shl 37);
+  X86_EFLAGS_TEST_NT = (UInt64(1) shl 38);
+  X86_EFLAGS_TEST_DF = (UInt64(1) shl 39);
+  X86_EFLAGS_UNDEFINED_OF = (UInt64(1) shl 40);
+  X86_EFLAGS_UNDEFINED_SF = (UInt64(1) shl 41);
+  X86_EFLAGS_UNDEFINED_ZF = (UInt64(1) shl 42);
+  X86_EFLAGS_UNDEFINED_PF = (UInt64(1) shl 43);
+  X86_EFLAGS_UNDEFINED_AF = (UInt64(1) shl 44);
+  X86_EFLAGS_UNDEFINED_CF = (UInt64(1) shl 45);
+  X86_EFLAGS_RESET_RF = (UInt64(1) shl 46);
+  X86_EFLAGS_TEST_RF = (UInt64(1) shl 47);
+  X86_EFLAGS_TEST_IF = (UInt64(1) shl 48);
+  X86_EFLAGS_TEST_TF = (UInt64(1) shl 49);
+  X86_EFLAGS_TEST_AF = (UInt64(1) shl 50);
+  X86_EFLAGS_RESET_ZF = (UInt64(1) shl 51);
+  X86_EFLAGS_SET_OF = (UInt64(1) shl 52);
+  X86_EFLAGS_SET_SF = (UInt64(1) shl 53);
+  X86_EFLAGS_SET_ZF = (UInt64(1) shl 54);
+  X86_EFLAGS_SET_AF = (UInt64(1) shl 55);
+  X86_EFLAGS_SET_PF = (UInt64(1) shl 56);
+  X86_EFLAGS_RESET_0F = (UInt64(1) shl 57);
+  X86_EFLAGS_RESET_AC = (UInt64(1) shl 58);
+  X86_FPU_FLAGS_MODIFY_C0 = (UInt64(1) shl 0);
+  X86_FPU_FLAGS_MODIFY_C1 = (UInt64(1) shl 1);
+  X86_FPU_FLAGS_MODIFY_C2 = (UInt64(1) shl 2);
+  X86_FPU_FLAGS_MODIFY_C3 = (UInt64(1) shl 3);
+  X86_FPU_FLAGS_RESET_C0 = (UInt64(1) shl 4);
+  X86_FPU_FLAGS_RESET_C1 = (UInt64(1) shl 5);
+  X86_FPU_FLAGS_RESET_C2 = (UInt64(1) shl 6);
+  X86_FPU_FLAGS_RESET_C3 = (UInt64(1) shl 7);
+  X86_FPU_FLAGS_SET_C0 = (UInt64(1) shl 8);
+  X86_FPU_FLAGS_SET_C1 = (UInt64(1) shl 9);
+  X86_FPU_FLAGS_SET_C2 = (UInt64(1) shl 10);
+  X86_FPU_FLAGS_SET_C3 = (UInt64(1) shl 11);
+  X86_FPU_FLAGS_UNDEFINED_C0 = (UInt64(1) shl 12);
+  X86_FPU_FLAGS_UNDEFINED_C1 = (UInt64(1) shl 13);
+  X86_FPU_FLAGS_UNDEFINED_C2 = (UInt64(1) shl 14);
+  X86_FPU_FLAGS_UNDEFINED_C3 = (UInt64(1) shl 15);
+  X86_FPU_FLAGS_TEST_C0 = (UInt64(1) shl 16);
+  X86_FPU_FLAGS_TEST_C1 = (UInt64(1) shl 17);
+  X86_FPU_FLAGS_TEST_C2 = (UInt64(1) shl 18);
+  X86_FPU_FLAGS_TEST_C3 = (UInt64(1) shl 19);
 
 type
   /// X86 registers
@@ -2102,7 +2101,7 @@ type
     disp: Int64;
   end;
 
-  cs_x86_op_union_detail = record
+  cs_x86_op_detail = record
     case Integer of
       0: (/// register value for REG operand
     reg: x86_reg);
@@ -2116,8 +2115,8 @@ type
   cs_x86_op = record
     /// operand type
     type_: x86_op_type;
-    /// union detail
-    detail: cs_x86_op_union_detail;
+    /// union op detail
+    detail: cs_x86_op_detail;
     /// size of this operand (in bytes).
     size: UInt8;
     /// How is this operand accessed? (READ, WRITE or READ|WRITE)
@@ -2141,13 +2140,13 @@ type
     imm_size: UInt8;
   end;
 
-  cs_x86_detail = record
+  cs_x86_flag = record
     case Integer of
       0: (/// EFLAGS updated by this instruction.
-          /// This can be formed from OR combination of X86_EFLAGS_* symbols in x86.h
+    /// This can be formed from OR combination of X86_EFLAGS_* symbols in x86.h
     eflags: UInt64);
       1: (/// FPU_FLAGS updated by this instruction.
-          /// This can be formed from OR combination of X86_FPU_FLAGS_* symbols in x86.h
+    /// This can be formed from OR combination of X86_FPU_FLAGS_* symbols in x86.h
     fpu_flags: UInt64);
   end;
 
@@ -2192,7 +2191,7 @@ type
     /// AVX static rounding mode
     avx_rm: x86_avx_rm;
     /// Union detail
-    detail: cs_x86_detail;
+    flag: cs_x86_flag;
     /// Number of operands of this instruction,
     /// or 0 when instruction has no operand.
     op_count: UInt8;

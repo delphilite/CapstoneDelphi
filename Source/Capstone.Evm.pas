@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone EVM header                       }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: evm.h                                     }
 {                                                       }

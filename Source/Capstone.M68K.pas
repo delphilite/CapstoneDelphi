@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone M68K header                      }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: m68k.h                                    }
 {                                                       }
@@ -667,6 +667,7 @@ type
 
   /// Instruction operand
   cs_m68k_op = record
+    /// union detail
     detail: cs_m68k_op_detail;
     /// data when operand is targeting memory
     mem: m68k_op_mem;
@@ -688,6 +689,7 @@ type
   /// Operation size of the current instruction (NOT the actually size of instruction)
   m68k_op_size = record
     type_: m68k_size_type;
+    /// union detail
     detail: m68k_op_size_detail;
   end;
 

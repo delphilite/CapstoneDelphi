@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone Sparc header                     }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: sparc.h                                   }
 {                                                       }
@@ -556,6 +556,7 @@ type
   cs_sparc_op = record
     /// operand type
     type_: sparc_op_type;
+    /// union op detail
     detail: cs_sparc_op_detail;
   end;
 

@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone TMS320C64X header                }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: tms320c64x.h                              }
 {                                                       }
@@ -375,6 +375,7 @@ type
   cs_tms320c64x_op = record
     /// operand type
     type_: tms320c64x_op_type;
+    /// union op detail
     detail: cs_tms320c64x_op_detail;
   end;
 

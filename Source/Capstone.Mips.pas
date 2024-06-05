@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone MIPS header                      }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: mips.h                                    }
 {                                                       }
@@ -937,6 +937,7 @@ type
   cs_mips_op = record
     /// operand type
     type_: mips_op_type;
+    /// union op detail
     detail: cs_mips_op_detail;
   end;
 

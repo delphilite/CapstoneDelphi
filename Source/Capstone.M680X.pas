@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone M680X header                     }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: m680x.h                                   }
 {                                                       }
@@ -603,6 +603,7 @@ type
   /// Instruction operand
   cs_m680x_op = record
     type_: m680x_op_type;
+    /// union op detail
     detail: cs_m680x_op_detail;
     /// size of this operand (in bytes)
     size: UInt8;

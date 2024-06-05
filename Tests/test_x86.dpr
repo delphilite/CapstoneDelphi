@@ -311,20 +311,20 @@ begin
     end;
   end;
 
-  if (x86^.detail.eflags <> 0) or (x86^.detail.fpu_flags <> 0) then
+  if (x86^.flag.eflags <> 0) or (x86^.flag.fpu_flags <> 0) then
   begin
     for i := 0 to ins^.detail^.groups_count - 1 do
     begin
       if ins^.detail^.groups[i] = X86_GRP_FPU then
       begin
-        l := #9'FPU_FLAGS:' + get_fpu_flag_names(x86^.detail.eflags);
+        l := #9'FPU_FLAGS:' + get_fpu_flag_names(x86^.flag.eflags);
         WriteLn(l);
         WriteLn('');
         Exit;
       end;
     end;
 
-    l := #9'EFLAGS:' + get_eflag_names(x86^.detail.eflags);
+    l := #9'EFLAGS:' + get_eflag_names(x86^.flag.eflags);
     WriteLn(l);
   end;
 

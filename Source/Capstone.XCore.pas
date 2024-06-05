@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone XCORE header                     }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: xcore.h                                   }
 {                                                       }
@@ -243,6 +243,7 @@ type
   cs_xcore_op = record
     /// operand type
     type_: xcore_op_type;
+    /// union op detail
     detail: cs_xcore_op_detail;
   end;
 

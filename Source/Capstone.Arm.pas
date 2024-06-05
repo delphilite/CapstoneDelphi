@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone ARM header                       }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: arm.h                                     }
 {                                                       }
@@ -44,8 +44,8 @@ const
   /// shift with register
   ARM_SFT_RRX_REG = 10;
 
+/// ARM condition code
 type
-  /// ARM condition code
   arm_cc = Integer;
   Parm_cc = ^arm_cc;
 

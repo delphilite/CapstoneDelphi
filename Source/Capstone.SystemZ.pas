@@ -2,7 +2,7 @@
 {                                                       }
 {  Pascal language binding for the Capstone engine      }
 {                                                       }
-{  Unit Name: Capstone SystemZ header                   }
+{  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: systemz.h                                 }
 {                                                       }
@@ -827,7 +827,7 @@ type
     disp: Int64;
   end;
 
-  cs_sysz_op_detail = record
+  cs_systemz_op_detail = record
     case Integer of
       0: (/// register value for REG operand
     reg: sysz_reg);
@@ -841,7 +841,8 @@ type
   cs_sysz_op = record
     /// operand type
     type_: sysz_op_type;
-    detail: cs_sysz_op_detail;
+    /// union op detail
+    detail: cs_systemz_op_detail;
   end;
 
   cs_sysz = record
