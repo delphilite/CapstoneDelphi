@@ -18,6 +18,10 @@ uses
   SysUtils, Capstone.Api, Capstone.Arm64, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
+const
+  s_arm64_post_index: array[Boolean] of string = (
+    'Pre', 'Post'
+  );
 var
   arm64: Pcs_arm64;
   op: Pcs_arm64_op;
@@ -95,9 +99,6 @@ begin
     if (op.vas <> ARM64_VAS_INVALID) then
       WriteLn(#9#9#9'Vector Arrangement Specifier: 0x', format_string_hex(op.vas, '%x'));
 
-    if (op.vess <> ARM64_VESS_INVALID) then
-      WriteLn(#9#9#9'Vector Element Size Specifier: ', op.vess);
-
     if (op.vector_index <> -1) then
       WriteLn(#9#9#9'Vector Index: ', op.vector_index);
   end;
@@ -106,7 +107,7 @@ begin
     WriteLn(#9'Update-flags: True');
 
   if (arm64.writeback) then
-    WriteLn(#9'Write-back: True');
+    WriteLn(#9'Write-back: ', s_arm64_post_index[arm64.post_index]);
 
   if (arm64.cc <> 0) then
     WriteLn(#9'Code-condition: ', arm64.cc);
@@ -136,12 +137,12 @@ end;
 
 procedure Test;
 const
-  ARM64_CODE: array[0..67] of Byte = (
-    $09, $00, $38, $D5, $BF, $40, $00, $D5, $0C, $05, $13, $D5, $20, $50, $02, $0E,
-    $20, $E4, $3D, $0F, $00, $18, $A0, $5F, $A2, $00, $AE, $9E, $9F, $37, $03, $D5,
-    $BF, $33, $03, $D5, $DF, $3F, $03, $D5, $21, $7C, $02, $9B, $21, $7C, $00, $53,
-    $00, $40, $21, $4B, $E1, $0B, $40, $B9, $20, $04, $81, $DA, $20, $08, $02, $8B,
-    $10, $5B, $E8, $3C
+  ARM64_CODE: array[0..75] of Byte = (
+    $09, $00, $38, $d5, $bf, $40, $00, $d5, $0c, $05, $13, $d5, $20, $50, $02, $0e,
+    $20, $e4, $3d, $0f, $00, $18, $a0, $5f, $a2, $00, $ae, $9e, $9f, $37, $03, $d5,
+    $bf, $33, $03, $d5, $df, $3f, $03, $d5, $21, $7c, $02, $9b, $21, $7c, $00, $53,
+    $00, $40, $21, $4b, $e1, $0b, $40, $b9, $20, $04, $81, $da, $20, $08, $02, $8b,
+    $10, $5b, $e8, $3c, $fd, $7b, $ba, $a9, $fd, $c7, $43, $f8
   );
 const
   Platforms: array[0..0] of TPlatform = (

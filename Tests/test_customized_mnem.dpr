@@ -59,8 +59,12 @@ begin
   err := cs_open(CS_ARCH_X86, CS_MODE_32, handle);
   if err <> CS_ERR_OK then
   begin
-    Writeln('Failed on cs_open() with error returned: ', err);
-    Abort;
+    if cs_support(CS_ARCH_X86) then
+    begin
+      Writeln('Failed on cs_open() with error returned: ', err);
+      Abort;
+    end
+    else Exit;
   end;
 
   // 1. Print out the instruction in default setup.

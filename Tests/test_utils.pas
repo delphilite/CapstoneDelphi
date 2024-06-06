@@ -22,7 +22,7 @@ const
 
 type
   TPlatform = record
-    arch: Cardinal;
+    arch: Integer;
     mode: Integer;
     code: PByte;
     size: NativeUInt;

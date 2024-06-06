@@ -102,8 +102,43 @@ const
     $10, $00, $39
   );
 {$ENDIF}
+{$IFDEF CAPSTONE_HAS_MOS65XX}
+  MOS65XX_CODE: array[0..11] of Byte = (
+    $0d, $34, $12, $08, $09, $ff, $10, $80, $20, $00, $00, $98
+  );
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_BPF}
+  EBPF_CODE: array[0..47] of Byte = (
+    $97, $09, $00, $00, $37, $13, $03, $00, $dc, $02, $00, $00, $20, $00, $00, $00,
+    $30, $00, $00, $00, $00, $00, $00, $00, $db, $3a, $00, $01, $00, $00, $00, $00,
+    $84, $02, $00, $00, $00, $00, $00, $00, $6d, $33, $17, $02, $00, $00, $00, $00
+  );
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_RISCV}
+  RISCV_CODE32: array[0..159] of Byte = (
+    $37, $34, $00, $00, $97, $82, $00, $00, $ef, $00, $80, $00, $ef, $f0, $1f, $ff,
+    $e7, $00, $45, $00, $e7, $00, $c0, $ff, $63, $05, $41, $00, $e3, $9d, $61, $fe,
+    $63, $ca, $93, $00, $63, $53, $b5, $00, $63, $65, $d6, $00, $63, $76, $f7, $00,
+    $03, $88, $18, $00, $03, $99, $49, $00, $03, $aa, $6a, $00, $03, $cb, $2b, $01,
+    $03, $dc, $8c, $01, $23, $86, $ad, $03, $23, $9a, $ce, $03, $23, $8f, $ef, $01,
+    $93, $00, $e0, $00, $13, $a1, $01, $01, $13, $b2, $02, $7d, $13, $c3, $03, $dd,
+    $13, $e4, $c4, $12, $13, $f5, $85, $0c, $13, $96, $e6, $01, $13, $d7, $97, $01,
+    $13, $d8, $f8, $40, $33, $89, $49, $01, $b3, $0a, $7b, $41, $33, $ac, $ac, $01,
+    $b3, $3d, $de, $01, $33, $d2, $62, $40, $b3, $43, $94, $00, $33, $e5, $c5, $00,
+    $b3, $76, $f7, $00, $b3, $54, $39, $01, $b3, $50, $31, $00, $33, $9f, $0f, $00
+  );
+  RISCV_CODE64: array[0..3] of Byte = (
+    $13, $04, $a8, $7a
+  );
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_TRICORE}
+  TRICORE_CODE: array[0..31] of Byte = (
+    $16, $01, $20, $01, $1d, $00, $02, $00, $8f, $70, $00, $11, $40, $ae, $89, $ee,
+    $04, $09, $42, $f2, $e2, $f2, $c2, $11, $19, $ff, $c0, $70, $19, $ff, $20, $10
+  );
+{$ENDIF}
 const
-  Platforms: array[0..16] of TPlatform = (
+  Platforms: array[0..21] of TPlatform = (
 {$IFDEF CAPSTONE_HAS_X86}
     (arch: CS_ARCH_X86; mode: CS_MODE_16; code: @X86_CODE16; size: SizeOf(X86_CODE16); comment: 'X86 16bit (Intel syntax)'),
     (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32; size: SizeOf(X86_CODE32); comment: 'X86 32bit (ATT syntax)'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_ATT),
@@ -137,7 +172,20 @@ const
     (arch: CS_ARCH_XCORE; mode: cs_mode(0); code: @XCORE_CODE; size: SizeOf(XCORE_CODE); comment: 'XCore'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_M680X}
-    (arch: CS_ARCH_M680X; mode: CS_MODE_M680X_6809; code: @M680X_CODE; size: SizeOf(M680X_CODE); comment: 'M680X_6809')
+    (arch: CS_ARCH_M680X; mode: CS_MODE_M680X_6809; code: @M680X_CODE; size: SizeOf(M680X_CODE); comment: 'M680X_6809'),
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_MOS65XX}
+    (arch: CS_ARCH_MOS65XX; mode: CS_MODE_LITTLE_ENDIAN; code: @MOS65XX_CODE; size: SizeOf(MOS65XX_CODE); comment: 'MOS65XX'),
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_BPF}
+    (arch: CS_ARCH_BPF; mode: CS_MODE_LITTLE_ENDIAN or CS_MODE_BPF_EXTENDED; code: @EBPF_CODE; size: SizeOf(EBPF_CODE); comment: 'eBPF'),
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_RISCV}
+    (arch: CS_ARCH_RISCV; mode: CS_MODE_RISCV32; code: @RISCV_CODE32; size: SizeOf(RISCV_CODE32); comment: 'RISCV32'),
+    (arch: CS_ARCH_RISCV; mode: CS_MODE_RISCV64; code: @RISCV_CODE64; size: SizeOf(RISCV_CODE64); comment: 'RISCV64'),
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_TRICORE}
+    (arch: CS_ARCH_TRICORE; mode: CS_MODE_TRICORE_162; code: @TRICORE_CODE; size: SizeOf(TRICORE_CODE); comment: 'TriCore')
 {$ENDIF}
   );
 var

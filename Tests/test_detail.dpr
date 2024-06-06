@@ -116,8 +116,20 @@ const
     $10, $00, $39
   );
 {$ENDIF}
+{$IFDEF CAPSTONE_HAS_MOS65XX}
+  MOS65XX_CODE: array[0..12] of Byte = (
+    $0a, $00, $fe, $34, $12, $d0, $ff, $ea, $19, $56, $34, $46, $80
+  );
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_BPF}
+  EBPF_CODE: array[0..47] of Byte = (
+    $97, $09, $00, $00, $37, $13, $03, $00, $dc, $02, $00, $00, $20, $00, $00, $00,
+    $30, $00, $00, $00, $00, $00, $00, $00, $db, $3a, $00, $01, $00, $00, $00, $00,
+    $84, $02, $00, $00, $00, $00, $00, $00, $6d, $33, $17, $02, $00, $00, $00, $00
+  );
+{$ENDIF}
 const
-  Platforms: array[0..22] of TPlatform = (
+  Platforms: array[0..24] of TPlatform = (
 {$IFDEF CAPSTONE_HAS_X86}
     (arch: CS_ARCH_X86; mode: CS_MODE_16; code: @X86_CODE16; size: SizeOf(X86_CODE16); comment: 'X86 16bit (Intel syntax)'),
     (arch: CS_ARCH_X86; mode: CS_MODE_32; code: @X86_CODE32; size: SizeOf(X86_CODE32); comment: 'X86 32bit (ATT syntax)'; opt_type: CS_OPT_SYNTAX; opt_value: CS_OPT_SYNTAX_ATT),
@@ -159,7 +171,13 @@ const
     (arch: CS_ARCH_M68K; mode: CS_MODE_BIG_ENDIAN + CS_MODE_M68K_040; code: @M68K_CODE; size: SizeOf(M68K_CODE); comment: 'M68K'),
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_M680X}
-    (arch: CS_ARCH_M680X; mode: CS_MODE_M680X_6809; code: @M680X_CODE; size: SizeOf(M680X_CODE); comment: 'M680X_M6809')
+    (arch: CS_ARCH_M680X; mode: CS_MODE_M680X_6809; code: @M680X_CODE; size: SizeOf(M680X_CODE); comment: 'M680X_M6809'),
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_MOS65XX}
+    (arch: CS_ARCH_MOS65XX; mode: 0; code: @MOS65XX_CODE; size: SizeOf(MOS65XX_CODE); comment: 'MOS65XX'),
+{$ENDIF}
+{$IFDEF CAPSTONE_HAS_BPF}
+    (arch: CS_ARCH_BPF; mode: CS_MODE_LITTLE_ENDIAN or CS_MODE_BPF_EXTENDED; code: @EBPF_CODE; size: SizeOf(EBPF_CODE); comment: 'eBPF')
 {$ENDIF}
   );
 var
