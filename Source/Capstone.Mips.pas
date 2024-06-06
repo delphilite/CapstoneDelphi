@@ -925,7 +925,7 @@ type
 
   cs_mips_op_detail = record
     case Integer of
-      0: (/// register value for REG operand
+      0: (/// register id for REG operand
     reg: mips_reg);
       1: (/// immediate value for IMM operand
     imm: Int64);

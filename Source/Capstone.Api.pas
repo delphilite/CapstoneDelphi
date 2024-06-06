@@ -33,8 +33,10 @@ unit Capstone.Api;
 interface
 
 uses
-  Capstone.Arm, Capstone.Arm64, Capstone.Mips, Capstone.X86, Capstone.Evm, Capstone.M680X,
-  Capstone.M68K, Capstone.Ppc, Capstone.Sparc, Capstone.SystemZ, Capstone.Tms320c64x, Capstone.XCore;
+  Capstone.Arm, Capstone.Arm64, Capstone.Bpf, Capstone.Evm, Capstone.M680X, Capstone.M68K,
+  Capstone.Mips, Capstone.Mos65xx, Capstone.Ppc, Capstone.RiscV, Capstone.SH, Capstone.Sparc,
+  Capstone.SystemZ, Capstone.Tms320c64x, Capstone.TriCore, Capstone.Wasm, Capstone.X86,
+  Capstone.XCore;
 
 const
 {$IFDEF MSWINDOWS}
@@ -63,7 +65,7 @@ const
 
 const
   // Capstone API version
-  CS_API_MAJOR = 4;
+  CS_API_MAJOR = 5;
   CS_API_MINOR = 0;
 
   // Version for bleeding edge code of the Github's "next" branch.
@@ -74,11 +76,7 @@ const
   // Capstone package version
   CS_VERSION_MAJOR = CS_API_MAJOR;
   CS_VERSION_MINOR = CS_API_MINOR;
-  CS_VERSION_EXTRA = 2;
-
-  /// Macro to create combined version which can be compared to
-  /// result of cs_version() API.
-  //#define CS_MAKE_VERSION(major, minor) ((major << 8) + minor)
+  CS_VERSION_EXTRA = 1;
 
   /// Maximum size of an instruction mnemonic string.
   CS_MNEMONIC_SIZE = 32;
@@ -116,9 +114,22 @@ const
   CS_ARCH_M680X = 10;
   /// Ethereum architecture
   CS_ARCH_EVM = 11;
-  CS_ARCH_MAX = 12;
-  // All architectures - for cs_support()
-  CS_ARCH_ALL = 65535;
+  /// MOS65XX architecture (including MOS6502)
+  CS_ARCH_MOS65XX = 12;
+  /// WebAssembly architecture
+  CS_ARCH_WASM = 13;
+  /// Berkeley Packet Filter architecture (including eBPF)
+  CS_ARCH_BPF = 14;
+  /// RISCV architecture
+  CS_ARCH_RISCV = 15;
+  /// SH architecture
+  CS_ARCH_SH = 16;
+  /// TriCore architecture
+  CS_ARCH_TRICORE = 17;
+  /// Max architecture
+  CS_ARCH_MAX = 18;
+  /// All architectures - for cs_support()
+  CS_ARCH_ALL = $FFFF;
 
 const
   // Support value to verify diet mode of the engine.
@@ -164,6 +175,12 @@ const
   CS_MODE_V9 = 1 shl 4;
   /// Quad Processing eXtensions mode (PPC)
   CS_MODE_QPX = 1 shl 4;
+  /// Signal Processing Engine mode (PPC)
+  CS_MODE_SPE = 1 shl 5;
+  /// Book-E mode (PPC)
+  CS_MODE_BOOKE = 1 shl 6;
+  /// Paired-singles mode (PPC)
+  CS_MODE_PS = 1 shl 7;
   /// M68K 68000 mode
   CS_MODE_M68K_000 = 1 shl 1;
   /// M68K 68010 mode
@@ -203,6 +220,57 @@ const
   CS_MODE_M680X_CPU12 = 1 shl 9;
   /// M680X Freescale/NXP HCS08 mode
   CS_MODE_M680X_HCS08 = 1 shl 10;
+  /// Classic BPF mode (default)
+  CS_MODE_BPF_CLASSIC = 0;
+  /// Extended BPF mode
+  CS_MODE_BPF_EXTENDED = 1 shl 0;
+  /// RISCV RV32G
+  CS_MODE_RISCV32 = 1 shl 0;
+  /// RISCV RV64G
+  CS_MODE_RISCV64 = 1 shl 1;
+  /// RISCV compressed instructure mode
+  CS_MODE_RISCVC = 1 shl 2;
+  /// MOS65XXX MOS 6502
+  CS_MODE_MOS65XX_6502 = 1 shl 1;
+  /// MOS65XXX WDC 65c02
+  CS_MODE_MOS65XX_65C02 = 1 shl 2;
+  /// MOS65XXX WDC W65c02
+  CS_MODE_MOS65XX_W65C02 = 1 shl 3;
+  /// MOS65XXX WDC 65816, 8-bit m/x
+  CS_MODE_MOS65XX_65816 = 1 shl 4;
+  /// MOS65XXX WDC 65816, 16-bit m, 8-bit x
+  CS_MODE_MOS65XX_65816_LONG_M = 1 shl 5;
+  /// MOS65XXX WDC 65816, 8-bit m, 16-bit x
+  CS_MODE_MOS65XX_65816_LONG_X = 1 shl 6;
+  CS_MODE_MOS65XX_65816_LONG_MX = CS_MODE_MOS65XX_65816_LONG_M or CS_MODE_MOS65XX_65816_LONG_X;
+  /// SH2
+  CS_MODE_SH2 = 1 shl 1;
+  /// SH2A
+  CS_MODE_SH2A = 1 shl 2;
+  /// SH3
+  CS_MODE_SH3 = 1 shl 3;
+  /// SH4
+  CS_MODE_SH4 = 1 shl 4;
+  /// SH4A
+  CS_MODE_SH4A = 1 shl 5;
+  /// w/ FPU
+  CS_MODE_SHFPU = 1 shl 6;
+  /// w/ DSP
+  CS_MODE_SHDSP = 1 shl 7;
+  /// Tricore 1.1
+  CS_MODE_TRICORE_110 = 1 shl 1;
+  /// Tricore 1.2
+  CS_MODE_TRICORE_120 = 1 shl 2;
+  /// Tricore 1.3
+  CS_MODE_TRICORE_130 = 1 shl 3;
+  /// Tricore 1.3.1
+  CS_MODE_TRICORE_131 = 1 shl 4;
+  /// Tricore 1.6
+  CS_MODE_TRICORE_160 = 1 shl 5;
+  /// Tricore 1.6.1
+  CS_MODE_TRICORE_161 = 1 shl 6;
+  /// Tricore 1.6.2
+  CS_MODE_TRICORE_162 = 1 shl 7;
 
 type
   /// User-defined dynamic memory related functions: malloc/calloc/realloc/free/vsnprintf()
@@ -256,6 +324,8 @@ const
   CS_OPT_MNEMONIC = 7;
   /// print immediate operands in unsigned form
   CS_OPT_UNSIGNED = 8;
+  /// ARM, prints branch immediates without offset.
+  CS_OPT_NO_BRANCH_OFFSET = 9;
 
 /// Runtime option value (associated with option type above)
 type
@@ -276,6 +346,8 @@ const
   CS_OPT_SYNTAX_NOREGNAME = 3;
   /// X86 Intel Masm syntax (CS_OPT_SYNTAX).
   CS_OPT_SYNTAX_MASM = 4;
+  /// MOS65XX use $ as hex prefix
+  CS_OPT_SYNTAX_MOTOROLA = 5;
 
 /// Common instruction operand types - to be consistent across all architectures.
 type
@@ -288,10 +360,9 @@ const
   CS_OP_REG = 1;
   /// Immediate operand.
   CS_OP_IMM = 2;
-  /// Memory operand.
-  CS_OP_MEM = 3;
   /// Floating-Point operand.
-  CS_OP_FP = 4;
+  CS_OP_FP = 3;
+  CS_OP_MEM = $80;
 
 /// Common instruction operand access types - to be consistent across all architectures.
 /// It is possible to combine access types, for example: CS_AC_READ | CS_AC_WRITE
@@ -368,11 +439,22 @@ type
     /// X86:     1 bytes.
     /// XCore:   2 bytes.
     /// EVM:     1 bytes.
+    /// RISCV:   4 bytes.
+    /// WASM:    1 bytes.
+    /// MOS65XX: 1 bytes.
+    /// BPF:     8 bytes.
+    /// TriCore: 2 bytes.
     callback: cs_skipdata_cb_t;
     /// User-defined data to be passed to @callback function pointer.
     user_data: Pointer;
   end;
 
+const
+  MAX_IMPL_W_REGS = 20;
+  MAX_IMPL_R_REGS = 20;
+  MAX_NUM_GROUPS = 8;
+
+type
   /// NOTE: All information in cs_detail is only available when CS_OPT_DETAIL = CS_OPT_ON
   /// Initialized as memset(., 0, offsetof(cs_detail, ARCH)+sizeof(cs_ARCH))
   /// by ARCH_getInstruction in arch/ARCH/ARCHDisassembler.c
@@ -380,17 +462,19 @@ type
   /// then update arch/ARCH/ARCHDisassembler.c accordingly
   cs_detail = record
     /// list of implicit registers read by this insn
-    regs_read: array[0..11] of UInt16;
+    regs_read: array[0..MAX_IMPL_R_REGS-1] of UInt16;
     /// number of implicit registers read by this insn
     regs_read_count: UInt8;
     /// list of implicit registers modified by this insn
-    regs_write: array[0..19] of UInt16;
+    regs_write: array[0..MAX_IMPL_W_REGS-1] of UInt16;
     /// number of implicit registers modified by this insn
     regs_write_count: UInt8;
     /// list of group this instruction belong to
-    groups: array[0..7] of UInt8;
+    groups: array[0..MAX_NUM_GROUPS-1] of UInt8;
     /// number of groups this insn belongs to
     groups_count: UInt8;
+    /// Instruction has writeback operands.
+    writeback: Boolean;
     /// Architecture-specific instruction info
     case Byte of
       /// X86 architecture, including 16-bit, 32-bit & 64-bit mode
@@ -417,6 +501,18 @@ type
      10: (m680x: cs_m680x);
       /// Ethereum architecture
      11: (evm: cs_evm);
+      /// MOS65XX architecture (including MOS6502)
+     12: (mos65xx: cs_mos65xx);
+      /// Web Assembly architecture
+     13: (wasm: cs_wasm);
+      /// Berkeley Packet Filter architecture (including eBPF)
+     14: (bpf: cs_bpf);
+      /// RISCV architecture
+     15: (riscv: cs_riscv);
+      /// SH architecture
+     16: (sh: cs_sh);
+      /// TriCore architecture
+     17: (tricore: cs_tricore);
   end;
   Pcs_detail = ^cs_detail;
 
@@ -437,10 +533,10 @@ type
     size: UInt16;
     /// Machine bytes of this instruction, with number of bytes indicated by @size above
     /// This information is available even when CS_OPT_DETAIL = CS_OPT_OFF
-    bytes: array[0..15] of UInt8;
+    bytes: array[0..23] of UInt8;
     /// Ascii text of instruction mnemonic
     /// This information is available even when CS_OPT_DETAIL = CS_OPT_OFF
-    mnemonic: array[0..31] of AnsiChar;
+    mnemonic: array[0..CS_MNEMONIC_SIZE-1] of AnsiChar;
     /// Ascii text of instruction operands
     /// This information is available even when CS_OPT_DETAIL = CS_OPT_OFF
     op_str: array[0..159] of AnsiChar;
@@ -636,13 +732,6 @@ function cs_strerror(code: cs_err): PAnsiChar; cdecl;
  *)
 function cs_disasm(handle: csh; const code: PByte; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
   external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_disasm';
-
-(**
-  Deprecated function - to be retired in the next version!
-  Use cs_disasm() instead of cs_disasm_ex()
- *)
-function cs_disasm_ex(handle: csh; const code: PByte; code_size: NativeUInt; address: UInt64; count: NativeUInt; var insn: Pcs_insn): NativeUInt; cdecl;
-  external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_disasm_ex';
 
 (**
  Free memory allocated by cs_malloc() or cs_disasm() (argument @insn)
