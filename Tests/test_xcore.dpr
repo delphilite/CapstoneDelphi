@@ -15,7 +15,7 @@ program test_xcore;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.XCore, test_utils;
+  SysUtils, Capstone.Api, Capstone.XCore, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 var
@@ -24,31 +24,31 @@ var
   op: Pcs_xcore_op;
 begin
   // detail can be NULL on "data" instruction if SKIPDATA option is turned ON
-  if ins^.detail = nil then
+  if ins.detail = nil then
     Exit;
 
-  xcore := @ins^.detail^.xcore;
-  if xcore^.op_count <> 0 then
-    WriteLn(#9'op_count: ', xcore^.op_count);
+  xcore := @ins.detail.xcore;
+  if xcore.op_count <> 0 then
+    WriteLn(#9'op_count: ', xcore.op_count);
 
-  for i := 0 to xcore^.op_count - 1 do
+  for i := 0 to xcore.op_count - 1 do
   begin
-    op := @xcore^.operands[i];
-    case op^.type_ of
+    op := @xcore.operands[i];
+    case op.type_ of
       XCORE_OP_REG:
-        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op^.detail.reg));
+        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       XCORE_OP_IMM:
-        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(op^.detail.imm, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(op.detail.imm, '%x'));
       XCORE_OP_MEM_:
         begin
           WriteLn(#9#9'operands[', i, '].type: MEM');
-          if op^.detail.mem.base <> XCORE_REG_INVALID then
-            WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, op^.detail.mem.base));
-          if op^.detail.mem.index <> XCORE_REG_INVALID then
-            WriteLn(#9#9#9'operands[', i, '].mem.index: REG = ', cs_reg_name(handle, op^.detail.mem.index));
-          if op^.detail.mem.disp <> 0 then
-            WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(op^.detail.mem.disp, '%x'));
-          if op^.detail.mem.direct <> 1 then
+          if op.detail.mem.base <> XCORE_REG_INVALID then
+            WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, op.detail.mem.base));
+          if op.detail.mem.index <> XCORE_REG_INVALID then
+            WriteLn(#9#9#9'operands[', i, '].mem.index: REG = ', cs_reg_name(handle, op.detail.mem.index));
+          if op.detail.mem.disp <> 0 then
+            WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(op.detail.mem.disp, '%x'));
+          if op.detail.mem.direct <> 1 then
             WriteLn(#9#9#9'operands[', i, '].mem.direct: -1');
         end;
     end;

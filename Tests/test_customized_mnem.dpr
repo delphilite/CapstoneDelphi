@@ -14,8 +14,10 @@ program test_customized_mnem;
 
 {$APPTYPE CONSOLE}
 
+{$I test.inc}
+
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.X86, test_utils;
+  SysUtils, Capstone.Api, Capstone.X86, test_utils;
 
 procedure print_insn_detail(handle: csh);
 const
@@ -67,14 +69,14 @@ begin
 
   // Customized mnemonic JNE to JNZ using CS_OPT_MNEMONIC option
   Writeln('Now customize engine to change mnemonic from ''JNE'' to ''JNZ''');
-  cs_option(handle, CS_OPT_MNEMONIC, size_t(@my_mnem));
+  cs_option(handle, CS_OPT_MNEMONIC, NativeUInt(@my_mnem));
 
   // 2. Now print out the instruction in newly customized setup.
   print_insn_detail(handle);
 
   // Reset engine to use the default mnemonic of JNE
   Writeln('Reset engine to use the default mnemonic');
-  cs_option(handle, CS_OPT_MNEMONIC, size_t(@default_mnem));
+  cs_option(handle, CS_OPT_MNEMONIC, NativeUInt(@default_mnem));
 
   // 3. Now print out the instruction in default setup.
   print_insn_detail(handle);

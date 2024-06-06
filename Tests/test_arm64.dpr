@@ -15,11 +15,12 @@ program test_arm64;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.Arm64, test_utils;
+  SysUtils, Capstone.Api, Capstone.Arm64, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 var
   arm64: Pcs_arm64;
+  op: Pcs_arm64_op;
   i: Integer;
   l: string;
   regs_read, regs_write: cs_regs;
@@ -36,45 +37,46 @@ begin
 
   for i := 0 to arm64.op_count - 1 do
   begin
-    case arm64.operands[i].type_ of
+    op := @arm64.operands[i];
+    case op.type_ of
       ARM64_OP_REG:
-        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, arm64.operands[i].detail.reg));
+        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       ARM64_OP_IMM:
-        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(arm64.operands[i].detail.imm, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(op.detail.imm, '%x'));
       ARM64_OP_FP:
 {$IFDEF _KERNEL_MODE}
         // Issue #681: Windows kernel does not support formatting float point
         WriteLn(#9#9'operands[', i, '].type: FP = <float_point_unsupported>');
 {$ELSE}
-        WriteLn(#9#9'operands[', i, '].type: FP = ', arm64.operands[i].detail.fp);
+        WriteLn(#9#9'operands[', i, '].type: FP = ', op.detail.fp);
 {$ENDIF}
       ARM64_OP_MEM_:
       begin
         WriteLn(#9#9'operands[', i, '].type: MEM');
-        if (arm64.operands[i].detail.mem.base <> ARM64_REG_INVALID) then
-          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, arm64.operands[i].detail.mem.base));
-        if (arm64.operands[i].detail.mem.index <> ARM64_REG_INVALID) then
-          WriteLn(#9#9#9'operands[', i, '].mem.index: REG = ', cs_reg_name(handle, arm64.operands[i].detail.mem.index));
-        if (arm64.operands[i].detail.mem.disp <> 0) then
-          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(arm64.operands[i].detail.mem.disp, '%x'));
+        if (op.detail.mem.base <> ARM64_REG_INVALID) then
+          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, op.detail.mem.base));
+        if (op.detail.mem.index <> ARM64_REG_INVALID) then
+          WriteLn(#9#9#9'operands[', i, '].mem.index: REG = ', cs_reg_name(handle, op.detail.mem.index));
+        if (op.detail.mem.disp <> 0) then
+          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(op.detail.mem.disp, '%x'));
       end;
       ARM64_OP_CIMM:
-        WriteLn(#9#9'operands[', i, '].type: C-IMM = ', arm64.operands[i].detail.imm);
+        WriteLn(#9#9'operands[', i, '].type: C-IMM = ', op.detail.imm);
       ARM64_OP_REG_MRS:
-        WriteLn(#9#9'operands[', i, '].type: REG_MRS = 0x', format_string_hex(arm64.operands[i].detail.reg, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: REG_MRS = 0x', format_string_hex(op.detail.reg, '%x'));
       ARM64_OP_REG_MSR:
-        WriteLn(#9#9'operands[', i, '].type: REG_MSR = 0x', format_string_hex(arm64.operands[i].detail.reg, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: REG_MSR = 0x', format_string_hex(op.detail.reg, '%x'));
       ARM64_OP_PSTATE:
-        WriteLn(#9#9'operands[', i, '].type: PSTATE = 0x', format_string_hex(arm64.operands[i].detail.pstate, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: PSTATE = 0x', format_string_hex(op.detail.pstate, '%x'));
       ARM64_OP_SYS:
-        WriteLn(#9#9'operands[', i, '].type: SYS = 0x', format_string_hex(arm64.operands[i].detail.sys, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: SYS = 0x', format_string_hex(op.detail.sys, '%x'));
       ARM64_OP_PREFETCH:
-        WriteLn(#9#9'operands[', i, '].type: PREFETCH = 0x', format_string_hex(arm64.operands[i].detail.prefetch, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: PREFETCH = 0x', format_string_hex(op.detail.prefetch, '%x'));
       ARM64_OP_BARRIER:
-        WriteLn(#9#9'operands[', i, '].type: BARRIER = 0x', format_string_hex(arm64.operands[i].detail.barrier, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: BARRIER = 0x', format_string_hex(op.detail.barrier, '%x'));
     end;
 
-    access := arm64.operands[i].access;
+    access := op.access;
     case access of
       CS_AC_READ:
         WriteLn(#9#9'operands[', i, '].access: READ');
@@ -84,20 +86,20 @@ begin
         WriteLn(#9#9'operands[', i, '].access: READ | WRITE');
     end;
 
-    if (arm64.operands[i].shift.type_ <> ARM64_SFT_INVALID) and (arm64.operands[i].shift.value <> 0) then
-      WriteLn(#9#9#9'Shift: type = ', arm64.operands[i].shift.type_, ', value = ', arm64.operands[i].shift.value);
+    if (op.shift.type_ <> ARM64_SFT_INVALID) and (op.shift.value <> 0) then
+      WriteLn(#9#9#9'Shift: type = ', op.shift.type_, ', value = ', op.shift.value);
 
-    if (arm64.operands[i].ext <> ARM64_EXT_INVALID) then
-      WriteLn(#9#9#9'Ext: ', arm64.operands[i].ext);
+    if (op.ext <> ARM64_EXT_INVALID) then
+      WriteLn(#9#9#9'Ext: ', op.ext);
 
-    if (arm64.operands[i].vas <> ARM64_VAS_INVALID) then
-      WriteLn(#9#9#9'Vector Arrangement Specifier: 0x', format_string_hex(arm64.operands[i].vas, '%x'));
+    if (op.vas <> ARM64_VAS_INVALID) then
+      WriteLn(#9#9#9'Vector Arrangement Specifier: 0x', format_string_hex(op.vas, '%x'));
 
-    if (arm64.operands[i].vess <> ARM64_VESS_INVALID) then
-      WriteLn(#9#9#9'Vector Element Size Specifier: ', arm64.operands[i].vess);
+    if (op.vess <> ARM64_VESS_INVALID) then
+      WriteLn(#9#9#9'Vector Element Size Specifier: ', op.vess);
 
-    if (arm64.operands[i].vector_index <> -1) then
-      WriteLn(#9#9#9'Vector Index: ', arm64.operands[i].vector_index);
+    if (op.vector_index <> -1) then
+      WriteLn(#9#9#9'Vector Index: ', op.vector_index);
   end;
 
   if (arm64.update_flags) then
@@ -110,7 +112,7 @@ begin
     WriteLn(#9'Code-condition: ', arm64.cc);
 
   // Print out all registers accessed by this instruction (either implicit or explicit)
-  if cs_regs_access(handle, ins, regs_read, @regs_read_count, regs_write, @regs_write_count) = CS_ERR_OK then
+  if cs_regs_access(handle, ins, regs_read, regs_read_count, regs_write, regs_write_count) = CS_ERR_OK then
   begin
     if (regs_read_count <> 0) then
     begin

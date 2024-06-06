@@ -15,7 +15,7 @@ program test_ppc;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.Ppc, test_utils;
+  SysUtils, Capstone.Api, Capstone.Ppc, test_utils;
 
 function get_bc_name(bc: Integer): string;
 begin
@@ -39,46 +39,48 @@ procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 var
   i: Integer;
   ppc: Pcs_ppc;
+  op: Pcs_ppc_op;
 begin
-  if ins^.detail = nil then
+  if ins.detail = nil then
     Exit;
 
-  ppc := @ins^.detail^.ppc;
-  if ppc^.op_count > 0 then
-    WriteLn(#9'op_count: ', ppc^.op_count);
+  ppc := @ins.detail.ppc;
+  if ppc.op_count > 0 then
+    WriteLn(#9'op_count: ', ppc.op_count);
 
-  for i := 0 to ppc^.op_count - 1 do
+  for i := 0 to ppc.op_count - 1 do
   begin
-    case ppc^.operands[i].type_ of
+    op := @ppc.operands[i];
+    case op.type_ of
       PPC_OP_REG:
-        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, ppc^.operands[i].detail.reg));
+        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       PPC_OP_IMM:
-        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(ppc^.operands[i].detail.imm, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(op.detail.imm, '%x'));
       PPC_OP_MEM_:
       begin
         WriteLn(#9#9'operands[', i, '].type: MEM');
-        if ppc^.operands[i].detail.mem.base <> PPC_REG_INVALID then
-          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, ppc^.operands[i].detail.mem.base));
-        if ppc^.operands[i].detail.mem.disp <> 0 then
-          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(ppc^.operands[i].detail.mem.disp, '%x'));
+        if op.detail.mem.base <> PPC_REG_INVALID then
+          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, op.detail.mem.base));
+        if op.detail.mem.disp <> 0 then
+          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(op.detail.mem.disp, '%x'));
       end;
       PPC_OP_CRX_:
       begin
         WriteLn(#9#9'operands[', i, '].type: CRX');
-        WriteLn(#9#9#9'operands[', i, '].crx.scale: ', ppc^.operands[i].detail.crx.scale);
-        WriteLn(#9#9#9'operands[', i, '].crx.reg: ', cs_reg_name(handle, ppc^.operands[i].detail.crx.reg));
-        WriteLn(#9#9#9'operands[', i, '].crx.cond: ', get_bc_name(ppc^.operands[i].detail.crx.cond));
+        WriteLn(#9#9#9'operands[', i, '].crx.scale: ', op.detail.crx.scale);
+        WriteLn(#9#9#9'operands[', i, '].crx.reg: ', cs_reg_name(handle, op.detail.crx.reg));
+        WriteLn(#9#9#9'operands[', i, '].crx.cond: ', get_bc_name(op.detail.crx.cond));
       end;
     end;
   end;
 
-  if ppc^.bc <> 0 then
-    WriteLn(#9'Branch code: ', ppc^.bc);
+  if ppc.bc <> 0 then
+    WriteLn(#9'Branch code: ', ppc.bc);
 
-  if ppc^.bh <> 0 then
-    WriteLn(#9'Branch hint: ', ppc^.bh);
+  if ppc.bh <> 0 then
+    WriteLn(#9'Branch hint: ', ppc.bh);
 
-  if ppc^.update_cr0 then
+  if ppc.update_cr0 then
     WriteLn(#9'Update-CR0: True');
 
   WriteLn('');

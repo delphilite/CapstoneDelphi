@@ -15,7 +15,7 @@ program test_systemz;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.SystemZ, test_utils;
+  SysUtils, Capstone.Api, Capstone.SystemZ, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 var

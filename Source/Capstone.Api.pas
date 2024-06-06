@@ -83,12 +83,13 @@ const
   /// Maximum size of an instruction mnemonic string.
   CS_MNEMONIC_SIZE = 32;
 
+/// Handle using with all API
 type
-  // Handle using with all API
   csh = NativeUInt;
 
-  /// Architecture type
-  cs_arch = Cardinal;
+/// Architecture type
+type
+  cs_arch = Integer;
 
 const
   /// ARM architecture (including Thumb, Thumb-2)
@@ -123,16 +124,17 @@ const
   // Support value to verify diet mode of the engine.
   // If cs_support(CS_SUPPORT_DIET) return True, the engine was compiled
   // in diet mode.
-  CS_SUPPORT_DIET = (Ord(CS_ARCH_ALL) + 1);
+  CS_SUPPORT_DIET = (CS_ARCH_ALL + 1);
 
   // Support value to verify X86 reduce mode of the engine.
   // If cs_support(CS_SUPPORT_X86_REDUCE) return True, the engine was compiled
   // in X86 reduce mode.
-  CS_SUPPORT_X86_REDUCE = (Ord(CS_ARCH_ALL) + 2);
+  CS_SUPPORT_X86_REDUCE = (CS_ARCH_ALL + 2);
 
+/// Mode type
 type
-  /// Mode type
   cs_mode = Integer;
+
 const
   /// little-endian mode (default mode)
   CS_MODE_LITTLE_ENDIAN = 0;
@@ -175,7 +177,7 @@ const
   /// M68K 68060 mode
   CS_MODE_M68K_060 = 1 shl 6;
   /// big-endian mode
-  CS_MODE_BIG_ENDIAN = 1 shl 31;
+  CS_MODE_BIG_ENDIAN = Int32(1) shl 31;
   /// Mips32 ISA (Mips)
   CS_MODE_MIPS32 = CS_MODE_32;
   /// Mips64 ISA (Mips)
@@ -231,9 +233,10 @@ type
     mnemonic: PAnsiChar;
   end;
 
+/// Runtime option for the disassembled engine
 type
-  /// Runtime option for the disassembled engine
   cs_opt_type = Integer;
+
 const
   /// No option specified
   CS_OPT_INVALID = 0;
@@ -254,9 +257,10 @@ const
   /// print immediate operands in unsigned form
   CS_OPT_UNSIGNED = 8;
 
+/// Runtime option value (associated with option type above)
 type
-  /// Runtime option value (associated with option type above)
   cs_opt_value = Integer;
+
 const
   /// Turn OFF an option - default for CS_OPT_DETAIL, CS_OPT_SKIPDATA, CS_OPT_UNSIGNED.
   CS_OPT_OFF = 0;
@@ -273,9 +277,10 @@ const
   /// X86 Intel Masm syntax (CS_OPT_SYNTAX).
   CS_OPT_SYNTAX_MASM = 4;
 
+/// Common instruction operand types - to be consistent across all architectures.
 type
-  /// Common instruction operand types - to be consistent across all architectures.
   cs_op_type = Integer;
+
 const
   /// uninitialized/invalid operand.
   CS_OP_INVALID = 0;
@@ -288,10 +293,11 @@ const
   /// Floating-Point operand.
   CS_OP_FP = 4;
 
+/// Common instruction operand access types - to be consistent across all architectures.
+/// It is possible to combine access types, for example: CS_AC_READ | CS_AC_WRITE
 type
-  /// Common instruction operand access types - to be consistent across all architectures.
-  /// It is possible to combine access types, for example: CS_AC_READ | CS_AC_WRITE
   cs_ac_type = Integer;
+
 const
   /// Uninitialized/invalid access type.
   CS_AC_INVALID = 0;
@@ -300,9 +306,10 @@ const
   /// Operand write to memory or register.
   CS_AC_WRITE = 2;
 
+/// Common instruction groups - to be consistent across all architectures.
 type
-  /// Common instruction groups - to be consistent across all architectures.
   cs_group_type = Integer;
+
 const
   /// uninitialized/invalid group.
   CS_GRP_INVALID = 0;
@@ -325,7 +332,7 @@ type
   (**
    User-defined callback function for SKIPDATA option.
    See tests/test_skipdata.c for sample code demonstrating this API.
-  
+
    @code: the input buffer containing code to be disassembled.
           This is the same buffer passed to cs_disasm().
    @code_size: size (in bytes) of the above @code buffer.
@@ -333,7 +340,7 @@ type
         buffer @code mentioned above.
    @user_data: user-data passed to cs_option() via @user_data field in
         cs_opt_skipdata struct below.
-  
+
    @return: return number of bytes to skip, or 0 to immediately stop disassembling.
    *)
   cs_skipdata_cb_t = function(const code: PByte; code_size: NativeUInt; offset: NativeUInt; user_data: Pointer): NativeUInt; cdecl;
@@ -448,10 +455,11 @@ type
   end;
   Pcs_insn = ^cs_insn;
 
+/// All type of errors encountered by Capstone API.
+/// These are values returned by cs_errno()
 type
-  /// All type of errors encountered by Capstone API.
-  /// These are values returned by cs_errno()
   cs_err = Integer;
+
 const
   /// No error: everything was fine
   CS_ERR_OK = 0;
@@ -495,9 +503,9 @@ type
  @minor: minor number of API version
 
  @return hexical number as (major << 8 | minor), which encodes both
-  major & minor versions.
-  NOTE: This returned value can be compared with version number made
-  with macro CS_MAKE_VERSION
+ major & minor versions.
+ NOTE: This returned value can be compared with version number made
+ with macro CS_MAKE_VERSION
 
  For example, second API version would return 1 in @major, and 1 in @minor
  The return value would be 0x0101
@@ -588,7 +596,7 @@ function cs_errno(handle: csh): cs_err; cdecl;
  @code: error code (see CS_ERR_* above)
 
  @return: returns a pointer to a string that describes the error code
-  passed in the argument @code
+passed in the argument @code
  *)
 function cs_strerror(code: cs_err): PAnsiChar; cdecl;
   external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_strerror';
@@ -611,14 +619,14 @@ function cs_strerror(code: cs_err): PAnsiChar; cdecl;
  which complicates things. This is especially troublesome for the case @count=0,
  when cs_disasm() runs uncontrollably (until either end of input buffer, or
  when it encounters an invalid instruction).
- 
+
  @handle: handle returned by cs_open()
  @code: buffer containing raw binary code to be disassembled.
  @code_size: size of the above code buffer.
  @address: address of the first instruction in given raw code buffer.
  @insn: array of instructions filled in by this API.
-  NOTE: @insn will be allocated by this function, and should be freed
-  with cs_free() API.
+   NOTE: @insn will be allocated by this function, and should be freed
+   with cs_free() API.
  @count: number of instructions to be disassembled, or 0 to get all of them
 
  @return: the number of successfully disassembled instructions,
@@ -680,7 +688,7 @@ function cs_malloc(handle: csh): Pcs_insn; cdecl;
  which complicates things. This is especially troublesome for the case
  @count=0, when cs_disasm() runs uncontrollably (until either end of input
  buffer, or when it encounters an invalid instruction).
- 
+
  @handle: handle returned by cs_open()
  @code: buffer containing raw binary code to be disassembled
  @size: size of above code
@@ -823,7 +831,7 @@ function cs_op_count(handle: csh; const insn: Pcs_insn; op_type: Cardinal): Inte
  @insn: disassembled instruction structure received from cs_disasm() or cs_disasm_iter()
  @op_type: Operand type to be found.
  @position: position of the operand to be found. This must be in the range
-  [1, cs_op_count(handle, insn, op_type)]
+[1, cs_op_count(handle, insn, op_type)]
 
  @return: index of operand of given type @op_type in <arch>.operands[] array
  in instruction @insn, or -1 on failure.
@@ -848,7 +856,7 @@ function cs_op_index(handle: csh; const insn: Pcs_insn; op_type: Cardinal; posit
  @return CS_ERR_OK on success, or other value on failure (refer to cs_err enum
  for detailed error).
  *)
-function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; regs_read_count: PByte; regs_write: cs_regs; regs_write_count: PByte): cs_err; cdecl;
+function cs_regs_access(handle: csh; const insn: Pcs_insn; var regs_read: cs_regs; var regs_read_count: Byte; var regs_write: cs_regs; var regs_write_count: Byte): cs_err; cdecl;
   external {$IFDEF CS_USE_EXTNAME}capstone{$ENDIF} name _PU + 'cs_regs_access';
 
 (**
@@ -856,6 +864,13 @@ function cs_regs_access(handle: csh; const insn: Pcs_insn; regs_read: cs_regs; r
  result of cs_version() API.
  *)
 function cs_make_version(major, minor: Integer): Cardinal; cdecl;
+
+(**
+ Calculate the offset of a disassembled instruction in its buffer, given its position
+ in its array of disassembled insn
+ NOTE: this macro works with position (>=1), not index
+ *)
+function cs_insn_offset(insns: Pcs_insn; post: Integer): Integer; cdecl;
 
 implementation
 
@@ -1011,6 +1026,15 @@ var
 function cs_make_version(major, minor: Integer): Cardinal;
 begin
   Result := major shl 8 or minor;
+end;
+
+function cs_insn_offset(insns: Pcs_insn; post: Integer): Integer;
+var
+  P: Pcs_insn;
+begin
+  P := insns;
+  Inc(P, post - 1);
+  Result := P.address - insns.address;
 end;
 
 end.

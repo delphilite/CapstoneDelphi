@@ -17,6 +17,9 @@ interface
 uses
   SysUtils;
 
+const
+  nine_spaces = '         ';
+
 type
   TPlatform = record
     arch: Cardinal;
@@ -33,6 +36,10 @@ type
     skipdata: NativeUInt;
   end;
 
+  function  format_buffer_short(str: PByte; len: Integer): string;
+
+  function  format_nine_spaces(const defspace: string; size: Integer): string;
+
   function  format_string_hex(const c: Integer;
     const fmt: string = ''): string; overload;
   function  format_string_hex(const c: Int64;
@@ -41,6 +48,33 @@ type
   procedure print_string_hex(const comment: string; str: PByte; len: Integer);
 
 implementation
+
+function format_buffer_short(str: PByte; len: Integer): string;
+var
+  i: Integer;
+  p: PByte;
+begin
+  Result := '';
+  p := PByte(str);
+  for i := 0 to len - 1 do
+  begin
+    Result := Result + format_string_hex(p[i]);
+  end;
+end;
+
+function format_nine_spaces(const defspace: string; size: Integer): string;
+begin
+  // If size is negative, output the specified length of the string and left-align it
+  if size < 0 then
+    Result := defspace
+  else begin
+    // Ensure size does not exceed the length of defspace
+    if size > Length(defspace) then
+      size := Length(defspace);
+    // Use the Copy function to get the specified length of the string
+    Result := Copy(defspace, 1, size);
+  end;
+end;
 
 function format_string_hex(const c: Integer; const fmt: string): string;
 begin

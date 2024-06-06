@@ -15,28 +15,28 @@ program test_m680x;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.M680X, test_utils;
+  SysUtils, Capstone.Api, Capstone.M680X, test_utils;
 
 procedure print_read_write_regs(handle: csh; detail: Pcs_detail);
 var
   i: Integer;
 begin
-  if detail^.regs_read_count > 0 then
+  if detail.regs_read_count > 0 then
   begin
     Write(#9'Registers read:');
-    for i := 0 to detail^.regs_read_count - 1 do
+    for i := 0 to detail.regs_read_count - 1 do
     begin
-      Write(Format(' %s', [cs_reg_name(handle, detail^.regs_read[i])]));
+      Write(Format(' %s', [cs_reg_name(handle, detail.regs_read[i])]));
     end;
     WriteLn;
   end;
 
-  if detail^.regs_write_count > 0 then
+  if detail.regs_write_count > 0 then
   begin
     Write(#9'Registers modified:');
-    for i := 0 to detail^.regs_write_count - 1 do
+    for i := 0 to detail.regs_write_count - 1 do
     begin
-      Write(Format(' %s', [cs_reg_name(handle, detail^.regs_write[i])]));
+      Write(Format(' %s', [cs_reg_name(handle, detail.regs_write[i])]));
     end;
     WriteLn;
   end;
@@ -53,6 +53,9 @@ const
   s_idx_inc_dec: array[Boolean] of string = (
     'decrement', 'increment'
   );
+  s_op_ext_indirect: array[Boolean] of string = (
+    '', 'INDIRECT'
+  );
 var
   detail: Pcs_detail;
   m680x: Pcs_m680x;
@@ -60,82 +63,80 @@ var
   op: Pcs_m680x_op;
   comment: PAnsiChar;
 begin
-  detail := insn^.detail;
+  detail := insn.detail;
   if detail = nil then
     Exit;
 
-  m680x := @detail^.m680x;
+  m680x := @detail.m680x;
 
-  if m680x^.op_count > 0 then
-    WriteLn(#9'op_count: ', m680x^.op_count);
+  if m680x.op_count > 0 then
+    WriteLn(#9'op_count: ', m680x.op_count);
 
-  for i := 0 to m680x^.op_count - 1 do
+  for i := 0 to m680x.op_count - 1 do
   begin
-    op := @m680x^.operands[i];
+    op := @m680x.operands[i];
     comment := '';
 
-    case op^.type_ of
+    case op.type_ of
       M680X_OP_REGISTER:
       begin
-        if ((i = 0) and ((m680x^.flags and M680X_FIRST_OP_IN_MNEM) <> 0)) or
-           ((i = 1) and ((m680x^.flags and M680X_SECOND_OP_IN_MNEM) <> 0)) then
+        if ((i = 0) and ((m680x.flags and M680X_FIRST_OP_IN_MNEM) <> 0)) or
+           ((i = 1) and ((m680x.flags and M680X_SECOND_OP_IN_MNEM) <> 0)) then
           comment := ' (in mnemonic)';
 
-        WriteLn(#9#9'operands[', i, '].type: REGISTER = ', cs_reg_name(handle, op^.detail.reg), AnsiString(comment));
+        WriteLn(#9#9'operands[', i, '].type: REGISTER = ', cs_reg_name(handle, op.detail.reg), AnsiString(comment));
       end;
       M680X_OP_CONSTANT:
-        WriteLn(#9#9'operands[', i, '].type: CONSTANT = ', op^.detail.const_val);
+        WriteLn(#9#9'operands[', i, '].type: CONSTANT = ', op.detail.const_val);
       M680X_OP_IMMEDIATE:
-        WriteLn(#9#9'operands[', i, '].type: IMMEDIATE = #', op^.detail.imm);
+        WriteLn(#9#9'operands[', i, '].type: IMMEDIATE = #', op.detail.imm);
       M680X_OP_DIRECT:
-        WriteLn(#9#9'operands[', i, '].type: DIRECT = 0x', format_string_hex(op^.detail.direct_addr, '%.2x'));
+        WriteLn(#9#9'operands[', i, '].type: DIRECT = 0x', format_string_hex(op.detail.direct_addr, '%.2x'));
       M680X_OP_EXTENDED:
-        if op^.detail.ext.indirect then
-          WriteLn(#9#9'operands[', i, '].type: EXTENDED INDIRECT = 0x', format_string_hex(op^.detail.ext.address, '%04x'))
-        else WriteLn(#9#9'operands[', i, '].type: EXTENDED = 0x', format_string_hex(op^.detail.ext.address, '%04x'));
+        WriteLn(#9#9'operands[', i, '].type: EXTENDED ', s_op_ext_indirect[op.detail.ext.indirect], ' = 0x', format_string_hex(op.detail.ext.address, '%4x'));
       M680X_OP_RELATIVE:
-        WriteLn(#9#9'operands[', i, '].type: RELATIVE = 0x', format_string_hex(op^.detail.rel.address, '%04x'));
+        WriteLn(#9#9'operands[', i, '].type: RELATIVE = 0x', format_string_hex(op.detail.rel.address, '%.4x'));
       M680X_OP_INDEXED:
       begin
-        if op^.detail.idx.flags and M680X_IDX_INDIRECT <> 0 then
+        if op.detail.idx.flags and M680X_IDX_INDIRECT <> 0 then
           WriteLn(#9#9'operands[', i, '].type: INDEXED INDIRECT')
         else WriteLn(#9#9'operands[', i, '].type: INDEXED');
 
-        if op^.detail.idx.base_reg <> M680X_REG_INVALID then
-          WriteLn(#9#9#9'base register: ', cs_reg_name(handle, op^.detail.idx.base_reg));
+        if op.detail.idx.base_reg <> M680X_REG_INVALID then
+          WriteLn(#9#9#9'base register: ', cs_reg_name(handle, op.detail.idx.base_reg));
 
-        if op^.detail.idx.offset_reg <> M680X_REG_INVALID then
-          WriteLn(#9#9#9'offset register: ', cs_reg_name(handle, op^.detail.idx.offset_reg));
+        if op.detail.idx.offset_reg <> M680X_REG_INVALID then
+          WriteLn(#9#9#9'offset register: ', cs_reg_name(handle, op.detail.idx.offset_reg));
 
-        if (op^.detail.idx.offset_bits <> 0) and (op^.detail.idx.offset_reg = M680X_REG_INVALID) and (op^.detail.idx.inc_dec = 0) then
+        if (op.detail.idx.offset_bits <> 0) and (op.detail.idx.offset_reg = M680X_REG_INVALID) and (op.detail.idx.inc_dec = 0) then
         begin
-          WriteLn(#9#9#9'offset: ', op^.detail.idx.offset);
+          WriteLn(#9#9#9'offset: ', op.detail.idx.offset);
 
-          if op^.detail.idx.base_reg = M680X_REG_PC then
-            WriteLn(#9#9#9'offset address: 0x', format_string_hex(op^.detail.idx.offset_addr, '%x'));
+          if op.detail.idx.base_reg = M680X_REG_PC then
+            WriteLn(#9#9#9'offset address: 0x', format_string_hex(op.detail.idx.offset_addr, '%x'));
 
-          WriteLn(#9#9#9'offset bits: ', op^.detail.idx.offset_bits);
+          WriteLn(#9#9#9'offset bits: ', op.detail.idx.offset_bits);
         end;
 
-        if op^.detail.idx.inc_dec <> 0 then
+        if op.detail.idx.inc_dec <> 0 then
         begin
-          WriteLn(#9#9#9, s_idx_flags[op^.detail.idx.flags and M680X_IDX_POST_INC_DEC <> 0], ' ',
-            s_idx_inc_dec[op^.detail.idx.inc_dec > 0], ': ', abs(op^.detail.idx.inc_dec));
+          WriteLn(#9#9#9, s_idx_flags[op.detail.idx.flags and M680X_IDX_POST_INC_DEC <> 0], ' ',
+            s_idx_inc_dec[op.detail.idx.inc_dec > 0], ': ', abs(op.detail.idx.inc_dec));
         end;
       end;
     end;
 
-    if op^.size <> 0 then
-      WriteLn(#9#9#9'size: ', op^.size);
+    if op.size <> 0 then
+      WriteLn(#9#9#9'size: ', op.size);
 
-    if op^.access <> CS_AC_INVALID then
-      WriteLn(#9#9#9'access: ', s_access[op^.access]);
+    if op.access <> CS_AC_INVALID then
+      WriteLn(#9#9#9'access: ', s_access[op.access]);
   end;
 
   print_read_write_regs(handle, detail);
 
-  if detail^.groups_count > 0 then
-    WriteLn(#9'groups_count: ', detail^.groups_count);
+  if detail.groups_count > 0 then
+    WriteLn(#9'groups_count: ', detail.groups_count);
 
   WriteLn;
 end;
@@ -238,8 +239,13 @@ begin
       item := insn;
       for j := 0 to count - 1 do
       begin
-        l := '0x' + format_string_hex(item.address);
-        WriteLn(l, ':'#9, item.mnemonic, #9, item.op_str);
+        l := '0x' + format_string_hex(item.address) + ': ';
+        l := l + format_buffer_short(@item.bytes, item.size);
+        l := l + format_nine_spaces(nine_spaces, 1 + ((5 - item.size) * 2));
+        l := l + string(item.mnemonic);
+        l := l + format_nine_spaces(nine_spaces, 1 + (5 - strlen(item.mnemonic)));
+        l := l + string(item.op_str);
+        WriteLn(l);
         print_insn_detail(handle, item);
         if j < count - 1 then
           Inc(item);

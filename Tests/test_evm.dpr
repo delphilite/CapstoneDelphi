@@ -15,33 +15,33 @@ program test_evm;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.Evm, test_utils;
+  SysUtils, Capstone.Api, Capstone.Evm, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 var
   i: Integer;
-  l:string;
+  l: string;
   evm: Pcs_evm;
 begin
-  if ins^.detail = nil then
+  if ins.detail = nil then
     Exit;
 
-  evm := @ins^.detail^.evm;
+  evm := @ins.detail.evm;
 
-  if evm^.pop > 0 then
-    WriteLn(#9'Pop:     ', evm^.pop);
+  if evm.pop > 0 then
+    WriteLn(#9'Pop:     ', evm.pop);
 
-  if evm^.push > 0 then
-    WriteLn(#9'Push:    ', evm^.push);
+  if evm.push > 0 then
+    WriteLn(#9'Push:    ', evm.push);
 
-  if evm^.fee > 0 then
-    WriteLn(#9'Gas fee: ', evm^.fee);
+  if evm.fee > 0 then
+    WriteLn(#9'Gas fee: ', evm.fee);
 
-  if ins^.detail^.groups_count > 0 then
+  if ins.detail.groups_count > 0 then
   begin
     l := #9'Groups: ';
-    for i := 0 to ins^.detail^.groups_count - 1 do
-      l := l + string(cs_group_name(handle, ins^.detail^.groups[i])) + ' ';
+    for i := 0 to ins.detail.groups_count - 1 do
+      l := l + string(cs_group_name(handle, ins.detail.groups[i])) + ' ';
     WriteLn(l);
   end;
 

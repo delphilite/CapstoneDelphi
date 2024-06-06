@@ -15,7 +15,7 @@ program test_x86;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.X86, test_utils;
+  SysUtils, Capstone.Api, Capstone.X86, test_utils;
 
 function get_eflag_name(const flag: UInt64): string;
 type
@@ -170,60 +170,60 @@ var
   op: Pcs_x86_op;
 begin
   // detail can be NULL on "data" instruction if SKIPDATA option is turned ON
-  if ins^.detail = nil then
+  if ins.detail = nil then
     Exit;
 
-  x86 := @ins^.detail^.x86;
+  x86 := @ins.detail.x86;
 
-  print_string_hex(#9'Prefix:', @x86^.prefix, 4);
+  print_string_hex(#9'Prefix:', @x86.prefix, 4);
 
-  print_string_hex(#9'Opcode:', @x86^.opcode, 4);
+  print_string_hex(#9'Opcode:', @x86.opcode, 4);
 
-  WriteLn(#9'rex: 0x', format_string_hex(x86^.rex, '%x'));
+  WriteLn(#9'rex: 0x', format_string_hex(x86.rex, '%x'));
 
-  WriteLn(#9'addr_size: ', x86^.addr_size);
-  WriteLn(#9'modrm: 0x', format_string_hex(x86^.modrm, '%x'));
-  if x86^.encoding.modrm_offset <> 0 then
-    WriteLn(#9'modrm_offset: 0x', format_string_hex(x86^.encoding.modrm_offset, '%x'));
+  WriteLn(#9'addr_size: ', x86.addr_size);
+  WriteLn(#9'modrm: 0x', format_string_hex(x86.modrm, '%x'));
+  if x86.encoding.modrm_offset <> 0 then
+    WriteLn(#9'modrm_offset: 0x', format_string_hex(x86.encoding.modrm_offset, '%x'));
 
-  WriteLn(#9'disp: 0x', format_string_hex(x86^.disp, '%x'));
-  if x86^.encoding.disp_offset <> 0 then
-    WriteLn(#9'disp_offset: 0x', format_string_hex(x86^.encoding.disp_offset, '%x'));
+  WriteLn(#9'disp: 0x', format_string_hex(x86.disp, '%x'));
+  if x86.encoding.disp_offset <> 0 then
+    WriteLn(#9'disp_offset: 0x', format_string_hex(x86.encoding.disp_offset, '%x'));
 
-  if x86^.encoding.disp_size <> 0 then
-    WriteLn(#9'disp_size: 0x', format_string_hex(x86^.encoding.disp_size, '%x'));
+  if x86.encoding.disp_size <> 0 then
+    WriteLn(#9'disp_size: 0x', format_string_hex(x86.encoding.disp_size, '%x'));
 
   // SIB is not available in 16-bit mode
   if (mode and CS_MODE_16) = 0 then
   begin
-    WriteLn(#9'sib: 0x', format_string_hex(x86^.sib, '%x'));
-    if x86^.sib_base <> X86_REG_INVALID then
-      WriteLn(#9#9'sib_base: ', cs_reg_name(handle, x86^.sib_base));
-    if x86^.sib_index <> X86_REG_INVALID then
-      WriteLn(#9#9'sib_index: ', cs_reg_name(handle, x86^.sib_index));
-    if x86^.sib_scale <> 0 then
-      WriteLn(#9#9'sib_scale: ', x86^.sib_scale);
+    WriteLn(#9'sib: 0x', format_string_hex(x86.sib, '%x'));
+    if x86.sib_base <> X86_REG_INVALID then
+      WriteLn(#9#9'sib_base: ', cs_reg_name(handle, x86.sib_base));
+    if x86.sib_index <> X86_REG_INVALID then
+      WriteLn(#9#9'sib_index: ', cs_reg_name(handle, x86.sib_index));
+    if x86.sib_scale <> 0 then
+      WriteLn(#9#9'sib_scale: ', x86.sib_scale);
   end;
 
   // XOP code condition
-  if x86^.xop_cc <> X86_XOP_CC_INVALID then
-    WriteLn(#9'xop_cc: ', x86^.xop_cc);
+  if x86.xop_cc <> X86_XOP_CC_INVALID then
+    WriteLn(#9'xop_cc: ', x86.xop_cc);
 
   // SSE code condition
-  if x86^.sse_cc <> X86_SSE_CC_INVALID then
-    WriteLn(#9'sse_cc: ', x86^.sse_cc);
+  if x86.sse_cc <> X86_SSE_CC_INVALID then
+    WriteLn(#9'sse_cc: ', x86.sse_cc);
 
   // AVX code condition
-  if x86^.avx_cc <> X86_AVX_CC_INVALID then
-    WriteLn(#9'avx_cc: ', x86^.avx_cc);
+  if x86.avx_cc <> X86_AVX_CC_INVALID then
+    WriteLn(#9'avx_cc: ', x86.avx_cc);
 
   // AVX Suppress All Exception
-  if x86^.avx_sae <> False then
-    WriteLn(#9'avx_sae: ', x86^.avx_sae);
+  if x86.avx_sae <> False then
+    WriteLn(#9'avx_sae: ', x86.avx_sae);
 
   // AVX Rounding Mode
-  if x86^.avx_rm <> X86_AVX_RM_INVALID then
-    WriteLn(#9'avx_rm: ', x86^.avx_rm);
+  if x86.avx_rm <> X86_AVX_RM_INVALID then
+    WriteLn(#9'avx_rm: ', x86.avx_rm);
 
   // Print out all immediate operands
   count := cs_op_count(handle, ins, X86_OP_IMM);
@@ -234,54 +234,54 @@ begin
     begin
       // Due to Delphi's 1-based indexing, adjust the index accordingly
       index := cs_op_index(handle, ins, X86_OP_IMM, i);
-      WriteLn(#9#9'imms[', i, ']: 0x', format_string_hex(x86^.operands[index].detail.imm, '%x'));
-      if x86^.encoding.imm_offset <> 0 then
-        WriteLn(#9'imm_offset: 0x', format_string_hex(x86^.encoding.imm_offset, '%x'));
-      if x86^.encoding.imm_size <> 0 then
-        WriteLn(#9'imm_size: 0x', format_string_hex(x86^.encoding.imm_size, '%x'));
+      WriteLn(#9#9'imms[', i, ']: 0x', format_string_hex(x86.operands[index].detail.imm, '%x'));
+      if x86.encoding.imm_offset <> 0 then
+        WriteLn(#9'imm_offset: 0x', format_string_hex(x86.encoding.imm_offset, '%x'));
+      if x86.encoding.imm_size <> 0 then
+        WriteLn(#9'imm_size: 0x', format_string_hex(x86.encoding.imm_size, '%x'));
     end;
   end;
 
-  if x86^.op_count <> 0 then
-    WriteLn(#9'op_count: ', x86^.op_count);
+  if x86.op_count <> 0 then
+    WriteLn(#9'op_count: ', x86.op_count);
 
   // Print out all operands
-  for i := 0 to x86^.op_count - 1 do
+  for i := 0 to x86.op_count - 1 do
   begin
-    op := @(x86^.operands[i]);
+    op := @x86.operands[i];
 
-    case op^.type_ of
+    case op.type_ of
       X86_OP_REG:
-        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op^.detail.reg));
+        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       X86_OP_IMM:
-        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', LowerCase(format_string_hex(op^.detail.imm, '%x')));
+        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', LowerCase(format_string_hex(op.detail.imm, '%x')));
       X86_OP_MEM_:
       begin
         WriteLn(#9#9'operands[', i, '].type: MEM');
-        if op^.detail.mem.segment <> X86_REG_INVALID then
-          WriteLn(#9#9#9'operands[', i, '].mem.segment: REG = ', cs_reg_name(handle, op^.detail.mem.segment));
-        if op^.detail.mem.base <> X86_REG_INVALID then
-          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, op^.detail.mem.base));
-        if op^.detail.mem.index <> X86_REG_INVALID then
-          WriteLn(#9#9#9'operands[', i, '].mem.index: REG = ', cs_reg_name(handle, op^.detail.mem.index));
-        if op^.detail.mem.scale <> 1 then
-          WriteLn(#9#9#9'operands[', i, '].mem.scale: ', op^.detail.mem.scale);
-        if op^.detail.mem.disp <> 0 then
-          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(op^.detail.mem.disp, '%x'));
+        if op.detail.mem.segment <> X86_REG_INVALID then
+          WriteLn(#9#9#9'operands[', i, '].mem.segment: REG = ', cs_reg_name(handle, op.detail.mem.segment));
+        if op.detail.mem.base <> X86_REG_INVALID then
+          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, op.detail.mem.base));
+        if op.detail.mem.index <> X86_REG_INVALID then
+          WriteLn(#9#9#9'operands[', i, '].mem.index: REG = ', cs_reg_name(handle, op.detail.mem.index));
+        if op.detail.mem.scale <> 1 then
+          WriteLn(#9#9#9'operands[', i, '].mem.scale: ', op.detail.mem.scale);
+        if op.detail.mem.disp <> 0 then
+          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(op.detail.mem.disp, '%x'));
       end;
     end;
 
     // AVX broadcast type
-    if op^.avx_bcast <> X86_AVX_BCAST_INVALID then
-      WriteLn(#9#9'operands[', i, '].avx_bcast: ', op^.avx_bcast);
+    if op.avx_bcast <> X86_AVX_BCAST_INVALID then
+      WriteLn(#9#9'operands[', i, '].avx_bcast: ', op.avx_bcast);
 
     // AVX zero opmask {z}
-    if op^.avx_zero_opmask then
+    if op.avx_zero_opmask then
       WriteLn(#9#9'operands[', i, '].avx_zero_opmask: TRUE');
 
-    WriteLn(#9#9'operands[', i, '].size: ', op^.size);
+    WriteLn(#9#9'operands[', i, '].size: ', op.size);
 
-    case op^.access of
+    case op.access of
       CS_AC_READ:
         WriteLn(#9#9'operands[', i, '].access: READ');
       CS_AC_WRITE:
@@ -292,7 +292,7 @@ begin
   end;
 
   // Print out all registers accessed by this instruction (either implicit or explicit)
-  if cs_regs_access(handle, ins, regs_read, @regs_read_count, regs_write, @regs_write_count) = CS_ERR_OK then
+  if cs_regs_access(handle, ins, regs_read, regs_read_count, regs_write, regs_write_count) = CS_ERR_OK then
   begin
     if regs_read_count <> 0 then
     begin
@@ -311,20 +311,20 @@ begin
     end;
   end;
 
-  if (x86^.flag.eflags <> 0) or (x86^.flag.fpu_flags <> 0) then
+  if (x86.flag.eflags <> 0) or (x86.flag.fpu_flags <> 0) then
   begin
-    for i := 0 to ins^.detail^.groups_count - 1 do
+    for i := 0 to ins.detail.groups_count - 1 do
     begin
-      if ins^.detail^.groups[i] = X86_GRP_FPU then
+      if ins.detail.groups[i] = X86_GRP_FPU then
       begin
-        l := #9'FPU_FLAGS:' + get_fpu_flag_names(x86^.flag.eflags);
+        l := #9'FPU_FLAGS:' + get_fpu_flag_names(x86.flag.eflags);
         WriteLn(l);
         WriteLn('');
         Exit;
       end;
     end;
 
-    l := #9'EFLAGS:' + get_eflag_names(x86^.flag.eflags);
+    l := #9'EFLAGS:' + get_eflag_names(x86.flag.eflags);
     WriteLn(l);
   end;
 

@@ -15,7 +15,7 @@ program test_arm;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.Arm, test_utils;
+  SysUtils, Capstone.Api, Capstone.Arm, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 var
@@ -38,7 +38,7 @@ begin
   for i := 0 to arm.op_count - 1 do
   begin
     op := @arm.operands[i];
-    case Integer(op.type_) of
+    case op.type_ of
       ARM_OP_REG:
         WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       ARM_OP_IMM:
@@ -133,7 +133,7 @@ begin
     WriteLn(#9'Memory-barrier: ', arm.mem_barrier);
 
   // Print out all registers accessed by this instruction (either implicit or explicit)
-  if cs_regs_access(handle, ins, regs_read, @regs_read_count, regs_write, @regs_write_count) = 0 then
+  if cs_regs_access(handle, ins, regs_read, regs_read_count, regs_write, regs_write_count) = 0 then
   begin
     if regs_read_count > 0 then
     begin

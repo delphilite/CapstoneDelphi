@@ -14,8 +14,10 @@ program test_iter;
 
 {$APPTYPE CONSOLE}
 
+{$I test.inc}
+
 uses
-  SysUtils, Windows, Capstone.Api, test_utils;
+  SysUtils, Capstone.Api, test_utils;
 
 procedure Test;
 const
@@ -147,7 +149,7 @@ var
   l: string;
   err: cs_err;
   code: PByte;
-  size: Size_t;
+  size: NativeUInt;
   n: Integer;
 begin
   for i := Low(Platforms) to High(Platforms) do

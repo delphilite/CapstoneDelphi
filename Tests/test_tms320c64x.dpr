@@ -15,7 +15,7 @@ program test_tms320c64x;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.Tms320c64x, test_utils;
+  SysUtils, Capstone.Api, Capstone.Tms320c64x, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 const
@@ -34,13 +34,13 @@ begin
   if ins.detail = nil then
     Exit;
 
-  tms320c64x := @(ins.detail.tms320c64x);
+  tms320c64x := @ins.detail.tms320c64x;
   if tms320c64x.op_count > 0 then
     WriteLn(#9'op_count: ', tms320c64x.op_count);
 
   for i := 0 to tms320c64x.op_count - 1 do
   begin
-    op := @(tms320c64x.operands[i]);
+    op := @tms320c64x.operands[i];
     case op.type_ of
       TMS320C64X_OP_REG:
         WriteLn(#9#9, 'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));

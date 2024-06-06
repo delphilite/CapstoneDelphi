@@ -14,8 +14,10 @@ program test_skipdata;
 
 {$APPTYPE CONSOLE}
 
+{$I test.inc}
+
 uses
-  SysUtils, Windows, Capstone.Api, test_utils;
+  SysUtils, Capstone.Api, test_utils;
 
 {$IFDEF CAPSTONE_HAS_ARM}
 function mycallback(const code: PByte; code_size: NativeUInt; offset: NativeUInt; user_data: Pointer): NativeUInt; cdecl;
@@ -51,15 +53,23 @@ var
 begin
 {$IFDEF CAPSTONE_HAS_X86}
   // rename default "data" instruction from ".byte" to "db"
+  FillChar(skipdata, SizeOf(skipdata), 0);
   skipdata.mnemonic := 'db';
 {$ENDIF}
 {$IFDEF CAPSTONE_HAS_ARM}
   // rename default "data" instruction from ".byte" to "db"
+  FillChar(skipdata_callback, SizeOf(skipdata_callback), 0);
   skipdata_callback.mnemonic := 'db';
   skipdata_callback.callback := @mycallback;
 {$ENDIF}
 
   SetLength(platforms, 4);
+
+  for i := Low(platforms) to High(platforms) do
+  begin
+    FillChar(platforms[i], SizeOf(platforms[i]), 0);
+  end;
+
 {$IFDEF CAPSTONE_HAS_X86}
   platforms[0].arch := CS_ARCH_X86;
   platforms[0].mode := CS_MODE_32;

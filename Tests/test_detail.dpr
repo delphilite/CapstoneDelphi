@@ -14,8 +14,10 @@ program test_detail;
 
 {$APPTYPE CONSOLE}
 
+{$I test.inc}
+
 uses
-  SysUtils, Windows, Capstone.Api, test_utils;
+  SysUtils, Capstone.Api, test_utils;
 
 procedure Test;
 const

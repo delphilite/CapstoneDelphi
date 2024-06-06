@@ -15,34 +15,36 @@ program test_mips;
 {$APPTYPE CONSOLE}
 
 uses
-  SysUtils, Windows, Capstone.Api, Capstone.Mips, test_utils;
+  SysUtils, Capstone.Api, Capstone.Mips, test_utils;
 
 procedure print_insn_detail(handle: csh; ins: Pcs_insn);
 var
   i: Integer;
   mips: Pcs_mips;
+  op: Pcs_mips_op;
 begin
-  if ins^.detail = nil then
+  if ins.detail = nil then
     Exit;
 
-  mips := @ins^.detail^.mips;
-  if mips^.op_count > 0 then
-    WriteLn(#9'op_count: ', mips^.op_count);
+  mips := @ins.detail.mips;
+  if mips.op_count > 0 then
+    WriteLn(#9'op_count: ', mips.op_count);
 
-  for i := 0 to mips^.op_count - 1 do
+  for i := 0 to mips.op_count - 1 do
   begin
-    case mips^.operands[i].type_ of
+    op := @mips.operands[i];
+    case op.type_ of
       MIPS_OP_REG:
-        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, mips^.operands[i].detail.reg));
+        WriteLn(#9#9'operands[', i, '].type: REG = ', cs_reg_name(handle, op.detail.reg));
       MIPS_OP_IMM:
-        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(mips^.operands[i].detail.imm, '%x'));
+        WriteLn(#9#9'operands[', i, '].type: IMM = 0x', format_string_hex(op.detail.imm, '%x'));
       MIPS_OP_MEM_:
       begin
         WriteLn(#9#9'operands[', i, '].type: MEM');
-        if mips^.operands[i].detail.mem.base <> MIPS_REG_INVALID then
-          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, mips^.operands[i].detail.mem.base));
-        if mips^.operands[i].detail.mem.disp <> 0 then
-          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(mips^.operands[i].detail.mem.disp, '%x'));
+        if op.detail.mem.base <> MIPS_REG_INVALID then
+          WriteLn(#9#9#9'operands[', i, '].mem.base: REG = ', cs_reg_name(handle, op.detail.mem.base));
+        if op.detail.mem.disp <> 0 then
+          WriteLn(#9#9#9'operands[', i, '].mem.disp: 0x', format_string_hex(op.detail.mem.disp, '%x'));
       end;
     end;
   end;
