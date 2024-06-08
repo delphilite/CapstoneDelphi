@@ -21,56 +21,92 @@ uses
 
 type
   TCsArch = (
-    csaARM,
-    csaARM64,
-    csaMIPS,
-    csaX86,
-    csaPPC,
-    csaSPARC,
-    csaSYSZ,
-    csaXCORE,
-    csaM68K,
-    csaTMS320C64X,
-    csaM680X,
-    csaEVM,
-    csaUnknown
+    csaUnknown,            // Unknown architecture
+    csaARM,                // ARM architecture (including Thumb, Thumb-2)
+    csaARM64,              // ARM-64, also called AArch64
+    csaMIPS,               // Mips architecture
+    csaX86,                // X86 architecture (including x86 & x86-64)
+    csaPPC,                // PowerPC architecture
+    csaSPARC,              // Sparc architecture
+    csaSYSZ,               // SystemZ architecture
+    csaXCORE,              // XCore architecture
+    csaM68K,               // 68K architecture
+    csaTMS320C64X,         // TMS320C64x architecture
+    csaM680X,              // 680X architecture
+    csaEVM,                // Ethereum architecture
+    csaMOS65XX,            // MOS65XX architecture (including MOS6502)
+    csaWASM,               // WebAssembly architecture
+    csaBPF,                // Berkeley Packet Filter architecture (including eBPF)
+    csaRISCV,              // RISCV architecture
+    csaSH,                 // SH architecture
+    csaTRICORE             // TriCore architecture
   );
 
-  TCsMode = set of (
-    csmLittleEndian,
-    csmARM,
-    csm16,
-    csm32,
-    csm64,
-    csmThumb,
-    csmMClass,
-    csmV8,
-    csmMicro,
-    csmMips3,
-    csmMips3R6,
-    csmMips2,
-    csmV9,
-    csmQpx,
-    csmM68k000,
-    csmM68k010,
-    csmM68k020,
-    csmM68k030,
-    csmM68k040,
-    csmM68k060,
-    csmBigEndian,
-    csmMips32,
-    csmMips64,
-    csmM680x6301,
-    csmM680x6309,
-    csmM680x6800,
-    csmM680x6801,
-    csmM680x6805,
-    csmM680x6808,
-    csmM680x6809,
-    csmM680x6811,
-    csmM680xCpu12,
-    csmM680xHcs08
+  TCsMode = (
+    csmLittleEndian,       // little-endian mode (default mode)
+    csmARM,                // 32-bit ARM
+    csm16,                 // 16-bit mode (X86)
+    csm32,                 // 32-bit mode (X86)
+    csm64,                 // 64-bit mode (X86, PPC)
+    csmThumb,              // ARM's Thumb mode, including Thumb-2
+    csmMClass,             // ARM's Cortex-M series
+    csmV8,                 // ARMv8 A32 encodings for ARM
+    csmMicro,              // MicroMips mode (Mips)
+    csmMips3,              // Mips III ISA
+    csmMips32R6,           // Mips32r6 ISA
+    csmMips2,              // Mips II ISA
+    csmV9,                 // SparcV9 mode (Sparc)
+    csmQPX,                // Quad Processing eXtensions mode (PPC)
+    csmSPE,                // Signal Processing Engine mode (PPC)
+    csmBookE,              // Book-E mode (PPC)
+    csmPS,                 // Paired-singles mode (PPC)
+    csmM68k000,            // M68K 68000 mode
+    csmM68k010,            // M68K 68010 mode
+    csmM68k020,            // M68K 68020 mode
+    csmM68k030,            // M68K 68030 mode
+    csmM68k040,            // M68K 68040 mode
+    csmM68k060,            // M68K 68060 mode
+    csmBigEndian,          // big-endian mode
+    csmMips32,             // Mips32 ISA (Mips)
+    csmMips64,             // Mips64 ISA (Mips)
+    csmM680x6301,          // M680X Hitachi 6301,6303 mode
+    csmM680x6309,          // M680X Hitachi 6309 mode
+    csmM680x6800,          // M680X Motorola 6800,6802 mode
+    csmM680x6801,          // M680X Motorola 6801,6803 mode
+    csmM680x6805,          // M680X Motorola/Freescale 6805 mode
+    csmM680x6808,          // M680X Motorola/Freescale/NXP 68HC08 mode
+    csmM680x6809,          // M680X Motorola 6809 mode
+    csmM680x6811,          // M680X Motorola/Freescale/NXP 68HC11 mode
+    csmM680xCPU12,         // M680X Motorola/Freescale/NXP CPU12, used on M68HC12/HCS12
+    csmM680xHCS08,         // M680X Freescale/NXP HCS08 mode
+    csmBpfClassic,         // Classic BPF mode (default)
+    csmBpfExtended,        // Extended BPF mode
+    csmRISCV32,            // RISCV RV32G
+    csmRISCV64,            // RISCV RV64G
+    csmRISCVC,             // RISCV compressed instructure mode
+    csmMos65Xx6502,        // MOS65XXX MOS 6502
+    csmMos65Xx65C02,       // MOS65XXX WDC 65c02
+    csmMos65XxW65C02,      // MOS65XXX WDC W65c02
+    csmMos65Xx65816,       // MOS65XXX WDC 65816, 8-bit m/x
+    csmMos65Xx65816LongM,  // MOS65XXX WDC 65816, 16-bit m, 8-bit x
+    csmMos65Xx65816LongX,  // MOS65XXX WDC 65816, 8-bit m, 16-bit x
+    csmMos65Xx65816LongMX, // MOS65XXX WDC 65816, 8-bit, 16-bit
+    csmSH2,                // SH2
+    csmSH2A,               // SH2A
+    csmSH3,                // SH3
+    csmSH4,                // SH4
+    csmSH4A,               // SH4A
+    csmSHFPU,              // w/ FPU
+    csmSHDSP,              // w/ DSP
+    csmTricore110,         // Tricore 1.1
+    csmTricore120,         // Tricore 1.2
+    csmTricore130,         // Tricore 1.3
+    csmTricore131,         // Tricore 1.3.1
+    csmTricore160,         // Tricore 1.6
+    csmTricore161,         // Tricore 1.6.1
+    csmTricore162          // Tricore 1.6.2
   );
+  TCsModeSet = set of TCsMode;
 
   TCsSyntax = (
     cssIntel, cssAtt
@@ -95,7 +131,7 @@ type
   TCapstone = class(TObject)
   private
     FArch: TCsArch;
-    FMode: TCsMode;
+    FMode: TCsModeSet;
     FHandle: csh;
     FLastErrorCode: Integer;
     FCode: PByte;
@@ -105,7 +141,7 @@ type
     FSyntax: TCsSyntax;
   private
     function  FormatErrorMessage(ACode: Integer): string;
-    function  GetHardwareMode(AMode: TCsMode): Integer;
+    function  GetHardwareMode(AMode: TCsModeSet): Integer;
     function  GetLastErrorMessage: string;
   public
     constructor Create;
@@ -126,7 +162,7 @@ type
     property  LastErrorMessage: string read GetLastErrorMessage;
 
     property  Arch: TCsArch read FArch write FArch;
-    property  Mode: TCsMode read FMode write FMode;
+    property  Mode: TCsModeSet read FMode write FMode;
     property  Details: Boolean read FDetails write FDetails;
     property  Syntax: TCsSyntax read FSyntax write FSyntax;
   end;
@@ -140,20 +176,91 @@ type
 implementation
 
 const
-  defArchitectureMode: array[TCsArch] of Integer = (
-    CS_ARCH_ARM,
-    CS_ARCH_ARM64,
-    CS_ARCH_MIPS,
-    CS_ARCH_X86,
-    CS_ARCH_PPC,
-    CS_ARCH_SPARC,
-    CS_ARCH_SYSZ,
-    CS_ARCH_XCORE,
-    CS_ARCH_M68K,
-    CS_ARCH_TMS320C64X,
-    CS_ARCH_M680X,
-    CS_ARCH_EVM,
-    CS_ARCH_ALL
+  defArchitectureMode: array[TCsArch] of cs_arch = (
+    CS_ARCH_ALL,                   // All architectures - for cs_support()
+    CS_ARCH_ARM,                   // ARM architecture (including Thumb, Thumb-2)
+    CS_ARCH_ARM64,                 // ARM-64, also called AArch64
+    CS_ARCH_MIPS,                  // Mips architecture
+    CS_ARCH_X86,                   // X86 architecture (including x86 & x86-64)
+    CS_ARCH_PPC,                   // PowerPC architecture
+    CS_ARCH_SPARC,                 // Sparc architecture
+    CS_ARCH_SYSZ,                  // SystemZ architecture
+    CS_ARCH_XCORE,                 // XCore architecture
+    CS_ARCH_M68K,                  // 68K architecture
+    CS_ARCH_TMS320C64X,            // TMS320C64x architecture
+    CS_ARCH_M680X,                 // 680X architecture
+    CS_ARCH_EVM,                   // Ethereum architecture
+    CS_ARCH_MOS65XX,               // MOS65XX architecture (including MOS6502)
+    CS_ARCH_WASM,                  // WebAssembly architecture
+    CS_ARCH_BPF,                   // Berkeley Packet Filter architecture (including eBPF)
+    CS_ARCH_RISCV,                 // RISCV architecture
+    CS_ARCH_SH,                    // SH architecture
+    CS_ARCH_TRICORE                // TriCore architecture
+  );
+
+  defHardwareMode: array[TCsMode] of cs_mode = (
+    CS_MODE_LITTLE_ENDIAN,         // little-endian mode (default mode)
+    CS_MODE_ARM,                   // 32-bit ARM
+    CS_MODE_16,                    // 16-bit mode (X86)
+    CS_MODE_32,                    // 32-bit mode (X86)
+    CS_MODE_64,                    // 64-bit mode (X86, PPC)
+    CS_MODE_THUMB,                 // ARM's Thumb mode, including Thumb-2
+    CS_MODE_MCLASS,                // ARM's Cortex-M series
+    CS_MODE_V8,                    // ARMv8 A32 encodings for ARM
+    CS_MODE_MICRO,                 // MicroMips mode (MIPS)
+    CS_MODE_MIPS3,                 // Mips III ISA
+    CS_MODE_MIPS32R6,              // Mips32r6 ISA
+    CS_MODE_MIPS2,                 // Mips II ISA
+    CS_MODE_V9,                    // SparcV9 mode (Sparc)
+    CS_MODE_QPX,                   // Quad Processing eXtensions mode (PPC)
+    CS_MODE_SPE,                   // Signal Processing Engine mode (PPC)
+    CS_MODE_BOOKE,                 // Book-E mode (PPC)
+    CS_MODE_PS,                    // Paired-singles mode (PPC)
+    CS_MODE_M68K_000,              // M68K 68000 mode
+    CS_MODE_M68K_010,              // M68K 68010 mode
+    CS_MODE_M68K_020,              // M68K 68020 mode
+    CS_MODE_M68K_030,              // M68K 68030 mode
+    CS_MODE_M68K_040,              // M68K 68040 mode
+    CS_MODE_M68K_060,              // M68K 68060 mode
+    CS_MODE_BIG_ENDIAN,            // big-endian mode
+    CS_MODE_MIPS32,                // Mips32 ISA (Mips)
+    CS_MODE_MIPS64,                // Mips64 ISA (Mips)
+    CS_MODE_M680X_6301,            // M680X Hitachi 6301,6303 mode
+    CS_MODE_M680X_6309,            // M680X Hitachi 6309 mode
+    CS_MODE_M680X_6800,            // M680X Motorola 6800,6802 mode
+    CS_MODE_M680X_6801,            // M680X Motorola 6801,6803 mode
+    CS_MODE_M680X_6805,            // M680X Motorola/Freescale 6805 mode
+    CS_MODE_M680X_6808,            // M680X Motorola/Freescale/NXP 68HC08 mode
+    CS_MODE_M680X_6809,            // M680X Motorola 6809 mode
+    CS_MODE_M680X_6811,            // M680X Motorola/Freescale/NXP 68HC11 mode
+    CS_MODE_M680X_CPU12,           // M680X Motorola/Freescale/NXP CPU12, used on M68HC12/HCS12
+    CS_MODE_M680X_HCS08,           // M680X Freescale/NXP HCS08 mode
+    CS_MODE_BPF_CLASSIC,           // Classic BPF mode (default)
+    CS_MODE_BPF_EXTENDED,          // Extended BPF mode
+    CS_MODE_RISCV32,               // RISCV RV32G
+    CS_MODE_RISCV64,               // RISCV RV64G
+    CS_MODE_RISCVC,                // RISCV compressed instructure mode
+    CS_MODE_MOS65XX_6502,          // MOS65XXX MOS 6502
+    CS_MODE_MOS65XX_65C02,         // MOS65XXX WDC 65c02
+    CS_MODE_MOS65XX_W65C02,        // MOS65XXX WDC W65c02
+    CS_MODE_MOS65XX_65816,         // MOS65XXX WDC 65816, 8-bit m/x
+    CS_MODE_MOS65XX_65816_LONG_M,  // MOS65XXX WDC 65816, 16-bit m, 8-bit x
+    CS_MODE_MOS65XX_65816_LONG_X,  // MOS65XXX WDC 65816, 8-bit m, 16-bit x
+    CS_MODE_MOS65XX_65816_LONG_MX, // MOS65XXX WDC 65816, 8-bit, 16-bit
+    CS_MODE_SH2,                   // SH2
+    CS_MODE_SH2A,                  // SH2A
+    CS_MODE_SH3,                   // SH3
+    CS_MODE_SH4,                   // SH4
+    CS_MODE_SH4A,                  // SH4A
+    CS_MODE_SHFPU,                 // w/ FPU
+    CS_MODE_SHDSP,                 // w/ DSP
+    CS_MODE_TRICORE_110,           // Tricore 1.1
+    CS_MODE_TRICORE_120,           // Tricore 1.2
+    CS_MODE_TRICORE_130,           // Tricore 1.3
+    CS_MODE_TRICORE_131,           // Tricore 1.3.1
+    CS_MODE_TRICORE_160,           // Tricore 1.6
+    CS_MODE_TRICORE_161,           // Tricore 1.6.1
+    CS_MODE_TRICORE_162            // Tricore 1.6.2
   );
 
 type
@@ -183,6 +290,9 @@ const
 
 resourcestring
   rsErrUnKnownErrorFmt  = 'Unknown Error code: %d';
+
+  rsErrUnsupportedArchFmt = 'Unsupported architecture: %d';
+  rsErrUnsupportedLibvFmt = 'Unsupported version: %x';
 
 { TCapstone }
 
@@ -248,78 +358,16 @@ begin
   Assert(SizeOf(TCsDetail) = SizeOf(cs_detail));
 end;
 
-function TCapstone.GetHardwareMode(AMode: TCsMode): Integer;
+function TCapstone.GetHardwareMode(AMode: TCsModeSet): Integer;
 var
-  M: Integer;
+  E: TCsMode;
 begin
-  M := 0;
-  if csmLittleEndian in AMode then
-    M := M or CS_MODE_LITTLE_ENDIAN;
-  if csmARM in AMode then
-    M := M or CS_MODE_ARM;
-  if csm16 in AMode then
-    M := M or CS_MODE_16;
-  if csm32 in AMode then
-    M := M or CS_MODE_32;
-  if csm64 in AMode then
-    M := M or CS_MODE_64;
-  if csmThumb in AMode then
-    M := M or CS_MODE_THUMB;
-  if csmMClass in AMode then
-    M := M or CS_MODE_MCLASS;
-  if csmV8 in AMode then
-    M := M or CS_MODE_V8;
-  if csmMicro in AMode then
-    M := M or CS_MODE_MICRO;
-  if csmMips3 in AMode then
-    M := M or CS_MODE_MIPS3;
-  if csmMips3R6 in AMode then
-    M := M or CS_MODE_MIPS32R6;
-  if csmMips2 in AMode then
-    M := M or CS_MODE_MIPS2;
-  if csmV9 in AMode then
-    M := M or CS_MODE_V9;
-  if csmQpx in AMode then
-    M := M or CS_MODE_QPX;
-  if csmM68k000 in AMode then
-    M := M or CS_MODE_M68K_000;
-  if csmM68k010 in AMode then
-    M := M or CS_MODE_M68K_010;
-  if csmM68k020 in AMode then
-    M := M or CS_MODE_M68K_020;
-  if csmM68k030 in AMode then
-    M := M or CS_MODE_M68K_030;
-  if csmM68k040 in AMode then
-    M := M or CS_MODE_M68K_040;
-  if csmM68k060 in AMode then
-    M := M or CS_MODE_M68K_060;
-  if csmBigEndian in AMode then
-    M := M or CS_MODE_BIG_ENDIAN;
-  if csmMips32 in AMode then
-    M := M or CS_MODE_MIPS32;
-  if csmMips64 in AMode then
-    M := M or CS_MODE_MIPS64;
-  if csmM680x6301 in AMode then
-    M := M or CS_MODE_M680X_6301;
-  if csmM680x6309 in AMode then
-    M := M or CS_MODE_M680X_6309;
-  if csmM680x6800 in AMode then
-    M := M or CS_MODE_M680X_6800;
-  if csmM680x6801 in AMode then
-    M := M or CS_MODE_M680X_6801;
-  if csmM680x6805 in AMode then
-    M := M or CS_MODE_M680X_6805;
-  if csmM680x6808 in AMode then
-    M := M or CS_MODE_M680X_6808;
-  if csmM680x6809 in AMode then
-    M := M or CS_MODE_M680X_6809;
-  if csmM680x6811 in AMode then
-    M := M or CS_MODE_M680X_6811;
-  if csmM680xCpu12 in AMode then
-    M := M or CS_MODE_M680X_CPU12;
-  if csmM680xHcs08 in AMode then
-    M := M or CS_MODE_M680X_HCS08;
-  Result := M;
+  Result := 0;
+  for E := Low(TCsMode) to High(TCsMode) do
+  begin
+    if E in AMode then
+      Result := Result or defHardwareMode[E];
+  end;
 end;
 
 function TCapstone.GetLastErrorMessage: string;
@@ -368,9 +416,16 @@ function TCapstone.Open(ACode: Pointer; const ASize: NativeUInt): Boolean;
 var
   A, M: Integer;
   H: csh;
+  U, V, R, S: Integer;
 begin
+  R := cs_version(U, V);
+  S := cs_make_version(CS_API_MAJOR, CS_API_MINOR);
+  if R < S then
+    raise ECapstone.CreateFmt(rsErrUnsupportedLibvFmt, [R]);
+
   if FArch = csaUnknown then
-    raise ECapstone.Create('Unknown Architecture');
+    raise ECapstone.CreateFmt(rsErrUnsupportedArchFmt, [Ord(FArch)]);
+
   A := defArchitectureMode[FArch];
   M := GetHardwareMode(FMode);
   H := 0;

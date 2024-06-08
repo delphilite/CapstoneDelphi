@@ -56,6 +56,9 @@ const
   capstone = 'libcapstone.dylib';
   {$LINKLIB libcapstone}
 {$IFEND}
+{$IFDEF ANDROID}
+  capstone = 'libcapstone.so';
+{$ENDIF ANDROID}
 
 {$IFDEF CS_USE_UNDERSCORE}
   _PU = '_';
