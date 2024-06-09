@@ -975,7 +975,9 @@ implementation
   {$L Win32\X86Disassembler.obj}
   {$L Win32\X86DisassemblerDecoder.obj}
   {$L Win32\X86IntelInstPrinter.obj}
+  {$L Win32\X86InstPrinterCommon.obj}
   {$L Win32\X86Mapping.obj}
+  {$L Win32\Mapping.obj}
   {$L Win32\MCInst.obj}
   {$L Win32\MCInstrDesc.obj}
   {$L Win32\MCRegisterInfo.obj}
@@ -991,7 +993,9 @@ implementation
   {$L Win64\X86Disassembler.o}
   {$L Win64\X86DisassemblerDecoder.o}
   {$L Win64\X86IntelInstPrinter.o}
+  {$L Win64\X86InstPrinterCommon.o}
   {$L Win64\X86Mapping.o}
+  {$L Win64\Mapping.o}
   {$L Win64\MCInst.o}
   {$L Win64\MCInstrDesc.o}
   {$L Win64\MCRegisterInfo.o}
@@ -1049,6 +1053,18 @@ begin
 end;
 
 {$IFDEF CS_USE_UNDERSCORE}
+procedure _puts; cdecl; external msvcrt name 'puts';
+{$ELSE}
+procedure puts; cdecl; external msvcrt name 'puts';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _printf; cdecl; external msvcrt name 'printf';
+{$ELSE}
+procedure printf; cdecl; external msvcrt name 'printf';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
 procedure _vsnprintf; cdecl; external msvcrt name 'vsnprintf';
 {$ELSE}
 procedure vsnprintf; cdecl; external msvcrt name 'vsnprintf';
@@ -1073,6 +1089,24 @@ procedure memset; cdecl; external msvcrt name 'memset';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
+procedure _strcat; cdecl; external msvcrt name 'strcat';
+{$ELSE}
+procedure strcat; cdecl; external msvcrt name 'strcat';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _strcmp; cdecl; external msvcrt name 'strcmp';
+{$ELSE}
+procedure strcmp; cdecl; external msvcrt name 'strcmp';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure _strcpy; cdecl; external msvcrt name 'strcpy';
+{$ELSE}
+procedure strcpy; cdecl; external msvcrt name 'strcpy';
+{$ENDIF}
+
+{$IFDEF CS_USE_UNDERSCORE}
 procedure _strlen; cdecl; external msvcrt name 'strlen';
 {$ELSE}
 procedure strlen; cdecl; external msvcrt name 'strlen';
@@ -1085,28 +1119,13 @@ procedure strncpy; cdecl; external msvcrt name 'strncpy';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _qsort; cdecl; external msvcrt name 'qsort';
-{$ELSE}
-procedure qsort; cdecl; external msvcrt name 'qsort';
-{$ENDIF}
-
-{$IFDEF CS_USE_UNDERSCORE}
-procedure __llmul; asm jmp System.@_llmul end;
-procedure __llshl; asm jmp System.@_llshl end;
-{$ELSE}
-procedure strcmp; cdecl; external msvcrt name 'strcmp';
-{$ENDIF}
-
-{$IFDEF CS_USE_UNDERSCORE}
 var
-  __fltused: Integer = 0;
   _cs_mem_malloc: Pointer = @_malloc;
   _cs_mem_calloc: Pointer = @_calloc;
   _cs_mem_free: Pointer = @_free;
   _cs_vsnprintf: Pointer = @_vsnprintf;
 {$ELSE}
 var
-  _fltused: Integer = 0;
   cs_mem_malloc: Pointer = @malloc;
   cs_mem_calloc: Pointer = @calloc;
   cs_mem_free: Pointer = @free;
