@@ -1,11 +1,29 @@
 # CapstoneDelphi
-[Capstone Disassembler Library](http://www.capstone-engine.org/) Binding for [Delphi](http://www.embarcadero.com/products/delphi) and [Free Pascal](https://www.freepascal.org/).
+CapstoneDelphi is a [Delphi](http://www.embarcadero.com/products/delphi) and [Free Pascal](https://www.freepascal.org/) binding for the [Capstone Disassembler Library](http://www.capstone-engine.org/). It supports Capstone 5 and provides a friendly and simple type-safe API that is ridiculously easy to learn and quick to pick up.
+
+Capstone is a disassembly framework with the target of becoming the ultimate disasm engine for binary analysis and reversing in the security community.
+
+## Features
+* **Supports** Capstone 5 multiple hardware architectures: ARM, AArch64, Alpha, BPF, Ethereum VM, HP PA-RISC (HPPA), M68K, M680X, Mips, MOS65XX, PPC, RISC-V(rv32G/rv64G), SH, Sparc, SystemZ, TMS320C64X, TriCore, Webassembly, XCore and X86 (16, 32, 64).
+* **Supports** Delphi XE2 and greater, and FPC 3 and greater.
+* **Provides** a friendly, type-safe, and easy-to-learn API.
+
+## Installation
+To install the CapstoneDelphi binding, follow these steps:
+
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/delphilite/CapstoneDelphi.git
+    ```
+
+2. Add the CapstoneDelphi\Source directory to the project or IDE's search path.
+
+3. Ensure you have the Capstone 5 library installed on your system. You can update precompiled Capstone 5.0.1 binary libraries from [PyPI](https://pypi.org/project/capstone/), [Anaconda](https://anaconda.org/conda-forge/capstone), [ArchLinuxARM](https://archlinuxarm.org/packages), etc.
 
 ## Usage
-Included is the wrapper class `TCapstone` in `Capstone.pas`. The example bellow 
-is incomplete, but it may give you an impression how to use it.
+Included is the wrapper class `TCapstone` in `Capstone.pas`. The example bellow is incomplete, but it may give you an impression how to use it.
 
-~~~pas
+```pas
 uses
   SysUtils, Capstone;
 
@@ -54,4 +72,18 @@ begin
       WriteLn(Format('Error Decompiler: %s', [E.Message]));
   end;
 end.
-~~~
+```
+
+For more examples based on low-level API, refer to the test cases under the tests directory.
+
+## Documentation
+For more detailed information, refer to the [Capstone documentation](https://www.capstone-engine.org/documentation.html).
+
+## Contributing
+Contributions are welcome! Please fork this repository and submit pull requests with your improvements.
+
+## License
+This project is licensed under the Mozilla Public License 2.0. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+Special thanks to the Capstone development team for creating and maintaining the Capstone disassembly framework.
