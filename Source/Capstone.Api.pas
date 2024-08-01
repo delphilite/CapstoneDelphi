@@ -365,6 +365,7 @@ const
   CS_OP_IMM = 2;
   /// Floating-Point operand.
   CS_OP_FP = 3;
+  /// Memory operand. Can be ORed with another operand type.
   CS_OP_MEM = $80;
 
 /// Common instruction operand access types - to be consistent across all architectures.
@@ -487,7 +488,7 @@ type
       /// ARM architecture (including Thumb/Thumb2)
       2: (arm: cs_arm);
       /// M68K architecture
-      3: (m68k  : cs_m68k);
+      3: (m68k: cs_m68k);
       /// MIPS architecture
       4: (mips: cs_mips);
       /// PowerPC architecture
@@ -1004,8 +1005,17 @@ implementation
   {$WARN BAD_GLOBAL_SYMBOL OFF}
 {$ENDIF CPUX64}
 
+// Link static library dependency functions.
 const
-  msvcrt = 'msvcrt.dll';
+{$IFDEF MSWINDOWS}
+  libc = 'msvcrt.dll';
+{$ENDIF MSWINDOWS}
+{$IF DEFINED(ANDROID) or DEFINED(LINUX)}
+  libc = 'libc.so';
+{$IFEND}
+{$IF DEFINED(DARWIN) or DEFINED(MACOS)}
+  libc = '/usr/lib/libc.dylib';
+{$IFEND}
 
 {$IFDEF CS_USE_UNDERSCORE}
 function _malloc(size: NativeUInt): Pointer; cdecl;
@@ -1053,69 +1063,69 @@ begin
 end;
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _puts; cdecl; external msvcrt name 'puts';
+procedure _puts; cdecl; external libc name 'puts';
 {$ELSE}
-procedure puts; cdecl; external msvcrt name 'puts';
+procedure puts; cdecl; external libc name 'puts';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _printf; cdecl; external msvcrt name 'printf';
+procedure _printf; cdecl; external libc name 'printf';
 {$ELSE}
-procedure printf; cdecl; external msvcrt name 'printf';
+procedure printf; cdecl; external libc name 'printf';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _vsnprintf; cdecl; external msvcrt name 'vsnprintf';
+procedure _vsnprintf; cdecl; external libc name 'vsnprintf';
 {$ELSE}
-procedure vsnprintf; cdecl; external msvcrt name 'vsnprintf';
+procedure vsnprintf; cdecl; external libc name 'vsnprintf';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _memcpy; cdecl; external msvcrt name 'memcpy';
+procedure _memcpy; cdecl; external libc name 'memcpy';
 {$ELSE}
-procedure memcpy; cdecl; external msvcrt name 'memcpy';
+procedure memcpy; cdecl; external libc name 'memcpy';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _memmove; cdecl; external msvcrt name 'memmove';
+procedure _memmove; cdecl; external libc name 'memmove';
 {$ELSE}
-procedure memmove; cdecl; external msvcrt name 'memmove';
+procedure memmove; cdecl; external libc name 'memmove';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _memset; cdecl; external msvcrt name 'memset';
+procedure _memset; cdecl; external libc name 'memset';
 {$ELSE}
-procedure memset; cdecl; external msvcrt name 'memset';
+procedure memset; cdecl; external libc name 'memset';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _strcat; cdecl; external msvcrt name 'strcat';
+procedure _strcat; cdecl; external libc name 'strcat';
 {$ELSE}
-procedure strcat; cdecl; external msvcrt name 'strcat';
+procedure strcat; cdecl; external libc name 'strcat';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _strcmp; cdecl; external msvcrt name 'strcmp';
+procedure _strcmp; cdecl; external libc name 'strcmp';
 {$ELSE}
-procedure strcmp; cdecl; external msvcrt name 'strcmp';
+procedure strcmp; cdecl; external libc name 'strcmp';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _strcpy; cdecl; external msvcrt name 'strcpy';
+procedure _strcpy; cdecl; external libc name 'strcpy';
 {$ELSE}
-procedure strcpy; cdecl; external msvcrt name 'strcpy';
+procedure strcpy; cdecl; external libc name 'strcpy';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _strlen; cdecl; external msvcrt name 'strlen';
+procedure _strlen; cdecl; external libc name 'strlen';
 {$ELSE}
-procedure strlen; cdecl; external msvcrt name 'strlen';
+procedure strlen; cdecl; external libc name 'strlen';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
-procedure _strncpy; cdecl; external msvcrt name 'strncpy';
+procedure _strncpy; cdecl; external libc name 'strncpy';
 {$ELSE}
-procedure strncpy; cdecl; external msvcrt name 'strncpy';
+procedure strncpy; cdecl; external libc name 'strncpy';
 {$ENDIF}
 
 {$IFDEF CS_USE_UNDERSCORE}
