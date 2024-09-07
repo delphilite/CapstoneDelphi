@@ -5,6 +5,7 @@
 {  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: m680x.h                                   }
+{    License: Mozilla Public License 2.0                }
 {                                                       }
 {  Copyright (c) 1998-2024 Super Studio                 }
 {                                                       }

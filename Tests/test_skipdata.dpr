@@ -5,6 +5,7 @@
 {  Unit Name: test_skipdata                             }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: tests\test_skipdata.c                     }
+{    License: Mozilla Public License 2.0                }
 {                                                       }
 {  Copyright (c) 1998-2024 Super Studio                 }
 {                                                       }

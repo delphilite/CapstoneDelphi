@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="capstone" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="aarch64-android">
+				<Option output="aarch64-android/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="aarch64-android/" />
+				<Option type="2" />
+				<Option compiler="aarch64-linux-android" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="aarch64-linux">
+				<Option output="aarch64-linux/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="aarch64-linux/" />
+				<Option type="2" />
+				<Option compiler="aarch64-linux-gnu" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="arm-android">
+				<Option output="arm-android/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="arm-android/" />
+				<Option type="2" />
+				<Option compiler="arm-linux-androideabi" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="arm-linux">
+				<Option output="arm-linux/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="arm-linux/" />
+				<Option type="2" />
+				<Option compiler="arm-linux-gnueabihf" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-mfloat-abi=hard" />
+					<Add option="-mfpu=vfpv3-d16" />
+					<Add option="-std=c11" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="bcb-win32">
+				<Option output="bcb/libcapstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="bcb/" />
+				<Option type="2" />
+				<Option compiler="bcb-win32" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+			</Target>
+			<Target title="bcb-win64">
+				<Option output="bcb-win64/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="bcb-win64/" />
+				<Option type="2" />
+				<Option compiler="bcb-win64" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+			</Target>
+			<Target title="i386-linux">
+				<Option output="i386-linux/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="i386-linux/" />
+				<Option type="2" />
+				<Option compiler="x86_64-pc-linux-gnu" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-m32" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-m32" />
+				</Linker>
+			</Target>
+			<Target title="i386-win32">
+				<Option output="i386-win32/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="i386-win32/" />
+				<Option type="2" />
+				<Option compiler="x86_64-w64-mingw32" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-m32" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-m32" />
+				</Linker>
+			</Target>
+			<Target title="loongarch64-linux">
+				<Option output="loongarch64-linux/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="loongarch64-linux/" />
+				<Option type="2" />
+				<Option compiler="loongarch64-linux-gnu" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="x86_64-linux">
+				<Option output="x86_64-linux/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="x86_64-linux/" />
+				<Option type="2" />
+				<Option compiler="x86_64-pc-linux-gnu" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-m64" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-m64" />
+				</Linker>
+			</Target>
+			<Target title="x86_64-win64">
+				<Option output="x86_64-win64/capstone" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="x86_64-win64/" />
+				<Option type="2" />
+				<Option compiler="x86_64-w64-mingw32" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-m64" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-m64" />
+				</Linker>
+			</Target>
+		</Build>
+		<VirtualTargets>
+			<Add alias="all" targets="aarch64-android;aarch64-linux;arm-android;arm-linux;bcb-win32;bcb-win64;i386-linux;i386-win32;loongarch64-linux;x86_64-linux;x86_64-win64;" />
+		</VirtualTargets>
+		<Compiler>
+			<Add option="-DCAPSTONE_X86_SUPPORT" />
+			<Add option="-DCAPSTONE_USE_SYS_DYN_MEM" />
+			<Add option="-DxCAPSTONE_X86_ATT_DISABLE" />
+			<Add option="-DCAPSTONE_HAS_X86" />
+			<Add directory="../include" />
+		</Compiler>
+		<Unit filename="../LEB128.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MCDisassembler.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MCFixedLenDisassembler.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MCInst.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MCInst.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MCInstrDesc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MCInstrDesc.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MCRegisterInfo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MCRegisterInfo.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../Mapping.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../Mapping.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../MathExtras.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../SStream.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../SStream.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86ATTInstPrinter.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86BaseInfo.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86Disassembler.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86Disassembler.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86DisassemblerDecoder.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86DisassemblerDecoder.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86DisassemblerDecoderCommon.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenAsmWriter.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenAsmWriter1.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenAsmWriter1_reduce.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenAsmWriter_reduce.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenDisassemblerTables.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenDisassemblerTables_reduce.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenInstrInfo.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenInstrInfo_reduce.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86GenRegisterInfo.inc">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86InstPrinter.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86InstPrinterCommon.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86InstPrinterCommon.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86IntelInstPrinter.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86Mapping.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86Mapping.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86Module.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../arch/X86/X86Module.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../cs.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../cs_priv.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../cs_simple_types.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/arm.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/arm64.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/bpf.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/capstone.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/evm.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/m680x.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/m68k.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/mips.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/mos65xx.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/platform.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/ppc.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/riscv.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/sh.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/sparc.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/systemz.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/tms320c64x.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/tricore.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/wasm.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/x86.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../include/capstone/xcore.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../utils.h">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

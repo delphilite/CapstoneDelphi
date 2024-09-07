@@ -5,6 +5,7 @@
 {  Unit Name: Capstone Wrapper Class                    }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose:                                           }
+{    License: Mozilla Public License 2.0                }
 {                                                       }
 {  Copyright (c) 1998-2024 Super Studio                 }
 {                                                       }

@@ -5,6 +5,7 @@
 {  Unit Name: Capstone Api Header                       }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: tricore.h                                 }
+{    License: Mozilla Public License 2.0                }
 {                                                       }
 {  Copyright (c) 1998-2024 Super Studio                 }
 {                                                       }
@@ -26,16 +27,12 @@ type
 
 const
   /// CS_OP_INVALID (Uninitialized).
-  /// uninitialized/invalid operand.
   TRICORE_OP_INVALID = 0;
   /// CS_OP_REG (Register operand).
-  /// Register operand.
   TRICORE_OP_REG = 1;
   /// CS_OP_IMM (Immediate operand).
-  /// Immediate operand.
   TRICORE_OP_IMM = 2;
   /// CS_OP_MEM (Memory operand).
-  /// Memory operand. Can be ORed with another operand type.
   TRICORE_OP_MEM_ = $80;
 
 /// TriCore registers

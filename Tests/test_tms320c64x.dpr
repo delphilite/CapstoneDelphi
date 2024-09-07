@@ -5,6 +5,7 @@
 {  Unit Name: test_tms320c64x                           }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: tests\test_tms320c64x.c                   }
+{    License: Mozilla Public License 2.0                }
 {                                                       }
 {  Copyright (c) 1998-2024 Super Studio                 }
 {                                                       }

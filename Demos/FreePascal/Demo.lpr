@@ -1,3 +1,16 @@
+{ ***************************************************** }
+{                                                       }
+{  Pascal language binding for the Capstone engine      }
+{                                                       }
+{  Unit Name: Demo                                      }
+{     Author: Lsuper 2024.05.01                         }
+{    Purpose: Demo                                      }
+{    License: Mozilla Public License 2.0                }
+{                                                       }
+{  Copyright (c) 1998-2024 Super Studio                 }
+{                                                       }
+{ ***************************************************** }
+
 program Demo;
 
 {$mode objfpc}{$H+}

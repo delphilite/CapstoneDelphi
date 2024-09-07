@@ -5,6 +5,7 @@
 {  Unit Name: test_m68k                                 }
 {     Author: Lsuper 2024.05.01                         }
 {    Purpose: tests\test_m68k.c                         }
+{    License: Mozilla Public License 2.0                }
 {                                                       }
 {  Copyright (c) 1998-2024 Super Studio                 }
 {                                                       }
