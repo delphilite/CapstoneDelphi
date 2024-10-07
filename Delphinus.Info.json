@@ -1,0 +1,11 @@
+{
+	"id": "{CA0269B1-A04F-40BF-8238-4B2B9ADC54CC}",
+	"name": "CapstoneDelphi",
+	"picture": "Ref\\Doc\\Logo.png",
+	"license_type": "MPL-2.0",
+	"license_file": "License",
+	"platforms": "Win32;Win64",
+	"first_version": "5.0.1",
+	"package_compiler_min": 23,
+	"compiler_min": 23
+}
