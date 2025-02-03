@@ -93,10 +93,10 @@ begin
           SH_OP_MEM_INVALID:
             ;
         end;
-        if (sh.size <> 0) then
-          WriteLn(#9#9#9'size: ', sh.size);
       end;
     end;
+    if (sh.size <> 0) then
+      WriteLn(#9#9#9'size: ', sh.size);
   end;
 
   print_read_write_regs(handle, ins.detail);

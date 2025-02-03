@@ -1,5 +1,5 @@
 # CapstoneDelphi
-![Version](https://img.shields.io/badge/version-v5.0.1-yellow.svg)
+![Version](https://img.shields.io/badge/version-v5.0.5-yellow.svg)
 ![License](https://img.shields.io/github/license/delphilite/CapstoneDelphi)
 ![Lang](https://img.shields.io/github/languages/top/delphilite/CapstoneDelphi.svg)
 ![stars](https://img.shields.io/github/stars/delphilite/CapstoneDelphi.svg)
@@ -23,10 +23,10 @@ To install the CapstoneDelphi binding, follow these steps:
 
 2. Add the CapstoneDelphi\Source directory to the project or IDE's search path.
 
-3. Ensure you have the Capstone 5 library installed on your system. You can update precompiled Capstone 5.0.1 binary libraries from [PyPI](https://pypi.org/project/capstone/), [Anaconda](https://anaconda.org/conda-forge/capstone), [ArchLinuxARM](https://archlinuxarm.org/packages), etc.
+3. Ensure you have the Capstone 5 library installed on your system. You can update precompiled Capstone 5.0.5 binary libraries from [PyPI](https://pypi.org/project/capstone/), [Anaconda](https://anaconda.org/conda-forge/capstone), [ArchLinuxARM](https://archlinuxarm.org/packages), etc.
 
 ## Installation: Delphinus-Support
-CapstoneDelphi should now be listed in Delphinus package manager.
+CapstoneDelphi should now be listed in [Delphinus package manager](https://github.com/Memnarch/Delphinus/wiki/Installing-Delphinus).
 
 Be sure to restart Delphi after installing via Delphinus otherwise the units may not be found in your test projects.
 

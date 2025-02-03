@@ -80,7 +80,7 @@ const
   // Capstone package version
   CS_VERSION_MAJOR = CS_API_MAJOR;
   CS_VERSION_MINOR = CS_API_MINOR;
-  CS_VERSION_EXTRA = 1;
+  CS_VERSION_EXTRA = 5;
 
   /// Maximum size of an instruction mnemonic string.
   CS_MNEMONIC_SIZE = 32;
@@ -364,10 +364,10 @@ const
   CS_OP_REG = 1;
   /// Immediate operand.
   CS_OP_IMM = 2;
-  /// Floating-Point operand.
-  CS_OP_FP = 3;
   /// Memory operand. Can be ORed with another operand type.
-  CS_OP_MEM = $80;
+  CS_OP_MEM = 3;
+  /// Floating-Point operand.
+  CS_OP_FP = 4;
 
 /// Common instruction operand access types - to be consistent across all architectures.
 /// It is possible to combine access types, for example: CS_AC_READ | CS_AC_WRITE
@@ -971,6 +971,7 @@ implementation
 {$IFDEF CS_STATICLINK}
 
 {$IFDEF CPUX86}
+  // Win32 from Ref\Ref\capstone-5.0.5\cb\capstone.cbp + BCC bcb-win32
   {$L Win32\cs.obj}
   {$L Win32\X86Module.obj}
   {$L Win32\X86ATTInstPrinter.obj}
@@ -989,6 +990,7 @@ implementation
 {$ENDIF CPUX86}
 
 {$IFDEF CPUX64}
+  // Win32 from Ref\Ref\capstone-5.0.5\cb\capstone.cbp + BCC bcb-win64
   {$L Win64\cs.o}
   {$L Win64\X86Module.o}
   {$L Win64\X86ATTInstPrinter.o}
@@ -1017,6 +1019,14 @@ const
 {$IF DEFINED(DARWIN) or DEFINED(MACOS)}
   libc = '/usr/lib/libc.dylib';
 {$IFEND}
+
+{$IFDEF CS_USE_UNDERSCORE}
+procedure __assert(expr: Boolean; msg: PAnsiChar); cdecl;
+{$ELSE}
+procedure _assert(expr: Boolean; msg: PAnsiChar); cdecl;
+{$ENDIF}
+begin
+end;
 
 {$IFDEF CS_USE_UNDERSCORE}
 function _malloc(size: NativeUInt): Pointer; cdecl;

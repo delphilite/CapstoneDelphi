@@ -33,7 +33,7 @@ const
   /// CS_OP_IMM (Immediate operand).
   TRICORE_OP_IMM = 2;
   /// CS_OP_MEM (Memory operand).
-  TRICORE_OP_MEM_ = $80;
+  TRICORE_OP_MEM_ = 3;
 
 /// TriCore registers
 type
