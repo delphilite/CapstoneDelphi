@@ -7,7 +7,7 @@
 {    Purpose: capstone.h                                }
 {    License: Mozilla Public License 2.0                }
 {                                                       }
-{  Copyright (c) 1998-2024 Super Studio                 }
+{  Copyright (c) 1998-2025 Super Studio                 }
 {                                                       }
 { ***************************************************** }
 
@@ -80,7 +80,7 @@ const
   // Capstone package version
   CS_VERSION_MAJOR = CS_API_MAJOR;
   CS_VERSION_MINOR = CS_API_MINOR;
-  CS_VERSION_EXTRA = 5;
+  CS_VERSION_EXTRA = 6;
 
   /// Maximum size of an instruction mnemonic string.
   CS_MNEMONIC_SIZE = 32;
@@ -971,7 +971,7 @@ implementation
 {$IFDEF CS_STATICLINK}
 
 {$IFDEF CPUX86}
-  // Win32 from Ref\Ref\capstone-5.0.5\cb\capstone.cbp + BCC bcb-win32
+  // Win32 from Ref\Ref\capstone-5.0.6\cb\capstone.cbp + BCC bcb-win32
   {$L Win32\cs.obj}
   {$L Win32\X86Module.obj}
   {$L Win32\X86ATTInstPrinter.obj}
@@ -990,7 +990,7 @@ implementation
 {$ENDIF CPUX86}
 
 {$IFDEF CPUX64}
-  // Win32 from Ref\Ref\capstone-5.0.5\cb\capstone.cbp + BCC bcb-win64
+  // Win32 from Ref\Ref\capstone-5.0.6\cb\capstone.cbp + BCC bcb-win64
   {$L Win64\cs.o}
   {$L Win64\X86Module.o}
   {$L Win64\X86ATTInstPrinter.o}
