@@ -6,6 +6,6 @@
 	"license_file": "License",
 	"platforms": "Win32;Win64",
 	"first_version": "5.0.1",
-	"package_compiler_min": 23,
-	"compiler_min": 23
+	"package_compiler_min": 15,
+	"compiler_min": 15
 }
